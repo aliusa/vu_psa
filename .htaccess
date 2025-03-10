@@ -1,0 +1,16 @@
+#requires apache 2.3.9 and late
+RewriteEngine On
+RewriteBase /
+Options -Indexes
+Options +FollowSymlinks
+
+# Fix the bundles folder
+RewriteRule ^bundles/(.*)$ /public/bundles/$1  [END]
+RewriteRule ^public/(.*)$ /public/$1  [END]
+
+
+#RewriteRule ^admin/(.*)$ public/index.php [QSA,L]#neveikia
+
+RewriteRule ^.well-known/(.*)     public/.well-known/$1                      [END]
+
+RewriteRule ^(.*)$  public/index.php [QSA,L]

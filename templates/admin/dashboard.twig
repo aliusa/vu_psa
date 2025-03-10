@@ -1,0 +1,36 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block main %}
+    <div class="row row-cols-2 row-cols-md-4 g-4">
+        <div class="col">
+            <div class="card h-100 shadow border-0">
+                <a href="/admin?crudAction=index&crudControllerFqcn=App\Controller\Admin\UsersCrudController" class="">
+                    <div class="card-body">
+                        Naudotojai <h1>{{ userCount }}</h1>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow border-0">
+                <div class="card-body">
+                    Aktyvūs paslaugų paketai <h1>{{ activeUsersServicesBundlesCount }}</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow border-0">
+                <div class="card-body">
+                    ...
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100 shadow border-0">
+                <div class="card-body">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}

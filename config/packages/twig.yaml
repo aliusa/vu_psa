@@ -1,0 +1,10 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    paths:
+        '%kernel.project_dir%/vendor/easycorp/easyadmin-bundle/templates': EasyAdmin
+    form_themes:
+      - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+    strict_variables: false
+#when@test:
+#    twig:
+#        strict_variables: true

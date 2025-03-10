@@ -1,0 +1,28 @@
+{% extends "base.twig" %}
+
+{% block body %}
+    {% if services %}
+        <div class="row g-3">
+            {% for service in services %}
+                <div class="col-12 col-md-6">
+                    <a href="services/{{ service.id }}" class="text-decoration-none">
+                        <div class="card text-bg-primary border-0 rounded-0 h-100">
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between">
+                                    <h1>{{ service.title }}</h1>
+                                    <h1 class="text-white">{{ (service.price/100)|format_currency('EUR') }}</h1>
+                                </div>
+                                <div>
+                                    <p>{{ service.description|u.truncate(100, '...', false) }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning" role="alert">Nėra aktyvių paslaugų</div>
+    {% endif %}
+{% endblock %}

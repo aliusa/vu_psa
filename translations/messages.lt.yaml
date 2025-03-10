@@ -1,0 +1,23 @@
+login:form title: Prisijungti į TVS
+login:login title: 'TVS: administratorių prisijungimas'
+login:username: Vartotojas
+login:password: Slaptažodis
+login:cms: turinio valdymo sistemos
+login:login to: Prisijunkite prie Jūsų
+
+title: Pavadinimas
+price: Kaina
+description: Aprašymas
+active_from: Aktyvi nuo
+active_to: Aktyvi iki
+created_at: Sukurta
+updated_at: Redaguota
+email: El.paštas
+phone: Telefonas
+password: Slaptažodis
+first_name: Vardas
+last_name: Pavardė
+country: Šalis
+
+#UsersObjectsServicesBundles
+users_objects_services_bundles: Paslaugų paketas

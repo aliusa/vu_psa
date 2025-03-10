@@ -1,0 +1,9 @@
+monolog:
+  channels: ['google']
+  handlers:
+    google:
+      type: rotating_file
+      path: "%kernel.logs_dir%/google/%kernel.environment%.log"
+      level: debug
+      channels: [ google ]
+      max_files: 30

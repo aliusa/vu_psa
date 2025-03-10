@@ -1,0 +1,39 @@
+<table class="table table-responsive table-striped table-hover table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th>Objektas</th>
+            <th>Aktyvūs paslaugų paketai</th>
+            <th>Neaktyvūs paslaugų paketai</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for userObject in field.value %}
+            <tr>
+                <td>
+                    <a class="list-group-item" href="?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5CUsersObjectsCrudController&entityId={{ userObject.id }}">
+                        {{ userObject }}
+                    </a>
+                </td>
+                <td>
+                    <a href="admin?crudAction=index&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesBundlesCrudController&filters[users_object][comparison]=%3D&filters[users_object][value]={{ userObject.id }}">
+                        {{ userObject.getActiveUsersObjectsServicesBundlesCount() }}
+                    </a>
+                </td>
+                <td>
+                    <a href="admin?crudAction=index&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesBundlesCrudController&filters[users_object][comparison]=%3D&filters[users_object][value]={{ userObject.id }}">
+                        {{ userObject.getInactiveUsersObjectsServicesBundlesCount() }}
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{#
+<div class="list-group">
+    {% for userObject in field.value %}
+        <a class="list-group-item" href="?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5CUsersObjectsCrudController&entityId={{ userObject.id }}">
+            {{ userObject }}
+        </a>
+    {% endfor %}
+</div>
+#}

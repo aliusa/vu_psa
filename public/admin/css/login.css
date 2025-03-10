@@ -1,0 +1,154 @@
+body{
+	background-color: #f7fdff;
+    height: 100vh;
+    min-height: 560px;
+}
+
+.container{
+    max-width: 735px;
+}
+
+h1 {
+    font-size: 31px;
+    color: rgb(51, 51, 51);
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+label {
+    font-size: 14px;
+    line-height: 28px;
+    color: rgb(51, 51, 51);
+    padding: 0;
+}
+
+input {
+    background-color: #ffffff;
+}
+
+@keyframes login-wr {
+    from{transform: scale(0.9);}
+    to{transform: scale(1);}
+}
+.login-wr{
+    animation-name: login-wr;
+    animation-duration: 1s;
+}
+
+.login-content {
+    min-height: 435px;
+    position: relative;
+    box-shadow: 0 17px 43.2px 10.8px rgba(0, 0, 0, 0.1);
+    background: #ffffff url("/public/admin/images/login-img.png") no-repeat;
+    background-position: right top;
+}
+
+.login-footer {
+    font-size: 14px;
+    color: rgb(101, 101, 101);
+    text-align: center;
+    margin-top: 20px;
+}
+.login-footer a {
+    text-decoration: underline;
+    color: rgb(101, 101, 101);
+}
+.lg-wr {
+    width: 260px;
+    position: absolute;
+    top: 50%;
+    left: 50px;
+    transform: translate(0, -50%);
+}
+
+.lg-info {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    width: 150px;
+}
+.lg-info span:first-of-type {
+    font-size: 45px;
+    color: rgb(255, 255, 255);
+    font-weight: 800;
+    text-align: right;
+}
+img {
+    transform: scale(1.8);
+}
+
+.lg-info span:last-of-type {
+    font-size: 18px;
+    line-height: 27px;
+    color: rgb(255, 255, 255);
+}
+
+form a {
+        font-size: 14px;
+        color: rgb(0, 166, 229);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 30px;
+}
+button {
+    border-radius: 5px;
+    background-color: #00a5e5;
+    display: block;
+    float: right;
+    border: none;
+    text-transform: uppercase;
+    padding: 7px 17px;
+    font-size: 14px;
+    color: rgb(255, 255, 255);
+}
+
+@media(max-width: 730px) {
+    .login-content{
+        background: #fff;
+    }
+    .lg-info {
+        position: relative;
+        left: auto; top: auto; right: auto;
+        width: auto;
+        background: #2B8DD0;
+        padding: 50px;
+    }
+    .lg-wr {
+        width: auto; top: auto; left: auto; right: auto;
+        position: relative;
+        transform: none;
+        padding: 50px;
+    }
+}
+
+
+/*
+@media(max-width: 438px) {
+    .login-wr {
+        margin-top: 90px;
+    }
+    .login-content {
+        background-size: contain;
+        min-height: 510px;
+    }
+    .lg-info {
+        top: -5px;
+        right: -10px;
+    }
+
+    .lg-wr {
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+@media(min-width: 439px) and (max-width: 768px) {
+    .login-content {
+        min-height: 600px;
+    }
+}
+@media(max-width: 768px) {
+
+    .lg-wr {
+        top: 65%;
+    }
+}*/

@@ -1,0 +1,49 @@
+security:
+    encoders:
+        App\Entity\Administrators:
+            algorithm: auto
+
+    # https://symfony.com/doc/current/security/experimental_authenticators.html
+    #enable_authenticator_manager: true #Available options are "access_control", "access_decision_manager", "access_denied_url", "always_authenticate_before_granting", "encoders", "erase_credentials", "firewalls", "hide_user_not_found", "providers", "role_hierarchy", "session_fixation_strategy".
+    # https://symfony.com/doc/current/security.html#c-hashing-passwords
+    #password_hashers:
+    #    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: auto #Available options are "access_control", "access_decision_manager", "access_denied_url", "always_authenticate_before_granting", "encoders", "erase_credentials", "firewalls", "hide_user_not_found", "providers", "role_hierarchy", "session_fixation_strategy".
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\Administrators
+                property: email
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            #lazy: true #Available options are "access_denied_handler", "access_denied_url", "anonymous", "context", "entry_point", "form_login", "form_login_ldap", "guard", "host", "http_basic", "http_basic_ldap", "json_login", "json_login_ldap", "logout", "logout_on_user_change", "methods", "pattern", "provider", "remember_me", "remote_user", "request_matcher", "security", "simple_form", "simple_preauth", "stateless", "switch_user", "user_checker", "x509".
+            anonymous: lazy
+            provider: app_user_provider
+            guard:
+                authenticators:
+                    - App\Security\AdministratorsAuthenticator
+            logout:
+                path: admin_logout
+                # where to redirect after logout
+                # target: app_any_route
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+         - { path: ^/admin/, role: ROLE_ADMIN }
+        #         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        #         - { path: ^/admin/logout, roles: IS_AUTHENTICATED_FULLY }
+        #         - { path: ^/admin/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        #         - { path: ^/admin/reset, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        #- { path: ^/admin, role: IS_AUTHENTICATED_FULLY }
+        # - { path: ^/profile, roles: ROLE_USER }

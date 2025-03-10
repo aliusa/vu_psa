@@ -1,0 +1,21 @@
+{% extends "base.twig" %}
+{% block title %}{{ agreement.title }}{% endblock %}
+
+{% block body %}
+    <div class="card mx-auto">
+        <div class="card-header text-center bg-white">
+            <img src="{{ asset('public/icons/logo.png') }}" class="card-img-top" alt="logo" style="max-width: 100px">
+            <p class="m-1">
+            {{ agreement.subtitle }}
+            </p>
+        </div>
+
+        <div class="card-body">
+            {{ agreement.text|raw }}
+        </div>
+        <div class="card-footer">
+            {{ 'agreement version'|trans }}: {{ agreement.version }}
+        </div>
+    </div>
+
+{% endblock %}

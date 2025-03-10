@@ -1,0 +1,20 @@
+.cke_notifications_area{
+    display: none;
+}
+
+.ea-detail .field-group.field-boolean {
+    flex-direction: initial;
+    .field-label {
+        flex: initial;
+        min-inline-size: initial;
+        text-align: right;
+        margin: 0 15px 0 0;
+        padding: 0 0 1px;
+    }
+    .field-value {
+        flex: 1;
+        min-inline-size: 66%;
+        inline-size: initial;
+        text-align: initial;
+    }
+}

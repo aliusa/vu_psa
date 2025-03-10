@@ -1,0 +1,12 @@
+{% extends 'base.twig' %}
+
+{% block title %}{{ service.title }}{% endblock %}
+
+{% block body %}
+    <div class="d-flex justify-content-between">
+        <h1>{{ service.title }}</h1>
+        <h1 class="text-success">{{ (service.price/100)|format_currency('EUR') }}</h1>
+    </div>
+
+    <div>{{ service.description }}</div>
+{% endblock %}

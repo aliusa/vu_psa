@@ -71,7 +71,7 @@ class ServicesCrudController extends BaseCrudController
             $fields[] = Field::new('title', 'title');
             $fields[] = MoneyField::new('price', 'price')->setCurrency('EUR');
             $fields[] = Field::new('active_from', 'active_from');
-            $fields[] = Field::new('active_to', 'active_to');
+            $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = Field::new('advertise', 'Reklamuoti');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
@@ -87,8 +87,8 @@ class ServicesCrudController extends BaseCrudController
                     ],
                 ])
             ;
-            $fields[] = Field::new('active_from', 'active_from')->setColumns('col-6');
-            $fields[] = Field::new('active_to', 'active_to')->setColumns('col-6');
+            $fields[] = DateField::new('active_from', 'active_from')->setColumns('col-6');
+            $fields[] = DateField::new('active_to', 'active_to')->setColumns('col-6');
             $fields[] = Field::new('advertise', 'Reklamuoti');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {

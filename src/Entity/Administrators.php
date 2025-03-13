@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AdministratorsRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
 use Symfony\Component\Validator\Constraints as AssertValidator;
@@ -20,16 +21,16 @@ class Administrators extends BaseEntity implements UserInterface, PasswordAuthen
     use TimestampableTrait;
 
     #[AssertValidator\Length(max: 100)]
-    #[ORM\Column(type: 'string', length: 100, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
     public $email;
 
-    #[ORM\Column(type: 'json')]
+    #[ORM\Column(type: Types::JSON)]
     private $roles = [];
 
     /**
      * @var string The hashed password
      */
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public $password;
 
     /**

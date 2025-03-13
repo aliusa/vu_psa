@@ -44,8 +44,8 @@ class UsersObjectsServicesCrudController extends AbstractCrudController
             $fields[] = Field::new('amount', 'amount');
             $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR');
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR');
-            $fields[] = Field::new('active_to', 'active_to');
-            $fields[] = Field::new('created_at', 'created_at');
+            $fields[] = DateField::new('active_to', 'active_to');
+            $fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas

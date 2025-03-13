@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 trait TimestampableTrait
@@ -9,13 +10,13 @@ trait TimestampableTrait
     /**
      * Sukūrimo laikas
      */
-    #[ORM\Column(type: 'datetime_immutable', nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     public ?\DateTimeImmutable $created_at = null;
 
     /**
      * Atnaujinimo laikas
      */
-    #[ORM\Column(type: 'datetime_immutable', nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     public ?\DateTimeImmutable $updated_at = null;
 
     public function touchForUpdate()

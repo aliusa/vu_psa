@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UsersObjectsServicesRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints AS Assert;
@@ -35,19 +36,19 @@ class UsersObjectsServices extends BaseEntity
     #[ORM\JoinColumn(name: 'services_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     public $services;
 
-    #[ORM\Column(type: 'integer', nullable: false)]
     #[Assert\Range(min: 0, max: 100)]
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
     public int $amount;
 
-    #[ORM\Column(type: 'integer', nullable: false)]
     #[Assert\Range(min: 0, max: 10000)]
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
     public int $unit_price;
 
-    #[ORM\Column(type: 'integer', nullable: false)]
     #[Assert\Range(min: 0, max: 100000)]
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
     public int $total_price;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
     public $active_to;
 
     public function __toString()

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UsersObjectsRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
@@ -37,23 +38,23 @@ class UsersObjects extends BaseEntity
     public $country;
 
     #[AssertValidator\Length(max: 100)]
-    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
     public ?string $city;
 
     #[AssertValidator\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     public ?string $street;
 
     #[AssertValidator\Length(max: 100)]
-    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
     public ?string $house;
 
     #[AssertValidator\Length(max: 10)]
-    #[ORM\Column(type: 'string', length: 10, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 10, nullable: true)]
     public ?string $flat;
 
-    #[AssertValidator\Length(max: 5)]
-    #[ORM\Column(type: 'string', length: 5, nullable: true)]
+    #[AssertValidator\Length(min: 5, max: 5)]
+    #[ORM\Column(type: Types::STRING, length: 5, nullable: true)]
     public ?string $zip;
 
     /**

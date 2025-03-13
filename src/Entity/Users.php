@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UsersRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
@@ -22,24 +23,27 @@ class Users extends BaseEntity implements UserInterface, PasswordAuthenticatedUs
     use TimestampableTrait;
 
     #[AssertValidator\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false, unique: true)]
     public ?string $email = null;
 
     #[AssertValidator\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     public ?string $password = null;
 
     #[AssertValidator\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     public ?string $phone;
 
     #[AssertValidator\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     public ?string $first_name = null;
 
     #[AssertValidator\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     public ?string $last_name = null;
+
+    #[ORM\Column(type: Types::JSON)]
+    private array $roles = [];
 
     /**
      * One User have Many UsersObjects.
@@ -99,9 +103,23 @@ class Users extends BaseEntity implements UserInterface, PasswordAuthenticatedUs
         return $this->email;
     }
 
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
     public function eraseCredentials(): void
@@ -111,7 +129,7 @@ class Users extends BaseEntity implements UserInterface, PasswordAuthenticatedUs
 
     public function getUserIdentifier(): string
     {
-        return $this->getId();
+        return $this->getFullName();
     }
 
     public function getFullName():string

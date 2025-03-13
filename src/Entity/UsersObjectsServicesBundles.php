@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UsersObjectsServicesBundlesRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 
@@ -38,8 +39,7 @@ class UsersObjectsServicesBundles extends BaseEntity
 
     public function getServicesCount(): int
     {
-        //todo 2025-03-06 01:26 alius:
-        return 3;
+        return $this->users_objects_services->count();
     }
 
     public function __toString()

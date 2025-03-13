@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CountriesRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
@@ -20,15 +21,15 @@ class Countries extends BaseEntity
     use TimestampableTrait;
 
     #[AssertValidator\Length(max: 255)]
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     public string $title;
 
     #[AssertValidator\Length(min: 3, max: 3)]
-    #[ORM\Column(type: 'string', length: 3, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 3, nullable: true)]
     public string $ioc;
 
     #[AssertValidator\Length(min: 2, max: 2)]
-    #[ORM\Column(type: 'string', length: 2, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 2, nullable: true)]
     public string $iso;
 
     /**

@@ -39,7 +39,7 @@ class UsersObjectsCrudController extends BaseCrudController
             $fields[] = Field::new('house', 'house');
             $fields[] = Field::new('flat', 'flat');
             $fields[] = Field::new('zip', 'zip');
-            $fields[] = Field::new('created_at', 'created_at');
+            $fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas

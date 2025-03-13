@@ -12,7 +12,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 
 class UsersObjectsServicesBundlesCrudController extends AbstractCrudController
 {
@@ -37,8 +36,8 @@ class UsersObjectsServicesBundlesCrudController extends AbstractCrudController
             $fields[] = Field::new('id');
             $fields[] = AssociationField::new('users_object', 'Klientų objektas');
             $fields[] = Field::new('ServicesCount', 'Paslaugos');/** @see UsersObjectsServicesBundles::getServicesCount() */
-            $fields[] = Field::new('active_to', 'active_to');
-            $fields[] = Field::new('created_at', 'created_at');
+            $fields[] = DateField::new('active_to', 'active_to');
+            $fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
@@ -51,7 +50,7 @@ class UsersObjectsServicesBundlesCrudController extends AbstractCrudController
 
             $fields[] = Field::new('id');
             $fields[] = AssociationField::new('users_object', 'Klientų objektas');
-            $fields[] = Field::new('active_to', 'active_to');
+            $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
 

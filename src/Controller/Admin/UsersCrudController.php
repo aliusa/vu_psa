@@ -51,7 +51,7 @@ class UsersCrudController extends BaseCrudController
             $fields[] = Field::new('email', 'email');
             //$fields[] = Field::new('phone', 'phone');
             //$fields[] = Field::new('ownedAmount');todo:uncomment
-            $fields[] = Field::new('created_at', 'created_at');
+            $fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas

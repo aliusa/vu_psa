@@ -3,22 +3,17 @@
 namespace App\Controller\Admin;
 
 use App\Entity\UsersObjectsServices;
-use App\Entity\UsersObjectsServicesBundles;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class UsersObjectsServicesCrudController extends AbstractCrudController
+class UsersObjectsServicesCrudController extends BaseCrudController
 {
     public function __construct()
     {
@@ -53,8 +48,8 @@ class UsersObjectsServicesCrudController extends AbstractCrudController
             $fields[] = AssociationField::new('users_objects_services_bundles', 'users_objects_services_bundles')->autocomplete()->setColumns('col-12 col-md-6');/** @see UsersObjectsServices::$users_objects_services_bundles */
             $fields[] = AssociationField::new('services', 'services')->autocomplete()->setColumns('col-12 col-md-6');/** @see UsersObjectsServices::$services */
             $fields[] = Field::new('amount', 'amount')->setColumns('col-4');
-            $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR')->setColumns('col-4');
-            $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR')->setColumns('col-4')->setDisabled(true);
+            $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR')->setColumns('col-4')->setFormTypeOption('attr', ['placeholder' => '00.00']);
+            $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR')->setColumns('col-4')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = DateField::new('active_to', 'active_to');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {

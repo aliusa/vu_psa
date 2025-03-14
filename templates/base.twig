@@ -38,6 +38,7 @@
                             <a class="nav-link" aria-current="page" href="/services">Paslaugos</a>
                         </li>
                         {% if app.user %}
+                            {##}
                         {% else %}
                             <li class="nav-item">
                                 <a class="nav-link" href="/users/login">Prisijungti</a>
@@ -46,13 +47,25 @@
                     </ul>
 
 
-                    <!--dešinėj-->
-                    <div class="">
-                        {% if app.user %}
-                            <span>{{ app.user.userIdentifier }}</span>
-                            <a href="{{ path('app_logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Atsijungti</a>
-                        {% endif %}
-                    </div>
+                    {% if app.user %}
+                        <!--dešinėj-->
+                        <div class="d-flex align-items-center">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ app.session.get('currentObject').getTitle() }}
+                                </button>
+                                <ul class="dropdown-menu">
+                                    {% for users_object in app.user.users_objects %}
+                                        <li><a class="dropdown-item" href="/users/change_object?id={{ users_object.getId() }}">{{ users_object.getTitle() }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div>
+                                <span>{{ app.user.userIdentifier }}</span>
+                                <a href="{{ path('app_logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Atsijungti</a>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </nav>
@@ -64,6 +77,9 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav2">
                         <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/users/dashboard">Dashboard</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/users/invoices">Sąskaitos</a>
                             </li>

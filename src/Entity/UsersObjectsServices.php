@@ -20,8 +20,8 @@ class UsersObjectsServices extends BaseEntity
 
     /**
      * This is the owning side.
-     * @see UsersObjectsServicesBundles::$
-     * @var PersistentCollection|Services
+     * @see UsersObjectsServicesBundles::$users_objects_services
+     * @var PersistentCollection|UsersObjectsServicesBundles
      */
     #[ORM\ManyToOne(targetEntity: UsersObjectsServicesBundles::class, inversedBy: 'users_objects_services')]
     #[ORM\JoinColumn(name: 'users_objects_services_bundles_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -36,9 +36,9 @@ class UsersObjectsServices extends BaseEntity
     #[ORM\JoinColumn(name: 'services_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     public $services;
 
-    #[Assert\Range(min: 0, max: 100)]
+    #[Assert\Range(min: 1, max: 100)]
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
-    public int $amount;
+    public int $amount = 1;
 
     #[Assert\Range(min: 0, max: 10000)]
     #[ORM\Column(type: Types::INTEGER, nullable: false)]

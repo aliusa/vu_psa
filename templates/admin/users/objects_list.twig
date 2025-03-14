@@ -25,15 +25,10 @@
                     </a>
                 </td>
             </tr>
+        {% else %}
+            <tr class="text-center">
+                <td colspan="3">Klientas neturi objektų</td>
+            </tr>
         {% endfor %}
     </tbody>
 </table>
-{#
-<div class="list-group">
-    {% for userObject in field.value %}
-        <a class="list-group-item" href="?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5CUsersObjectsCrudController&entityId={{ userObject.id }}">
-            {{ userObject }}
-        </a>
-    {% endfor %}
-</div>
-#}

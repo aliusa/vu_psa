@@ -3,5 +3,34 @@
 {% block title %}Mano sąskaitos{% endblock %}
 
 {% block body %}
-    <div>...</div>
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Išrašyta</th>
+                <th>Suma</th>
+                <th>Apmokėti iki</th>
+                <th>Apmokėta</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invoice in invoices %}
+                <tr>
+                    <td>{{ invoice.created_at|date('Y-m-d H:i') }}</td>
+                    <td>{{ (invoice.total/100)|format_currency('EUR') }}</td>
+                    <td>{{ invoice.due_date|date('Y-m-d') }}</td>
+                    <td>
+                        {% if invoice.is_paid %}
+                            <span class="badge text-bg-success">TAIP</span>
+                        {% else %}
+                            <span class="badge text-bg-danger">NE</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr class="text-center">
+                    <td colspan="4">Nėturite išrašytų sąskaitų</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

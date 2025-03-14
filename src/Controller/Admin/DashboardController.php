@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Administrators;
 use App\Entity\Countries;
-use App\Entity\Premises;
+use App\Entity\Invoices;
 use App\Entity\Services;
 use App\Entity\Users;
 use App\Entity\UsersObjects;
@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -109,6 +108,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Klientų objektai', 'fa-solid fa-house', UsersObjects::class),
             MenuItem::linkToCrud('Klientų objektų paslaugų paketai', 'fa-solid fa-house', UsersObjectsServicesBundles::class),
             MenuItem::linkToCrud('Klientų objektų paslaugų paketo paslaugos', 'fa-solid fa-house', UsersObjectsServices::class),
+            MenuItem::linkToCrud('Sąskaitos', 'fa-solid fa-shop', Invoices::class),
             MenuItem::section('Paslaugos'),
             MenuItem::linkToCrud('Paslaugos', 'fa-solid fa-shop', Services::class),
             MenuItem::section('Administratoriai'),

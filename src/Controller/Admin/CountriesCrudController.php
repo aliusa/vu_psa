@@ -3,31 +3,15 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Countries;
-use App\Entity\Users;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Form\Event\PostSubmitEvent;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class CountriesCrudController extends AbstractCrudController
+class CountriesCrudController extends BaseCrudController
 {
     public function __construct()
     {
@@ -51,14 +35,14 @@ class CountriesCrudController extends AbstractCrudController
             $fields[] = Field::new('title', 'title');
             $fields[] = Field::new('ioc', 'ioc');
             $fields[] = Field::new('iso', 'iso');
-            $fields[] = Field::new('created_at', 'created_at');
+            $fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
 
             $fields[] = TextField::new('title', 'title')->setColumns('col-4');
-            $fields[] = TextField::new('ioc', 'ioc')->setColumns('col-4');
-            $fields[] = TextField::new('iso', 'iso')->setColumns('col-4');
+            $fields[] = TextField::new('ioc', 'ioc')->setColumns('col-4')->setHelp('3 skaitmenų kodas');
+            $fields[] = TextField::new('iso', 'iso')->setColumns('col-4')->setHelp('2 skaitmenų kodas');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra

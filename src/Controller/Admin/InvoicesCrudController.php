@@ -2,16 +2,19 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\UsersObjects;
+use App\Entity\Invoices;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 
-class UsersObjectsCrudController extends BaseCrudController
+class InvoicesCrudController extends BaseCrudController
 {
     public function __construct()
     {
@@ -20,7 +23,7 @@ class UsersObjectsCrudController extends BaseCrudController
 
     public static function getEntityFqcn(): string
     {
-        return UsersObjects::class;
+        return Invoices::class;
     }
 
     public function configureFields(string $pageName): iterable
@@ -32,40 +35,40 @@ class UsersObjectsCrudController extends BaseCrudController
             //sąrašas
 
             $fields[] = Field::new('id');
-            $fields[] = AssociationField::new('users', 'Naudotojas');
-            $fields[] = Field::new('city', 'city');
-            $fields[] = Field::new('street', 'street');
-            $fields[] = Field::new('house', 'house');
-            $fields[] = Field::new('flat', 'flat');
-            $fields[] = Field::new('zip', 'zip');
+            /** @see Invoices::getUser() */
+            $fields[] = Field::new('User', 'Klientas');
+            /** @see Invoices::getUsersObjectsServicesBundles() */
+            $fields[] = Field::new('UsersObjectsServicesBundles', 'users_objects_services_bundles');
+            $fields[] = MoneyField::new('total', 'total')->setCurrency('EUR');
+            $fields[] = DateField::new('due_date', 'due_date');
+            $fields[] = BooleanField::new('is_paid', 'is_paid');
             $fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
 
-            $fields[] = AssociationField::new('users', 'Naudotojas')->autocomplete();
-            $fields[] = AssociationField::new('country', 'country')->autocomplete()->setColumns('col-6 col-md-2');
-            $fields[] = Field::new('city', 'city')->setColumns('col-6 col-md-2');
-            $fields[] = Field::new('street', 'street')->setColumns('col-3 col-md-2');
-            $fields[] = Field::new('house', 'house')->setColumns('col-3 col-md-2');
-            $fields[] = Field::new('flat', 'flat')->setColumns('col-3 col-md-2');
-            $fields[] = Field::new('zip', 'zip')->setColumns('col-3 col-md-2')->setFormTypeOption('attr', ['placeholder' => 12345]);
+            ///** @see Invoices::getUser() */
+            //$fields[] = AssociationField::new('User', 'Klientas');
+            ///** @see Invoices::getUsersObjectsServicesBundles() */
+            //$fields[] = AssociationField::new('UsersObjectsServicesBundles', 'users_objects_services_bundles');
+
+            //$fields[] = TextField::new('is_paid', 'is_paid')->setColumns('col-4');
+            //$fields[] = TextField::new('due_date', 'due_date')->setColumns('col-4');
+            //$fields[] = BooleanField::new('is_paid', 'is_paid')->setColumns('col-4');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
             $fields[] = Field::new('id');
-            $fields[] = AssociationField::new('users', 'Naudotojas');
-            $fields[] = AssociationField::new('country', 'country');
-            $fields[] = Field::new('city', 'city');
-            $fields[] = Field::new('street', 'street');
-            $fields[] = Field::new('house', 'house');
-            $fields[] = Field::new('flat', 'flat');
-            $fields[] = Field::new('zip', 'zip');
+            /** @see Invoices::getUser() */
+            $fields[] = Field::new('User', 'Klientas');
+            /** @see Invoices::getUsersObjectsServicesBundles() */
+            $fields[] = Field::new('UsersObjectsServicesBundles', 'users_objects_services_bundles');
+            $fields[] = MoneyField::new('total', 'total')->setCurrency('EUR');
+            $fields[] = DateField::new('due_date', 'due_date');
+            $fields[] = BooleanField::new('is_paid', 'is_paid');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
-            /** @see UsersObjects::getUsersObjectsServicesBundles() */
-            $fields[] = Field::new('UsersObjectsServicesBundles', 'Paslaugų paketai')->setTemplatePath('admin/users_objects/bundles_list.twig');
 
         }
 
@@ -81,6 +84,7 @@ class UsersObjectsCrudController extends BaseCrudController
         $actions = parent::configureActions($actions);
 
         $actions->add(Crud::PAGE_INDEX, Action::DETAIL);
+        $actions->getAsDto(Crud::PAGE_INDEX)->disableActions([Crud::PAGE_NEW, Crud::PAGE_EDIT, 'delete']);
 
         return $actions;
     }
@@ -93,13 +97,9 @@ class UsersObjectsCrudController extends BaseCrudController
 
         $filters
             ->add('id')
-            ->add('users')
-            ->add('country')
-            ->add('city')
-            ->add('street')
-            ->add('house')
-            ->add('flat')
-            ->add('zip')
+            ->add('total')
+            ->add('due_date')
+            ->add('is_paid')
             ->add('created_at')
         ;
 
@@ -113,15 +113,15 @@ class UsersObjectsCrudController extends BaseCrudController
         $crud
             ->setDefaultSort(['id' => 'DESC'])
             // the labels used to refer to this entity in titles, buttons, etc.
-            ->setEntityLabelInSingular(function (?UsersObjects $entity, ?string $pageName) {
+            ->setEntityLabelInSingular(function (?Invoices $entity, ?string $pageName) {
                 return match ($pageName) {
-                    Crud::PAGE_INDEX, Crud::PAGE_NEW => 'Klientų objektai',
-                    Crud::PAGE_EDIT => "Klientų objektas #{$entity->getId()}",
+                    Crud::PAGE_INDEX, Crud::PAGE_NEW => 'Sąskaitą',
+                    Crud::PAGE_EDIT => "Sąskaita #{$entity->getId()}",
                     Crud::PAGE_DETAIL => $entity->__tostring(),
-                    default => 'Klientų objektas',
+                    default => 'Sąskaita',
                 };
             })
-            ->setEntityLabelInPlural('Klientų objektai')
+            ->setEntityLabelInPlural('Sąskaitos')
         ;
 
         return $crud;

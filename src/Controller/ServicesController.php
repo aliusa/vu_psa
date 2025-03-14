@@ -19,6 +19,7 @@ final class ServicesController extends BaseController
             'services' => $services,
         ]);
     }
+
     #[Route('/services/{id}', name: 'services_view', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
     public function view(EntityManagerInterface $entityManager, Services $service): Response
     {

@@ -7,13 +7,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 
-class UsersObjectsServicesBundlesCrudController extends AbstractCrudController
+class UsersObjectsServicesBundlesCrudController extends BaseCrudController
 {
     public function __construct()
     {
@@ -53,7 +52,8 @@ class UsersObjectsServicesBundlesCrudController extends AbstractCrudController
             $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
-
+            /** @see UsersObjectsServicesBundles::getUsersObjectsServices() */
+            $fields[] = Field::new('getUsersObjectsServices', 'Paslaugos')->setTemplatePath('admin/users_objects_bundles/services_list.twig');
         }
 
         if(empty($fields)){

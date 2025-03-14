@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\InvoicesRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
@@ -9,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints AS Assert;
 
+#[ORM\Table('invoices')]
+#[ORM\Entity(repositoryClass: InvoicesRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Invoices extends BaseEntity
 {
     use IdTrait;
@@ -16,8 +20,8 @@ class Invoices extends BaseEntity
 
     /**
      * This is the owning side.
-     * @see UsersObjectsServicesBundles::$
-     * @var PersistentCollection|Services
+     * @see UsersObjectsServicesBundles::$invoices
+     * @var UsersObjectsServicesBundles
      */
     #[ORM\ManyToOne(targetEntity: UsersObjectsServicesBundles::class, inversedBy: 'users_objects_services')]
     #[ORM\JoinColumn(name: 'users_objects_services_bundles_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -25,7 +29,7 @@ class Invoices extends BaseEntity
 
     #[Assert\Range(min: 0, max: 10000)]
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
-    public int $amount;
+    public int $total;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true, options: [])]
     public $due_date;
@@ -36,5 +40,14 @@ class Invoices extends BaseEntity
     public function __toString()
     {
         return implode(' - ', ["[#{$this->getId()}]", ]);
+    }
+
+    public function getUser(): Users
+    {
+        return $this->users_objects_services_bundles->users_object->users;
+    }
+    public function getUsersObjectsServicesBundles(): UsersObjectsServicesBundles
+    {
+        return $this->users_objects_services_bundles;
     }
 }

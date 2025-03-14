@@ -3,42 +3,18 @@
 namespace App\Controller\Admin;
 
 use App\Controller\Admin\Field\CKEditorField;
-use App\Controller\Admin\Filter\ConsumptionAverageFilter;
-use App\Controller\Admin\Filter\ConsumptionGroupFilter;
-use App\Controller\Admin\Filter\GeneratingObjectTypeFilter;
-use App\Controller\Admin\Filter\PowerPlantTypeFilter;
-use App\Controller\Admin\Filter\UsageFrequencyFilter;
-use App\Controller\Admin\Filter\UserObjectProfileFilter;
-use App\Controller\Admin\Filter\UserObjectProfileType;
-use App\Controller\Admin\Filter\UserObjectsCountFilter;
-use App\Controller\Admin\Filter\UserSettingsFilter;
-use App\Entity\Report;
 use App\Entity\Services;
-use App\Entity\Users;
-use App\Service\EliqIntegration;
-use App\Service\GridioIntegration;
-use App\Service\ReportsService;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
-use Symfony\Component\Form\Event\PostSubmitEvent;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -79,7 +55,7 @@ class ServicesCrudController extends BaseCrudController
 
             $fields[] = FormField::addRow();
             $fields[] = Field::new('title', 'title')->setColumns('col-6');
-            $fields[] = MoneyField::new('price', 'price')->setCurrency('EUR')->setColumns('col-6');
+            $fields[] = MoneyField::new('price', 'price')->setCurrency('EUR')->setColumns('col-6')->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = CKEditorField::new('description', 'description')
                 ->setFormTypeOptions([
                     'config' => [

@@ -22,7 +22,7 @@ class UsersObjects extends BaseEntity
     /**
      * This is the owning side.
      * @see Users::$users_objects
-     * @var PersistentCollection|Users
+     * @var Users
      */
     #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'users_objects')]
     #[ORM\JoinColumn(name: 'users_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -68,7 +68,7 @@ class UsersObjects extends BaseEntity
 
     public function __toString()
     {
-        return implode(' - ', ["[#{$this->getId()}]", $this->users->getFullName(), $this->city, $this->street, $this->house, $this->flat, $this->zip]);
+        return implode(' - ', ["[#{$this->getId()}]", $this->users->getFullName(), $this->city, $this->street, $this->house.'-'.$this->flat, $this->zip]);
     }
 
     public function getActiveUsersObjectsServicesBundlesCount(): int
@@ -83,5 +83,18 @@ class UsersObjects extends BaseEntity
         return $this->users_objects_services_bundles->filter(static function(UsersObjectsServicesBundles $usersObjectsServicesBundles) {
             return !$usersObjectsServicesBundles->isActive();
         })->count();
+    }
+
+    /**
+     * @return UsersObjectsServicesBundles[]|PersistentCollection
+     */
+    public function getUsersObjectsServicesBundles(): PersistentCollection|array
+    {
+        return $this->users_objects_services_bundles;
+    }
+
+    public function getTitle():string
+    {
+        return vsprintf('%s %s %s, LT-%s', [$this->city, $this->street, $this->house.'-'.$this->flat, $this->zip]);
     }
 }

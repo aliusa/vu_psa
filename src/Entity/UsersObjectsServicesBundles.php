@@ -26,7 +26,21 @@ class UsersObjectsServicesBundles extends BaseEntity
     #[ORM\JoinColumn(name: 'users_object_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     public $users_object;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    /**
+     * @see UsersObjectsServices::$users_objects_services_bundles
+     * @var PersistentCollection|UsersObjectsServices[]
+     */
+    #[ORM\OneToMany(targetEntity: UsersObjectsServices::class, mappedBy: 'users_objects_services_bundles')]
+    public $users_objects_services;
+
+    /**
+     * @see Invoices::$users_objects_services_bundles
+     * @var PersistentCollection|Invoices[]
+     */
+    #[ORM\OneToMany(targetEntity: Invoices::class, mappedBy: 'users_objects_services_bundles')]
+    public $invoices;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     public ?\DateTimeImmutable $active_to = null;
 
     /**
@@ -50,5 +64,13 @@ class UsersObjectsServicesBundles extends BaseEntity
     public function isActive(): bool
     {
         return $this->active_to > new \DateTime();
+    }
+
+    /**
+     * @return UsersObjectsServices[]|PersistentCollection
+     */
+    public function getUsersObjectsServices(): PersistentCollection|array
+    {
+        return $this->users_objects_services;
     }
 }

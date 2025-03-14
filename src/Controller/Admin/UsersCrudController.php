@@ -10,7 +10,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -64,7 +63,7 @@ class UsersCrudController extends BaseCrudController
 
             $fields[] = FormField::addRow();
             $fields[] = EmailField::new('email', 'email')->setColumns('col-6');
-            $fields[] = TelephoneField::new('phone', 'phone')->setColumns('col-6');
+            $fields[] = TelephoneField::new('phone', 'phone')->setColumns('col-6')->setFormTypeOption('attr', ['placeholder' => '+370....']);
             $fields[] = TextField::new('first_name', 'first_name')->setColumns('col-6');
             $fields[] = TextField::new('last_name', 'last_name')->setColumns('col-6');
             $fields[] = TextField::new('password', 'password')
@@ -84,7 +83,7 @@ class UsersCrudController extends BaseCrudController
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
             /** @see Users::getUsersOjectsList() */
-            $fields[] = Field::new('UsersOjectsList', 'Objektai')->setTemplatePath('admin/users/users.objects_list.twig');
+            $fields[] = Field::new('UsersOjectsList', 'Objektai')->setTemplatePath('admin/users/objects_list.twig');
 
         }
 

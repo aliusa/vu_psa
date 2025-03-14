@@ -18,6 +18,10 @@ password: Slaptažodis
 first_name: Vardas
 last_name: Pavardė
 country: Šalis
+amount: Kiekis
+unit_price: vnt. kiekis
+total_price: viso kiekis
+service: Paslauga
 
 #UsersObjectsServicesBundles
 users_objects_services_bundles: Paslaugų paketas

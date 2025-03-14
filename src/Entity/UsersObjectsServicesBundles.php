@@ -73,4 +73,12 @@ class UsersObjectsServicesBundles extends BaseEntity
     {
         return $this->users_objects_services;
     }
+
+    /**
+     * @return Invoices[]|PersistentCollection
+     */
+    public function getInvoices(): PersistentCollection|array
+    {
+        return $this->invoices;
+    }
 }

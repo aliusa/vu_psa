@@ -22,6 +22,9 @@ amount: Kiekis
 unit_price: vnt. kiekis
 total_price: viso kiekis
 service: Paslauga
+is_paid: Apmokėta
+due_date: Mokėti iki
+total: Viso
 
 #UsersObjectsServicesBundles
 users_objects_services_bundles: Paslaugų paketas

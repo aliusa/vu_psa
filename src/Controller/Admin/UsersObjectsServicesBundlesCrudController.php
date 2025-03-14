@@ -54,6 +54,8 @@ class UsersObjectsServicesBundlesCrudController extends BaseCrudController
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
             /** @see UsersObjectsServicesBundles::getUsersObjectsServices() */
             $fields[] = Field::new('getUsersObjectsServices', 'Paslaugos')->setTemplatePath('admin/users_objects_bundles/services_list.twig');
+            /** @see UsersObjectsServicesBundles::getInvoices() */
+            $fields[] = Field::new('getInvoices', 'Sąskaitos')->setTemplatePath('admin/users_objects_bundles/invoices_list.twig');
         }
 
         if(empty($fields)){

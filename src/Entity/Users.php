@@ -42,7 +42,7 @@ class Users extends BaseEntity implements UserInterface, PasswordAuthenticatedUs
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     public ?string $last_name = null;
 
-    #[ORM\Column(type: Types::JSON)]
+    #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $roles = [];
 
     /**

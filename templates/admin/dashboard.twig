@@ -20,9 +20,11 @@
         </div>
         <div class="col">
             <div class="card h-100 shadow border-0">
-                <div class="card-body">
-                    ...
-                </div>
+                <a href="/admin?crudAction=index&crudControllerFqcn=App\Controller\Admin\InvoicesCrudController&filters[is_paid]=0" class="">
+                    <div class="card-body">
+                        Nesumokėta <h1>{{ (unpaidAmount/100)|format_currency('EUR') }}</h1>
+                    </div>
+                </a>
             </div>
         </div>
         <div class="col">

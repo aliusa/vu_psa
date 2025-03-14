@@ -36,6 +36,12 @@ class DashboardController extends AbstractDashboardController
                 ->select('COUNT(1)')
                 ->andWhere('item.active_to >= CURRENT_TIMESTAMP()')
                 ->getQuery()->getSingleScalarResult(),
+            'unpaidAmount' => $this->entityManager->getRepository(Invoices::class)
+                ->createQueryBuilder('item')
+                ->select('SUM(item.total) AS total')
+                ->andWhere('item.is_paid = 0')
+                ->getQuery()
+                ->getSingleScalarResult(),
         ]);
         return $this->render('@EasyAdmin/welcome.html.twig', [
             'dashboard_controller_filepath' => (new \ReflectionClass(static::class))->getFileName(),

@@ -59,6 +59,9 @@ services:
     App\Security\AdminLoginFormAuthenticator:
       arguments:
         $userProvider: '@security.user.provider.concrete.admin_user_provider'
+    App\Security\FrontLoginFormAuthenticator:
+      arguments:
+        $userProvider: '@security.user.provider.concrete.app_user_provider'
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
     #Psr\Container\ContainerInterface:
     #  autowire: true

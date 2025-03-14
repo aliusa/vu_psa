@@ -6,7 +6,7 @@ security:
       # used to reload user from session & other features (e.g. switch_user)
       app_user_provider:
         entity:
-          class: App\Entity\Administrators
+          class: App\Entity\Users
           property: email
       admin_user_provider:
         entity:
@@ -28,31 +28,46 @@ security:
       dev:
         pattern: ^/(_(profiler|wdt)|css|images|js)/
         security: false
-      front:
-        lazy: true
-        provider: app_user_provider
-        #custom_authenticators:
-        #  - App\Security\AdminLoginFormAuthenticator
-        logout:
-          path: app_logout
-          # where to redirect after logout
-          # target: app_any_route
-        form_login:
-          login_path: app_login
-          check_path: app_login
-          enable_csrf: true
-      main:
+
+      admin:
+        pattern:
+          - ^/admin?
+          - ^/admin/
         lazy: true
         provider: admin_user_provider
+        #form_login:
+        #  login_path: admin_login
+        #  check_path: admin_login
+        #  enable_csrf: true
         custom_authenticators:
           - App\Security\AdminLoginFormAuthenticator
         logout:
           path: admin_logout
           target: admin_login
+        entry_point: App\Security\AdminLoginFormAuthenticator
+
+      front:
+        pattern: ^/ # ✅ Add pattern so it doesn't act as a catch-all
+        lazy: true
+        provider: app_user_provider
+        custom_authenticators:
+          - App\Security\FrontLoginFormAuthenticator
+        #form_login:
+        #  login_path: app_login
+        #  check_path: app_login
+        #  enable_csrf: true
+        logout:
+          path: app_logout
+          # where to redirect after logout
+          target: app_login
+        entry_point: App\Security\FrontLoginFormAuthenticator
+
     access_control:
       # require ROLE_ADMIN for /admin*
       - { path: '^/admin/login', roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: '^/admin', roles: [ROLE_ADMIN, ROLE_SUPER_ADMIN] }
+      #- { path: '^/users/login', roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      #- { path: '^/', roles: ROLE_USER }
 
       #- { path: ^/admin/logout, roles: IS_AUTHENTICATED_FULLY }
       #- { path: ^/admin/register, role: IS_AUTHENTICATED_ANONYMOUSLY }

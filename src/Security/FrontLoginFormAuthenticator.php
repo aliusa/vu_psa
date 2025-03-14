@@ -2,9 +2,8 @@
 
 namespace App\Security;
 
-use App\Controller\Admin\DashboardController;
-use App\Controller\SecurityAdminController;
-use App\Entity\Administrators;
+use App\Controller\SecurityFrontController;
+use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,9 +23,11 @@ use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class AdminLoginFormAuthenticator extends AbstractLoginFormAuthenticator
+class FrontLoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
+
+    private bool $debug = false;
 
     public function __construct(
         private HttpUtils $httpUtils,
@@ -40,8 +41,8 @@ class AdminLoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function start(Request $request, ?AuthenticationException $authException = null): Response
     {
-        if ($request->attributes->get('_route') === 'admin_login') {
-            $subRequest = $this->httpUtils->createRequest($request, 'admin_login');
+        if ($request->attributes->get('_route') === 'app_login') {
+            $subRequest = $this->httpUtils->createRequest($request, 'app_login');
             $response = $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             if (200 === $response->getStatusCode()) {
                 $response->setStatusCode(401);
@@ -49,7 +50,7 @@ class AdminLoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
             return $response;
         } else {
-            //redirect from /admin to /admin/login
+            //redirect from /app to /app/login
 
             $url = $this->getLoginUrl($request);
 
@@ -60,14 +61,14 @@ class AdminLoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public function supports(Request $request): bool
     {
         return
-            in_array($request->attributes->get('_route'), ['admin_login'])
+            in_array($request->attributes->get('_route'), ['app_login'])
             && $request->isMethod('POST');
     }
 
     protected function getLoginUrl(Request $request): string
     {
-        /** @see SecurityAdminController::login() */
-        return $this->httpUtils->generateUri($request, 'admin_login');
+        /** @see SecurityFrontController::login() */
+        return $this->httpUtils->generateUri($request, 'app_login');
     }
 
     public function authenticate(Request $request): Passport
@@ -83,13 +84,13 @@ class AdminLoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         $userBadge = new UserBadge($email, static function (string $email) use ($em) {
-            $administrator = $em->getRepository(Administrators::class)->findOneBy(['email' => $email]);
+            $user = $em->getRepository(Users::class)->findOneBy(['email' => $email]);
 
-            if (!$administrator) {
+            if (!$user) {
                 throw new UserNotFoundException('Email could not be found.');
             }
 
-            return $administrator;
+            return $user;
         });
 
         $passport = new Passport(
@@ -98,15 +99,16 @@ class AdminLoginFormAuthenticator extends AbstractLoginFormAuthenticator
             [
                 new RememberMeBadge(),
                 new CsrfTokenBadge('authenticate', $csrfToken),
-            ]
+            ],
         );
-
         return $passport;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        /** @see DashboardController::index() */
-        return $this->httpUtils->createRedirectResponse($request, 'admin');
+        /** @var Users $user */
+        $user = $token->getUser();
+        $request->getSession()->set('currentObject', $user->users_objects->first());
+        return $this->httpUtils->createRedirectResponse($request, '/');
     }
 }

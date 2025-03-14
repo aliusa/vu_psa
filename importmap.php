@@ -16,4 +16,11 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    '@fortawesome/fontawesome-free/css/fontawesome.min.css' => [
+        'version' => '6.7.2',
+        'type' => 'css',
+    ],
+    'jquery' => [
+        'version' => '3.7.1',
+    ],
 ];

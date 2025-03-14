@@ -21,9 +21,9 @@
                 <td>{{ (invoice.total/100)|format_currency('EUR') }}</td>
                 <td>
                     {% if invoice.is_paid %}
-                        <span class="badge text-bg-success">TAIP</span>
+                        <span class="badge text-bg-success">{{ "yes"|trans }}</span>
                     {% else %}
-                        <span class="badge text-bg-danger">NE</span>
+                        <span class="badge text-bg-danger">{{ "no"|trans }}</span>
                     {% endif %}
                 </td>
             </tr>

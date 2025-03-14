@@ -7,22 +7,22 @@
         <thead>
             <tr>
                 <th>Išrašyta</th>
-                <th>Suma</th>
-                <th>Apmokėti iki</th>
-                <th>Apmokėta</th>
+                <th>{{ "total"|trans }}</th>
+                <th>{{ "due_date"|trans }}</th>
+                <th>{{ "is_paid"|trans }}</th>
             </tr>
         </thead>
         <tbody>
             {% for invoice in invoices %}
-                <tr>
+                <tr data-href="/users/invoices/{{ invoice.id }}" class="cursor-pointer">
                     <td>{{ invoice.created_at|date('Y-m-d H:i') }}</td>
                     <td>{{ (invoice.total/100)|format_currency('EUR') }}</td>
                     <td>{{ invoice.due_date|date('Y-m-d') }}</td>
                     <td>
                         {% if invoice.is_paid %}
-                            <span class="badge text-bg-success">TAIP</span>
+                            <span class="badge text-bg-success">{{ "yes"|trans }}</span>
                         {% else %}
-                            <span class="badge text-bg-danger">NE</span>
+                            <span class="badge text-bg-danger">{{ "no"|trans }}</span>
                         {% endif %}
                     </td>
                 </tr>

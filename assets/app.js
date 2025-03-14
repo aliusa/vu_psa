@@ -7,5 +7,21 @@
 import './styles/app.scss';
 //import { Alert } from 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/+esm';
 //import fortawesomefontawesomeFree from 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/+esm';
+//import './vendor/@fortawesome/fontawesome-free/css/fontawesome.min.css';
+//import './vendor/@fortawesome/fontawesome-free/fontawesome-free.index.js';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+import $ from 'jquery';
+window.$ = $;
+
+$('tr[data-href]').each(function (index, object) {
+    console.log(this, index, object);
+    var tr = $(object);
+
+    $(this).on('click', function (e) {
+        location.href = tr.attr('data-href');
+    });
+
+    return false;//break
+    return;//continue
+});

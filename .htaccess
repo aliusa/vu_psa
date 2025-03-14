@@ -7,6 +7,7 @@ Options +FollowSymlinks
 # Fix the bundles folder
 RewriteRule ^bundles/(.*)$ /public/bundles/$1  [END]
 RewriteRule ^public/(.*)$ /public/$1  [END]
+RewriteRule ^assets/(.*)$ /public/assets/$1  [END]
 
 
 #RewriteRule ^admin/(.*)$ public/index.php [QSA,L]#neveikia

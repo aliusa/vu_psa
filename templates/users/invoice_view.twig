@@ -1,0 +1,32 @@
+{% extends 'base.twig' %}
+
+{% block title %}Mano sąskaita #{{ invoice.id }}{% endblock %}
+
+{% block body %}
+    <table class="table table-condensed table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Išrašyta</th>
+                <td>{{ invoice.created_at|date('Y-m-d') }}</td>
+            </tr>
+            <tr>
+                <th>{{ "total"|trans }}</th>
+                <td>{{ (invoice.total/100)|format_currency('EUR') }}</td>
+            </tr>
+            <tr>
+                <th>{{ "due_date"|trans }}</th>
+                <td>{{ invoice.due_date|date('Y-m-d') }}</td>
+            </tr>
+            <tr>
+                <th>{{ "is_paid"|trans }}</th>
+                <td>
+                    {% if invoice.is_paid %}
+                        <span class="badge text-bg-success">{{ "yes"|trans }}</span>
+                    {% else %}
+                        <span class="badge text-bg-danger">{{ "no"|trans }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </thead>
+    </table>
+{% endblock %}

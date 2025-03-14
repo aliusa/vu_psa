@@ -25,6 +25,8 @@ service: Paslauga
 is_paid: Apmokėta
 due_date: Mokėti iki
 total: Viso
+yes: TAIP
+no: NE
 
 #UsersObjectsServicesBundles
 users_objects_services_bundles: Paslaugų paketas

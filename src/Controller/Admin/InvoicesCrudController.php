@@ -39,7 +39,8 @@ class InvoicesCrudController extends BaseCrudController
             $fields[] = Field::new('User', 'Klientas');
             /** @see Invoices::getUsersObjectsServicesBundles() */
             $fields[] = Field::new('UsersObjectsServicesBundles', 'users_objects_services_bundles');
-            $fields[] = MoneyField::new('total', 'total')->setCurrency('EUR');
+            /** @see Invoices::getInvoiceTotal() */
+            $fields[] = MoneyField::new('getInvoiceTotal', 'total')->setCurrency('EUR');
             $fields[] = DateField::new('due_date', 'due_date');
             $fields[] = BooleanField::new('is_paid', 'is_paid');
             $fields[] = DateTimeField::new('created_at', 'created_at');
@@ -64,11 +65,17 @@ class InvoicesCrudController extends BaseCrudController
             $fields[] = Field::new('User', 'Klientas');
             /** @see Invoices::getUsersObjectsServicesBundles() */
             $fields[] = Field::new('UsersObjectsServicesBundles', 'users_objects_services_bundles');
-            $fields[] = MoneyField::new('total', 'total')->setCurrency('EUR');
+            ///** @see Invoices::getInvoiceTotal() */
+            //$fields[] = MoneyField::new('getInvoiceTotal', 'total')->setCurrency('EUR');
             $fields[] = DateField::new('due_date', 'due_date');
             $fields[] = BooleanField::new('is_paid', 'is_paid');
+            $fields[] = Field::new('series', 'Serija');
+            /** @see Invoices::getNo() */
+            $fields[] = Field::new('getNo', 'Numeris');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
+            /** @see Invoices::getInvoiceServices() */
+            $fields[] = Field::new('getInvoiceServices', 'Priskirtos paslaugos')->setTemplatePath('admin/invoices/services_list.twig');
 
         }
 
@@ -97,7 +104,8 @@ class InvoicesCrudController extends BaseCrudController
 
         $filters
             ->add('id')
-            ->add('total')
+            ///** @see Invoices::getInvoiceTotal() */
+            //->add('getInvoiceTotal')
             ->add('due_date')
             ->add('is_paid')
             ->add('created_at')

@@ -27,7 +27,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="d-flex flex-column">
-                                    <div class="d-flex flex-column">{{ "total"|trans }}: <strong>{{ (newestInvoices.total/100)|format_currency('EUR') }}</strong></div>
+                                    <div class="d-flex flex-column">{{ "total"|trans }}: <strong>{{ (newestInvoices.getInvoiceTotal()/100)|format_currency('EUR') }}</strong></div>
                                 </div>
                             </div>
                         </div>

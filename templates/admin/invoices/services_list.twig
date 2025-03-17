@@ -1,0 +1,54 @@
+<table class="table table-responsive table-hover table-condensed table-bordered">
+    <thead>
+        <tr class="table-secondary">
+            <th class="w-50">Paslauga</th>
+            <th>Vnt. kaina be PVM</th>
+            <th>PVM</th>
+            <th>Vnt. kaina su PVM</th>
+            <th>Kiekis</th>
+            <th>Suma be PVM</th>
+            <th>Suma su PVM</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if field.value.isEmpty() %}
+            <tr class="text-center">
+                <td colspan="10">Nėra priskirtų paslaugų</td>
+            </tr>
+        {% else %}
+            {% set sumUnitPrice = 0 %}
+            {% set sumUnitPvm = 0 %}
+            {% set sumUnitPriceTotal = 0 %}
+            {% set sumTotalPriceBePvm = 0 %}
+            {% set sumTotalPriceSuPvm = 0 %}
+            {% for users_objects_services in field.value %}
+                <tr>
+                    <td>
+                        <a class="list-group-item" href="/admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesCrudController&entityId={{ users_objects_services.id }}">
+                            {{ users_objects_services.services.title }}
+                        </a>
+                    </td>
+                    <td>{{ (users_objects_services.unit_price/100)|format_currency('EUR') }}</td>
+                    <td>{{ (users_objects_services.unit_adjustments/100)|format_currency('EUR') }}</td>
+                    <td>{{ ((users_objects_services.unit_total)/100)|format_currency('EUR') }}</td>
+                    <td>{{ users_objects_services.amount }}</td>
+                    <td>{{ (users_objects_services.unit_price * users_objects_services.amount/100)|format_currency('EUR') }}</td>
+                    <td>{{ (users_objects_services.total_price/100)|format_currency('EUR') }}</td>
+                </tr>
+                {% set sumUnitPrice = sumUnitPrice + users_objects_services.unit_price %}
+                {% set sumUnitPvm = sumUnitPvm + users_objects_services.unit_adjustments %}
+                {% set sumTotalPriceBePvm = sumTotalPriceBePvm + users_objects_services.unit_price * users_objects_services.amount %}
+                {% set sumTotalPriceSuPvm = sumTotalPriceSuPvm + users_objects_services.total_price %}
+            {% endfor %}
+            <tr class="table-light">
+                <th></th>
+                <th>{{ (sumUnitPrice/100)|format_currency('EUR') }}</th>
+                <th>{{ (sumUnitPvm/100)|format_currency('EUR') }}</th>
+                <th>{{ (sumUnitPriceTotal/100)|format_currency('EUR') }}</th>
+                <th></th>
+                <th>{{ (sumTotalPriceBePvm/100)|format_currency('EUR') }}</th>
+                <th>{{ (sumTotalPriceSuPvm/100)|format_currency('EUR') }}</th>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

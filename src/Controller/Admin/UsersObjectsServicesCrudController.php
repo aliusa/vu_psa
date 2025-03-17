@@ -38,6 +38,8 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             $fields[] = AssociationField::new('services', 'service');
             $fields[] = Field::new('amount', 'amount');
             $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR');
+            $fields[] = MoneyField::new('unit_adjustments', 'unit_adjustments')->setCurrency('EUR');
+            $fields[] = MoneyField::new('unit_total', 'unit_total')->setCurrency('EUR');
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR');
             $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = DateTimeField::new('created_at', 'created_at');
@@ -49,6 +51,7 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             $fields[] = AssociationField::new('services', 'services')->autocomplete()->setColumns('col-12 col-md-6');/** @see UsersObjectsServices::$services */
             $fields[] = Field::new('amount', 'amount')->setColumns('col-4');
             $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR')->setColumns('col-4')->setFormTypeOption('attr', ['placeholder' => '00.00']);
+            $fields[] = MoneyField::new('unit_adjustments', 'unit_adjustments')->setCurrency('EUR')->setColumns('col-4')->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR')->setColumns('col-4')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = DateField::new('active_to', 'active_to');
 
@@ -60,6 +63,8 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             $fields[] = AssociationField::new('services', 'service');
             $fields[] = Field::new('amount', 'amount');
             $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR');
+            $fields[] = MoneyField::new('unit_adjustments', 'unit_adjustments')->setCurrency('EUR');
+            $fields[] = MoneyField::new('unit_total', 'unit_total')->setCurrency('EUR');
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR');
             $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = DateTimeField::new('created_at', 'created_at');

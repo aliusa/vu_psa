@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Invoices;
 use App\Entity\UsersObjects;
+use App\Entity\UsersObjectsServices;
 use App\Entity\UsersObjectsServicesBundles;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,32 +34,33 @@ class UsersController extends BaseController
     #[Route('/users/dashboard', methods: ['GET'])]
     public function dashboard(EntityManagerInterface $entityManager): Response
     {
-        $leftToPay = $entityManager->getRepository(Invoices::class)
-            ->createQueryBuilder('item')
-            ->select('SUM(item.total) AS total')
-            ->innerJoin('item.users_objects_services_bundles', 'users_objects_services_bundles')/** @see Invoices::$users_objects_services_bundles */
+        $leftToPay = $entityManager->getRepository(UsersObjectsServices::class)
+            ->createQueryBuilder('users_objects_services')
+            ->select('SUM(users_objects_services.total_price) AS total_price')
+            ->innerJoin('users_objects_services.users_objects_services_bundles', 'users_objects_services_bundles')/** @see Invoices::$users_objects_services_bundles */
+            ->leftJoin('users_objects_services_bundles.invoices', 'invoices')/** @see UsersObjectsServicesBundles::$invoices */
             ->andWhere('users_objects_services_bundles.users_object = :users_object')/** @see UsersObjectsServicesBundles::$users_object */
-            ->setParameter('users_object', $this->request->getSession()->get('currentObject'))
-            ->andWhere('item.is_paid = 0')
+                ->setParameter('users_object', $this->request->getSession()->get('currentObject'))
+            ->andWhere('invoices.is_paid = 0')
             ->getQuery()
             ->getSingleScalarResult()
         ;
 
-        /** @var Invoices|null $invoices */
+        /** @var Invoices[] $invoices */
         $newInvoices = $entityManager->getRepository(Invoices::class)
-            ->createQueryBuilder('item')
-            ->innerJoin('item.users_objects_services_bundles', 'users_objects_services_bundles')/** @see Invoices::$users_objects_services_bundles */
+            ->createQueryBuilder('invoices')
+            ->innerJoin('invoices.users_objects_services_bundles', 'users_objects_services_bundles')/** @see Invoices::$users_objects_services_bundles */
             ->andWhere('users_objects_services_bundles.users_object = :users_object')/** @see UsersObjectsServicesBundles::$users_object */
             ->setParameter('users_object', $this->request->getSession()->get('currentObject'))
-            ->addOrderBy('item.created_at', 'DESC')
+            ->addOrderBy('invoices.created_at', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getSingleResult()
+            ->getResult()
         ;
 
         return $this->render('users/dashboard.twig', [
             'leftToPay' => $leftToPay,
-            'newestInvoices' => $newInvoices,
+            'newestInvoices' => reset($newInvoices),
         ]);
     }
 
@@ -68,8 +70,8 @@ class UsersController extends BaseController
     {
         /** @var Invoices[] $invoices */
         $invoices = $entityManager->getRepository(Invoices::class)
-            ->createQueryBuilder('item')
-            ->innerJoin('item.users_objects_services_bundles', 'users_objects_services_bundles')/** @see Invoices::$users_objects_services_bundles */
+            ->createQueryBuilder('invoices')
+            ->innerJoin('invoices.users_objects_services_bundles', 'users_objects_services_bundles')/** @see Invoices::$users_objects_services_bundles */
             ->andWhere('users_objects_services_bundles.users_object = :users_object')/** @see UsersObjectsServicesBundles::$users_object */
             ->setParameter('users_object', $this->request->getSession()->get('currentObject'))
             ->getQuery()
@@ -85,15 +87,15 @@ class UsersController extends BaseController
     #[Route('/users/invoices/{id}', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
     public function invoicesId(EntityManagerInterface $entityManager): Response
     {
-        /** @var Invoices $invoice */
+        /** @var Invoices[] $invoice */
         $invoiceFound = $entityManager->getRepository(Invoices::class)
-            ->createQueryBuilder('item')
-            ->innerJoin('item.users_objects_services_bundles', 'users_objects_services_bundles')/** @see Invoices::$users_objects_services_bundles */
+            ->createQueryBuilder('invoices')
+            ->innerJoin('invoices.users_objects_services_bundles', 'users_objects_services_bundles')/** @see Invoices::$users_objects_services_bundles */
             ->andWhere('users_objects_services_bundles.users_object = :users_object')/** @see UsersObjectsServicesBundles::$users_object */
             ->setParameter('users_object', $this->request->getSession()->get('currentObject'))
-            ->andWhere('item.id = :id')->setParameter('id', $this->request->get('id'))
+            ->andWhere('invoices.id = :id')->setParameter('id', $this->request->get('id'))
             ->getQuery()
-            ->getSingleResult()
+            ->getResult()
             ;
         if (!$invoiceFound) {
             $referer = $this->request->headers->get('referer');
@@ -101,7 +103,7 @@ class UsersController extends BaseController
         }
 
         return $this->render('users/invoice_view.twig', [
-            'invoice' => $invoiceFound,
+            'invoice' => reset($invoiceFound),
         ]);
     }
 }

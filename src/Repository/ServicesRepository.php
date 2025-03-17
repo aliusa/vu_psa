@@ -20,10 +20,10 @@ class ServicesRepository extends BaseRepository
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
+    //        return $this->createQueryBuilder('service')
+    //            ->andWhere('service.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
+    //            ->orderBy('service.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
@@ -32,8 +32,8 @@ class ServicesRepository extends BaseRepository
 
     //    public function findOneBySomeField($value): ?Services
     //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
+    //        return $this->createQueryBuilder('service')
+    //            ->andWhere('service.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()
@@ -42,12 +42,12 @@ class ServicesRepository extends BaseRepository
 
     public function getActiveServices(): array
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.active_from <= :now')
-            ->andWhere('s.active_to IS NULL OR s.active_to < :now')
-            ->andWhere('s.advertise = 1')
+        return $this->createQueryBuilder('service')
+            ->andWhere('service.active_from <= :now')
+            ->andWhere('service.active_to IS NULL OR service.active_to < :now')
+            ->andWhere('service.advertise = 1')
             ->setParameter('now', new \DateTime())
-            ->orderBy('s.id', 'ASC')
+            ->orderBy('service.id', 'ASC')
             ->getQuery()
             ->getResult()
         ;

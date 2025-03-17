@@ -16,8 +16,13 @@
             {% for invoice in invoices %}
                 <tr data-href="/users/invoices/{{ invoice.id }}" class="cursor-pointer">
                     <td>{{ invoice.created_at|date('Y-m-d H:i') }}</td>
-                    <td>{{ (invoice.total/100)|format_currency('EUR') }}</td>
-                    <td>{{ invoice.due_date|date('Y-m-d') }}</td>
+                    <td>{{ (invoice.getInvoiceTotal()/100)|format_currency('EUR') }}</td>
+                    <td>
+                        {{ invoice.due_date|date('Y-m-d') }}
+                        {% if invoice.isDuePassed() %}
+                            <span class="badge text-bg-danger">VĖLUOJAMA</span>
+                        {% endif %}
+                    </td>
                     <td>
                         {% if invoice.is_paid %}
                             <span class="badge text-bg-success">{{ "yes"|trans }}</span>

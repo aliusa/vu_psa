@@ -25,7 +25,7 @@ class UsersObjects extends BaseEntity
      * @var Users
      */
     #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'users_objects')]
-    #[ORM\JoinColumn(name: 'users_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'users_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $users;
 
     /**
@@ -34,7 +34,7 @@ class UsersObjects extends BaseEntity
      * @var PersistentCollection|Users
      */
     #[ORM\ManyToOne(targetEntity: Countries::class, inversedBy: 'users_objects')]
-    #[ORM\JoinColumn(name: 'country_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'country_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $country;
 
     #[AssertValidator\Length(max: 100)]
@@ -63,7 +63,7 @@ class UsersObjects extends BaseEntity
      * @var PersistentCollection|UsersObjectsServicesBundles[]
      */
     #[ORM\OneToMany(targetEntity: UsersObjectsServicesBundles::class, mappedBy: 'users_object')]
-    #[ORM\JoinColumn(name: 'users_objects_services_bundles_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'users_objects_services_bundles_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $users_objects_services_bundles;
 
     public function __toString()

@@ -12,18 +12,21 @@
         {% for invoice in field.value %}
             <tr>
                 <td>
-                    <a class="list-group-item" href="/admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\InvoicesCrudController&entityId={{ service.id }}">
-                        #{{ invoice.id }}
+                    <a class="list-group-item" href="/admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\InvoicesCrudController&entityId={{ invoice.id }}">
+                        #{{ invoice.id }} {{ invoice.getFormattedSeries() }}
                     </a>
                 </td>
                 <td>{{ invoice.created_at|date('Y-m-d H:i:s') }}</td>
                 <td>{{ invoice.due_date|date('Y-m-d') }}</td>
-                <td>{{ (invoice.total/100)|format_currency('EUR') }}</td>
+                <td>{{ (invoice.getInvoiceTotal()/100)|format_currency('EUR') }}</td>
                 <td>
                     {% if invoice.is_paid %}
                         <span class="badge text-bg-success">{{ "yes"|trans }}</span>
                     {% else %}
                         <span class="badge text-bg-danger">{{ "no"|trans }}</span>
+                        {% if invoice.isDuePassed() %}
+                            <span class="badge text-bg-danger">VĖLUOJAMA</span>
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>

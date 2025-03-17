@@ -23,7 +23,7 @@ class UsersObjectsServicesBundles extends BaseEntity
      * @var PersistentCollection|UsersObjects
      */
     #[ORM\ManyToOne(targetEntity: UsersObjects::class, inversedBy: 'users_objects_services_bundles')]
-    #[ORM\JoinColumn(name: 'users_object_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'users_object_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $users_object;
 
     /**

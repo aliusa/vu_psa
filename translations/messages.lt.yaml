@@ -19,8 +19,8 @@ first_name: Vardas
 last_name: Pavardė
 country: Šalis
 amount: Kiekis
-unit_price: vnt. kiekis
-total_price: viso kiekis
+unit_price: vnt. kaina
+total_price: viso kaina
 service: Paslauga
 is_paid: Apmokėta
 due_date: Mokėti iki

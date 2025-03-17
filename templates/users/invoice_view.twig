@@ -50,10 +50,10 @@
         <thead>
             <tr class="table-secondary">
                 <th class="w-50">Paslauga</th>
-                <th>Vnt. kaina be PVM</th>
-                <th>PVM</th>
-                <th>Vnt. kaina su PVM</th>
-                <th>Kiekis</th>
+                <th>{{ "unit_price"|trans }}</th>
+                <th>{{ "unit_adjustments"|trans }}</th>
+                <th>{{ "unit_total"|trans }}</th>
+                <th>{{ "amount"|trans }}</th>
                 <th>Suma be PVM</th>
                 <th>Suma su PVM</th>
             </tr>
@@ -61,7 +61,7 @@
         <tbody>
             {% if invoice.users_objects_services_bundles.users_objects_services.isEmpty() %}
                 <tr>
-                    <td colspan="10">Nėra paslaugų</td>
+                    <td colspan="20">Nėra paslaugų</td>
                 </tr>
             {% else %}
                 {% set sumUnitPrice = 0 %}

@@ -2,18 +2,19 @@
     <thead>
         <tr class="table-secondary">
             <th class="w-50">Paslauga</th>
-            <th>Vnt. kaina be PVM</th>
-            <th>PVM</th>
-            <th>Vnt. kaina su PVM</th>
+            <th>{{ "unit_price"|trans }}</th>
+            <th>{{ "unit_adjustments"|trans }}</th>
+            <th>{{ "unit_total"|trans }}</th>
             <th>Kiekis</th>
             <th>Suma be PVM</th>
             <th>Suma su PVM</th>
+            <th>Priskirta</th>
         </tr>
     </thead>
     <tbody>
         {% if field.value.isEmpty() %}
             <tr class="text-center">
-                <td colspan="10">Nėra priskirtų paslaugų</td>
+                <td colspan="20">Nėra priskirtų paslaugų</td>
             </tr>
         {% else %}
             {% set sumUnitPrice = 0 %}
@@ -34,6 +35,7 @@
                     <td>{{ users_objects_services.amount }}</td>
                     <td>{{ (users_objects_services.unit_price * users_objects_services.amount/100)|format_currency('EUR') }}</td>
                     <td>{{ (users_objects_services.total_price/100)|format_currency('EUR') }}</td>
+                    <td class="text-nowrap">{{ users_objects_services.created_at|date('Y-m-d H:i') }}</td>
                 </tr>
                 {% set sumUnitPrice = sumUnitPrice + users_objects_services.unit_price %}
                 {% set sumUnitPvm = sumUnitPvm + users_objects_services.unit_adjustments %}
@@ -48,6 +50,7 @@
                 <th></th>
                 <th>{{ (sumTotalPriceBePvm/100)|format_currency('EUR') }}</th>
                 <th>{{ (sumTotalPriceSuPvm/100)|format_currency('EUR') }}</th>
+                <th></th>
             </tr>
         {% endif %}
     </tbody>

@@ -2,24 +2,24 @@
     <thead>
         <tr>
             <th>Paslaugų paketas</th>
+            <th>Paslaugos</th>
+            <th>Sąskaitos</th>
             <th>{{ "created_at"|trans }}</th>
             <th>{{ "active_to"|trans }}</th>
         </tr>
     </thead>
     <tbody>
         {% for userObjectBundle in field.value %}
-            <tr>
-                <td>
-                    <a class="list-group-item" href="/admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesBundlesCrudController&entityId={{ userObjectBundle.id }}">
-                        #{{ userObjectBundle.id }}
-                    </a>
-                </td>
+            <tr data-href="/admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesBundlesCrudController&entityId={{ userObjectBundle.id }}">
+                <td>#{{ userObjectBundle.id }}</td>
+                <td>{{ userObjectBundle.getUsersObjectsServices().count() }}</td>
+                <td>{{ userObjectBundle.getInvoices().count() }}</td>
                 <td>{{ userObjectBundle.created_at|date('Y-m-d H:i:s') }}</td>
-                <td>{{ userObjectBundle.active_to|date('Y-m-d H:i:s') }}</td>
+                <td class="{% if userObjectBundle.isActive() %}text-success{% else %}text-danger{% endif %}">{{ userObjectBundle.active_to|date('Y-m-d') }}</td>
             </tr>
         {% else %}
             <tr class="text-center">
-                <td colspan="3">Objektas neturi paslaugų paketų</td>
+                <td colspan="20">Objektas neturi paslaugų paketų</td>
             </tr>
         {% endfor %}
     </tbody>

@@ -19,14 +19,16 @@ first_name: Vardas
 last_name: Pavardė
 country: Šalis
 amount: Kiekis
-unit_price: vnt. kaina
-total_price: viso kaina
+total_price: Viso kaina
 service: Paslauga
 is_paid: Apmokėta
 due_date: Mokėti iki
 total: Viso
 yes: TAIP
 no: NE
+unit_price: Vnt. kaina be PVM
+unit_adjustments: Vnt. PVM kaina
+unit_total: Vnt. kaina su PVM
 
 #UsersObjectsServicesBundles
 users_objects_services_bundles: Paslaugų paketas

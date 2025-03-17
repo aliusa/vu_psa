@@ -6,6 +6,9 @@ body {
     //
 }
 
-.cursor-pointer {
+//.cursor-pointer {
+//    cursor: pointer;
+//}
+tr[data-href] {
     cursor: pointer;
 }

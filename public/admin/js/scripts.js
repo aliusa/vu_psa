@@ -93,4 +93,16 @@ $(document).ready(function () {
     $(triggerEl).closest('.form-tabs').find('.tab-pane').removeClass('active');
     $(triggerEl).closest('.form-tabs').find('.tab-pane#' + currentTab).addClass('active');
 
+    $('tr[data-href]').each(function (index, object) {
+        console.log(this, index, object);
+        var tr = $(object);
+
+        $(this).on('click', function (e) {
+            location.href = tr.attr('data-href');
+        });
+
+        return false;//break
+        return;//continue
+    });
 });
+

@@ -14,8 +14,8 @@
         </thead>
         <tbody>
             {% for invoice in invoices %}
-                <tr data-href="/users/invoices/{{ invoice.id }}" class="cursor-pointer">
-                    <td>{{ invoice.created_at|date('Y-m-d H:i') }}</td>
+                <tr data-href="/users/invoices/{{ invoice.id }}">
+                    <td>{{ invoice.created_at|date('Y-m-d') }}</td>
                     <td>{{ (invoice.getInvoiceTotal()/100)|format_currency('EUR') }}</td>
                     <td>
                         {{ invoice.due_date|date('Y-m-d') }}
@@ -33,7 +33,7 @@
                 </tr>
             {% else %}
                 <tr class="text-center">
-                    <td colspan="4">Nėturite išrašytų sąskaitų</td>
+                    <td colspan="20">Nėturite išrašytų sąskaitų</td>
                 </tr>
             {% endfor %}
         </tbody>

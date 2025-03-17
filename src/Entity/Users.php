@@ -98,11 +98,6 @@ class Users extends BaseEntity implements UserInterface, PasswordAuthenticatedUs
         return $this->email;
     }
 
-    public function getConfirmedEmail():?string
-    {
-        return $this->email;
-    }
-
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;

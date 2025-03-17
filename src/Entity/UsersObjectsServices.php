@@ -8,7 +8,7 @@ use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
-use Symfony\Component\Validator\Constraints AS Assert;
+use Symfony\Component\Validator\Constraints AS AssertValidator;
 
 #[ORM\Table('users_objects_services')]
 #[ORM\Entity(repositoryClass: UsersObjectsServicesRepository::class)]
@@ -36,21 +36,21 @@ class UsersObjectsServices extends BaseEntity
     #[ORM\JoinColumn(name: 'services_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $services;
 
-    #[Assert\Range(min: 1, max: 100)]
+    #[AssertValidator\Range(min: 1, max: 100)]
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
     public int $amount = 1;
 
     /**
      * @var int Vnt. kaina be PVM
      */
-    #[Assert\Range(min: 0, max: 10000)]
+    #[AssertValidator\Range(min: 0, max: 10000)]
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
     public int $unit_price;
 
     /**
      * @var int Vnt. PVM
      */
-    #[Assert\Range(min: 0, max: 10000)]
+    #[AssertValidator\Range(min: 0, max: 10000)]
     #[ORM\Column(type: Types::INTEGER, nullable: false, options: ['default' => 0])]
     public int $unit_adjustments;
 
@@ -64,7 +64,7 @@ class UsersObjectsServices extends BaseEntity
     /**
      * @var int Vnt. kaina su PVM * kiekis
      */
-    #[Assert\Range(min: 0, max: 100000)]
+    #[AssertValidator\Range(min: 0, max: 100000)]
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
     public int $total_price;
 

@@ -53,7 +53,7 @@ class MailerManager
     //region Messages
     public function user_sendMessages(Message $message)
     {
-        $email = $message->user->getConfirmedEmail();
+        $email = $message->user->email;
         if(!empty($email)){
             $params['subject'] = $message->message_group->subject;
             $params['html'] = $message->message_group->message;

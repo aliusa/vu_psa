@@ -18,5 +18,6 @@ composer validate
 php bin/console cache:clear --env=dev && php bin/console cache:clear --env=prod
 php bin/console assets:install
 php bin/console importmap:install
+php bin/console asset-map:compile
 php bin/console doctrine:schema:update --force
 ```

@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use App\Registry;
 use App\Repository\InvoicesRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
 use Symfony\Component\Validator\Constraints as AssertValidator;
 
@@ -24,15 +26,15 @@ class Invoices extends BaseEntity
      * @see UsersObjectsServicesBundles::$invoices
      * @var UsersObjectsServicesBundles
      */
-    #[ORM\ManyToOne(targetEntity: UsersObjectsServicesBundles::class, inversedBy: 'users_objects_services')]
+    #[ORM\ManyToOne(targetEntity: UsersObjectsServicesBundles::class, inversedBy: 'invoices')]
     #[ORM\JoinColumn(name: 'users_objects_services_bundles_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $users_objects_services_bundles;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true, options: [])]
     public $due_date;
 
-    #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
-    public $is_paid;
+    #[ORM\Column(type: Types::DATETIMETZ_MUTABLE, nullable: true)]
+    public ?\DateTime $is_paid = null;
 
     #[ORM\Column(type: Types::STRING, nullable: false, options: [])]
     public $series;
@@ -40,6 +42,14 @@ class Invoices extends BaseEntity
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::STRING, nullable: false, options: [])]
     public $no;
+
+    /**
+     * One User have Many UsersObjects.
+     * @see Payments::$invoices
+     * @var PersistentCollection|Payments
+     */
+    #[ORM\OneToMany(targetEntity: Payments::class, mappedBy: 'invoices')]
+    public $payments;
 
     public function __toString()
     {
@@ -60,6 +70,14 @@ class Invoices extends BaseEntity
         return !$this->is_paid && $this->due_date < new \DateTime();
     }
 
+    public function isPayedPassedDue(): bool
+    {
+        return $this->is_paid && $this->due_date < $this->is_paid;
+    }
+
+    /**
+     * @return string SAS-00001
+     */
     public function getFormattedSeries(): string
     {
         return vsprintf("%s-%05d", [$this->series, $this->getNo()]);

@@ -41,7 +41,7 @@ class UsersController extends BaseController
             ->leftJoin('users_objects_services_bundles.invoices', 'invoices')/** @see UsersObjectsServicesBundles::$invoices */
             ->andWhere('users_objects_services_bundles.users_object = :users_object')/** @see UsersObjectsServicesBundles::$users_object */
                 ->setParameter('users_object', $this->request->getSession()->get('currentObject'))
-            ->andWhere('invoices.is_paid = 0')
+            ->andWhere('invoices.is_paid IS NULL')
             ->getQuery()
             ->getSingleScalarResult()
         ;
@@ -84,7 +84,7 @@ class UsersController extends BaseController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/users/invoices/{id}', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route('/users/invoices/{id}',name: 'invoicesId', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
     public function invoicesId(EntityManagerInterface $entityManager): Response
     {
         /** @var Invoices[] $invoice */

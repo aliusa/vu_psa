@@ -3,7 +3,9 @@
 {% block title %}Mano sąskaita #{{ invoice.id }}{% endblock %}
 
 {% block body %}
-    <h2 class="mt-4">Sąskaita <span class="text-muted">{{ invoice.getFormattedSeries() }}</span></h2>
+    <div class="mt-4">
+        <h2 class="">Sąskaita <span class="text-muted">{{ invoice.getFormattedSeries() }}</span></h2>
+    </div>
     <table class="table table-condensed table-bordered">
         <thead>
             <tr>
@@ -33,12 +35,16 @@
                 <th>{{ "is_paid"|trans }}</th>
                 <td>
                     {% if invoice.is_paid %}
-                        <span class="badge text-bg-success">{{ "yes"|trans }}</span>
+                        <span class="text-success">{{ invoice.is_paid|date('Y-m-d H:i') }}</span>
+                        {% if invoice.isPayedPassedDue() %}
+                            <span class="badge text-bg-warning">Pavėluotai</span>
+                        {% endif %}
                     {% else %}
                         <span class="badge text-bg-danger">{{ "no"|trans }}</span>
                         {% if invoice.isDuePassed() %}
                             <span class="badge text-bg-danger">VĖLUOJAMA</span>
                         {% endif %}
+                        <a href="/payments/pay/{{ invoice.id }}" class="text-primary">Apmokėti</a>
                     {% endif %}
                 </td>
             </tr>

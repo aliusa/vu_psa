@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Entity\Invoices;
+use App\Repository\InvoicesRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Container\ContainerInterface;

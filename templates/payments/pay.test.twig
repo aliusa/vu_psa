@@ -1,0 +1,65 @@
+{% extends 'base.twig' %}
+
+{% block title %}Mano sąskaita #{{ invoice.id }}{% endblock %}
+
+{% block body %}
+    <div class="card shadow-sm text-center mx-auto rounded-5" style="max-width: 800px">
+        <div class="card-header rounded-top-5">
+            <h4 class="my-0 font-weight-normal">
+                Order: #{{ payment_data.orderid }}
+            </h4>
+            <h4>
+                Payment: {{ payment_data.payment }}
+            </h4>
+        </div>
+        <div class="card-body">
+            <h1 class="card-title pricing-card-title">{{ (payment_data.amount/100)|format_currency('EUR') }} <small class="text-muted">/{{ payment_data.currency }}</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+                <li>{{ payment_data.paytext }}</li>
+            </ul>
+
+            <ul class="base-list-group">
+                <li class="list-group-item">
+                    <a class="btn btn-lg btn-danger" href="{{ payment_data.cancelurl }}" target="_blank">{{ 'cancel payment'|trans }}</a>
+                    <p class="my-1">Return back to eshop with cancel callback</p>
+                </li>
+                <li class="list-group-item">OR</li>
+                <li class="list-group-item">
+                    <form method="post" action="{{ payment_data.callbackurl }}">
+                        {% for key, value in callback_data %}
+                            <input type="hidden" name="{{ key }}" value="{{ value }}">
+                        {% endfor %}
+                        <button id="confirmBtn" type="button" class="btn btn-lg btn-success">{{ 'confirm payment'|trans }}</button>
+
+                        <p class="my-1">Confirms payment and notifies eshop in background</p>
+                    </form>
+
+                    <div class="my-3">
+                        <div id="confirmProgress" class="spinner-border" role="status" style="display: none">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <pre id="confirmStatus">...</pre>
+                    </div>
+                </li>
+                <li class="list-group-item">AND THEN</li>
+                <li class="list-group-item">
+                    <a class="btn btn-lg btn-primary" href="{{ payment_data.accepturl }}" target="_blank">{{ 'accept payment'|trans }}</a>
+                    <p class="my-1">Return back to eshop with accept callback</p>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            $("#confirmBtn").on('click', function(e){
+                var $form = $(this).parents('form');
+                $("#confirmProgress").show();
+                $.post($form.attr('action'), $form.serialize(), function (result) {
+                    $("#confirmStatus").html(JSON.stringify(result));
+                    $("#confirmProgress").hide();
+                });
+            })
+        });
+    </script>
+{% endblock %}

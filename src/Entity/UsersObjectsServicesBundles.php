@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Registry;
 use App\Repository\UsersObjectsServicesBundlesRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;

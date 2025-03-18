@@ -42,7 +42,7 @@ class InvoicesCrudController extends BaseCrudController
             /** @see Invoices::getInvoiceTotal() */
             $fields[] = MoneyField::new('getInvoiceTotal', 'total')->setCurrency('EUR');
             $fields[] = DateField::new('due_date', 'due_date');
-            $fields[] = BooleanField::new('is_paid', 'is_paid');
+            $fields[] = DateTimeField::new('is_paid', 'is_paid');
             $fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
@@ -68,7 +68,7 @@ class InvoicesCrudController extends BaseCrudController
             ///** @see Invoices::getInvoiceTotal() */
             //$fields[] = MoneyField::new('getInvoiceTotal', 'total')->setCurrency('EUR');
             $fields[] = DateField::new('due_date', 'due_date');
-            $fields[] = BooleanField::new('is_paid', 'is_paid');
+            $fields[] = DateTimeField::new('is_paid', 'is_paid');
             $fields[] = Field::new('series', 'Serija');
             /** @see Invoices::getNo() */
             $fields[] = Field::new('getNo', 'Numeris');
@@ -107,7 +107,7 @@ class InvoicesCrudController extends BaseCrudController
             ///** @see Invoices::getInvoiceTotal() */
             //->add('getInvoiceTotal')
             ->add('due_date')
-            ->add('is_paid')
+            //->add('is_paid')
             ->add('created_at')
         ;
 

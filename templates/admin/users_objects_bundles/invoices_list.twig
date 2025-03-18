@@ -21,7 +21,10 @@
                 <td>{{ (invoice.getInvoiceTotal()/100)|format_currency('EUR') }}</td>
                 <td>
                     {% if invoice.is_paid %}
-                        <span class="badge text-bg-success">{{ "yes"|trans }}</span>
+                        <span class="text-success">{{ invoice.is_paid|date('Y-m-d H:i') }}</span>
+                        {% if invoice.isPayedPassedDue() %}
+                            <span class="badge text-bg-warning">Pavėluotai</span>
+                        {% endif %}
                     {% else %}
                         <span class="badge text-bg-danger">{{ "no"|trans }}</span>
                         {% if invoice.isDuePassed() %}

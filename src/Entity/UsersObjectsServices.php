@@ -57,7 +57,7 @@ class UsersObjectsServices extends BaseEntity
     /**
      * @var int Vnt. kaina su PVM (unit_price + unit_adjustments)
      */
-    #[Assert\Range(min: 0, max: 10000)]
+    #[AssertValidator\Range(min: 0, max: 10000)]
     #[ORM\Column(type: Types::INTEGER, nullable: false, generated: 'ALWAYS', columnDefinition: "unit_price + unit_adjustments")]
     public int $unit_total;
 
@@ -70,6 +70,13 @@ class UsersObjectsServices extends BaseEntity
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
     public $active_to;
+
+    public function __construct()
+    {
+        if (isset($this->unit_price)) {
+            $this->unit_adjustments = $this->unit_price * 0.21;
+        }
+    }
 
     public function __toString()
     {

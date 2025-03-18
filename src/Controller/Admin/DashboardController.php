@@ -37,9 +37,11 @@ class DashboardController extends AbstractDashboardController
                 ->andWhere('item.active_to >= CURRENT_TIMESTAMP()')
                 ->getQuery()->getSingleScalarResult(),
             'unpaidAmount' => $this->entityManager->getRepository(Invoices::class)
-                ->createQueryBuilder('item')
-                ->select('SUM(item.total) AS total')
-                ->andWhere('item.is_paid = 0')
+                ->createQueryBuilder('invoices')
+                ->select('SUM(users_objects_services.total_price) AS total')
+                ->innerJoin('invoices.users_objects_services_bundles', 'users_objects_services_bundles')/** @see Invoices::$users_objects_services_bundles */
+                ->innerJoin('users_objects_services_bundles.users_objects_services', 'users_objects_services')/** @see UsersObjectsServicesBundles::$users_objects_services */
+                ->andWhere('invoices.is_paid IS NULL')
                 ->getQuery()
                 ->getSingleScalarResult(),
         ]);

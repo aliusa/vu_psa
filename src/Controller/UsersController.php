@@ -94,6 +94,8 @@ class UsersController extends BaseController
             ->andWhere('users_objects_services_bundles.users_object = :users_object')/** @see UsersObjectsServicesBundles::$users_object */
             ->setParameter('users_object', $this->request->getSession()->get('currentObject'))
             ->andWhere('invoices.id = :id')->setParameter('id', $this->request->get('id'))
+            ->orderBy('invoices.created_at', 'DESC')
+            ->setMaxResults(50)
             ->getQuery()
             ->getResult()
             ;

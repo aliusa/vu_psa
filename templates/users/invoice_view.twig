@@ -9,6 +9,10 @@
     <table class="table table-condensed table-bordered">
         <thead>
             <tr>
+                <th>Periodas</th>
+                <td>{{ invoice.getPeriod() }}</td>
+            </tr>
+            <tr>
                 <th>Išrašyta</th>
                 <td>{{ invoice.created_at|date('Y-m-d') }}</td>
             </tr>
@@ -41,9 +45,6 @@
                         {% endif %}
                     {% else %}
                         <span class="badge text-bg-danger">{{ "no"|trans }}</span>
-                        {% if invoice.isDuePassed() %}
-                            <span class="badge text-bg-danger">VĖLUOJAMA</span>
-                        {% endif %}
                         <a href="/payments/pay/{{ invoice.id }}" class="text-primary">Apmokėti</a>
                     {% endif %}
                 </td>

@@ -100,8 +100,7 @@ class UsersController extends BaseController
             ->getResult()
             ;
         if (!$invoiceFound) {
-            $referer = $this->request->headers->get('referer');
-            return $this->redirect($referer ?: $this->generateUrl('users_invoices'));
+            return $this->redirect($this->generateUrl('users_invoices'));
         }
 
         return $this->render('users/invoice_view.twig', [

@@ -6,7 +6,7 @@
     <table class="table table-striped table-hover table-bordered">
         <thead>
             <tr>
-                <th>Išrašyta</th>
+                <th>Periodas</th>
                 <th>{{ "total"|trans }}</th>
                 <th>{{ "due_date"|trans }}</th>
                 <th>{{ "is_paid"|trans }}</th>
@@ -15,7 +15,7 @@
         <tbody>
             {% for invoice in invoices %}
                 <tr data-href="/users/invoices/{{ invoice.id }}">
-                    <td>{{ invoice.created_at|date('Y-m-d') }}</td>
+                    <td>{{ invoice.getPeriod() }}</td>
                     <td>{{ (invoice.getInvoiceTotal()/100)|format_currency('EUR') }}</td>
                     <td>
                         {{ invoice.due_date|date('Y-m-d') }}
@@ -31,9 +31,6 @@
                             {% endif %}
                         {% else %}
                             <span class="badge text-bg-danger">{{ "no"|trans }}</span>
-                            {% if invoice.isDuePassed() %}
-                                <span class="badge text-bg-danger">VĖLUOJAMA</span>
-                            {% endif %}
                             <a href="/payments/pay/{{ invoice.id }}" class="text-primary">Apmokėti</a>
                         {% endif %}
                     </td>

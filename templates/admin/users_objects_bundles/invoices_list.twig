@@ -17,7 +17,12 @@
                     </a>
                 </td>
                 <td>{{ invoice.created_at|date('Y-m-d H:i:s') }}</td>
-                <td>{{ invoice.due_date|date('Y-m-d') }}</td>
+                <td>
+                    {{ invoice.due_date|date('Y-m-d') }}
+                    {% if invoice.isDuePassed() %}
+                        <span class="badge text-bg-danger">VĖLUOJAMA</span>
+                    {% endif %}
+                </td>
                 <td>{{ (invoice.getInvoiceTotal()/100)|format_currency('EUR') }}</td>
                 <td>
                     {% if invoice.is_paid %}
@@ -27,9 +32,6 @@
                         {% endif %}
                     {% else %}
                         <span class="badge text-bg-danger">{{ "no"|trans }}</span>
-                        {% if invoice.isDuePassed() %}
-                            <span class="badge text-bg-danger">VĖLUOJAMA</span>
-                        {% endif %}
                     {% endif %}
                 </td>
             </tr>

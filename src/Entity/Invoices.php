@@ -101,4 +101,31 @@ class Invoices extends BaseEntity
         }
         return $total;
     }
+
+    /**
+     * Už kurį periodą išrašyta sąskaita.
+     *
+     * @return string "2025 m. Vasaris"
+     * @throws \DateInvalidOperationException
+     */
+    public function getPeriod()
+    {
+        $lastPeriod = $this->created_at->sub(new \DateInterval('P1M'));
+        $month = match ($lastPeriod->format('n')) {
+            '1' => 'Sausis',
+            '2' => 'Vasaris',
+            '3' => 'Kovas',
+            '4' => 'Balandis',
+            '5' => 'Gegužis',
+            '6' => 'Birželis',
+            '7' => 'Liepa',
+            '8' => 'Rugpjūtis',
+            '9' => 'Rugsėjis',
+            '10' => 'Spalis',
+            '11' => 'Lapkritis',
+            '12' => 'Gruodis',
+        };
+
+        return $lastPeriod->format('Y') . ' m. ' . $month;
+    }
 }

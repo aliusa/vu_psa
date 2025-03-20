@@ -15,13 +15,13 @@ import $ from 'jquery';
 window.$ = $;
 
 $('tr[data-href]').each(function (index, object) {
-    console.log(this, index, object);
+    //console.log(this, index, object);
     var tr = $(object);
 
     $(this).on('click', function (e) {
         location.href = tr.attr('data-href');
     });
 
-    return false;//break
-    return;//continue
+    //return false;//break
+    //return;//continue
 });

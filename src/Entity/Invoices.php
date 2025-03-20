@@ -6,6 +6,7 @@ use App\Registry;
 use App\Repository\InvoicesRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
@@ -30,7 +31,10 @@ class Invoices extends BaseEntity
     #[ORM\JoinColumn(name: 'users_objects_services_bundles_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $users_objects_services_bundles;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true, options: [])]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: ['default' => 'CURRENT_DATE'])]
+    public $period_start;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true, options: [])]
     public $due_date;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE, nullable: true)]
@@ -40,7 +44,7 @@ class Invoices extends BaseEntity
     public $series;
 
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: Types::STRING, nullable: false, options: [])]
+    #[ORM\Column(type: Types::INTEGER, nullable: false, options: [])]
     public $no;
 
     /**
@@ -50,6 +54,11 @@ class Invoices extends BaseEntity
      */
     #[ORM\OneToMany(targetEntity: Payments::class, mappedBy: 'invoices')]
     public $payments;
+
+    public function __construct()
+    {
+        $this->payments = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -110,8 +119,8 @@ class Invoices extends BaseEntity
      */
     public function getPeriod()
     {
-        $lastPeriod = $this->created_at->sub(new \DateInterval('P1M'));
-        $month = match ($lastPeriod->format('n')) {
+        $lastPeriod = $this->period_start->sub(new \DateInterval('P1M'));
+        $month = match ($this->period_start->format('n')) {
             '1' => 'Sausis',
             '2' => 'Vasaris',
             '3' => 'Kovas',

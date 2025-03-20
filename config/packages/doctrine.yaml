@@ -22,16 +22,17 @@ doctrine:
                 alias: App
         dql:
           string_functions:
-            LPAD: DoctrineExtensions\Query\Mysql\Lpad
+            #LPAD: DoctrineExtensions\Query\Mysql\Lpad
+            #greatest: DoctrineExtensions\Query\Mysql\Greatest
           numeric_functions:
-            ROUND: DoctrineExtensions\Query\Mysql\Round
+            #ROUND: DoctrineExtensions\Query\Mysql\Round
           datetime_functions:
             #WEEK: DoctrineExtensions\Query\Mysql\Week
-            YEARWEEK: DoctrineExtensions\Query\Mysql\YearWeek
+            #YEARWEEK: DoctrineExtensions\Query\Mysql\YearWeek
             #WEEKOFYEAR: App\DoctrineExtensions\Query\Mysql\WeekOfYear
-            YEAR: DoctrineExtensions\Query\Mysql\Year
-            MONTH: DoctrineExtensions\Query\Mysql\Month
-            HOUR: DoctrineExtensions\Query\Mysql\Hour
-            DAY: DoctrineExtensions\Query\Mysql\Day
-            RAND: DoctrineExtensions\Query\Mysql\Rand
-            JSON_CONTAINS: DoctrineExtensions\Query\Mysql\JsonContains
+            #YEAR: DoctrineExtensions\Query\Mysql\Year
+            #MONTH: DoctrineExtensions\Query\Mysql\Month
+            #HOUR: DoctrineExtensions\Query\Mysql\Hour
+            #DAY: DoctrineExtensions\Query\Mysql\Day
+            #RAND: DoctrineExtensions\Query\Mysql\Rand
+            #JSON_CONTAINS: DoctrineExtensions\Query\Mysql\JsonContains

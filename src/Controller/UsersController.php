@@ -52,7 +52,7 @@ class UsersController extends BaseController
             ->innerJoin('invoices.users_objects_services_bundles', 'users_objects_services_bundles')/** @see Invoices::$users_objects_services_bundles */
             ->andWhere('users_objects_services_bundles.users_object = :users_object')/** @see UsersObjectsServicesBundles::$users_object */
             ->setParameter('users_object', $this->request->getSession()->get('currentObject'))
-            ->addOrderBy('invoices.created_at', 'DESC')
+            ->addOrderBy('invoices.period_start', 'DESC')/** @see Invoices::$period_start */
             ->setMaxResults(1)
             ->getQuery()
             ->getResult()
@@ -74,6 +74,7 @@ class UsersController extends BaseController
             ->innerJoin('invoices.users_objects_services_bundles', 'users_objects_services_bundles')/** @see Invoices::$users_objects_services_bundles */
             ->andWhere('users_objects_services_bundles.users_object = :users_object')/** @see UsersObjectsServicesBundles::$users_object */
             ->setParameter('users_object', $this->request->getSession()->get('currentObject'))
+            ->addOrderBy('invoices.period_start', 'DESC')/** @see Invoices::$period_start */
             ->getQuery()
             ->getResult()
             ;

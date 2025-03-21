@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Countries;
+use App\Entity\UsersObjects;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -108,5 +110,24 @@ class CountriesCrudController extends BaseCrudController
         ;
 
         return $crud;
+    }
+
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (!$entityInstance instanceof Countries) {
+            return;
+        }
+
+        // Check for related entities
+        $relatedObjects = $entityManager->getRepository(UsersObjects::class)->findBy(['country' => $entityInstance]);/** @see UsersObjects::$country */
+
+        if (!empty($relatedObjects)) {
+            $this->addFlash('danger', 'Negalima ištrinti įrašo, nes šalis turi priskirtus objektus.');
+            return;
+        }
+
+        // Proceed with deletion
+        $entityManager->remove($entityInstance);
+        $entityManager->flush();
     }
 }

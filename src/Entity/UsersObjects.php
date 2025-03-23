@@ -22,7 +22,7 @@ class UsersObjects extends BaseEntity
     /**
      * This is the owning side.
      * @see Users::$users_objects
-     * @var Users
+     * @var \Proxies\__CG__\App\Entity\Users|Users
      */
     #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'users_objects')]
     #[ORM\JoinColumn(name: 'users_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
@@ -30,8 +30,8 @@ class UsersObjects extends BaseEntity
 
     /**
      * This is the owning side.
-     * @see Users::$users_objects
-     * @var PersistentCollection|Users
+     * @see Countries::$users_objects
+     * @var \Proxies\__CG__\App\Entity\Countries|Countries
      */
     #[ORM\ManyToOne(targetEntity: Countries::class, inversedBy: 'users_objects')]
     #[ORM\JoinColumn(name: 'country_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]

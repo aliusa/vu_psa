@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\UsersObjects;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -125,5 +126,27 @@ class UsersObjectsCrudController extends BaseCrudController
         ;
 
         return $crud;
+    }
+
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if (!$entityInstance instanceof UsersObjects) {
+            return;
+        }
+
+        // Check for related entities
+        if ($entityInstance->country) {
+            $this->addFlash('danger', 'Negalima ištrinti įrašo, nes objektas turi priskirtą šalį.');
+            return;
+        }
+
+        // Check for related entities
+        if (!$entityInstance->users_objects_services_bundles->isEmpty()) {
+            $this->addFlash('danger', 'Negalima ištrinti įrašo, nes objektas turi priskirtą paslaugų paketą.');
+            return;
+        }
+
+        // Proceed with deletion
+        parent::deleteEntity($entityManager, $entityInstance);
     }
 }

@@ -181,15 +181,12 @@ class UsersCrudController extends BaseCrudController
         }
 
         // Check for related entities
-        $relatedObjects = $entityManager->getRepository(UsersObjects::class)->findBy(['users' => $entityInstance]);/** @see UsersObjects::$users */
-
-        if (!empty($relatedObjects)) {
+        if (!$entityInstance->users_objects->isEmpty()) {
             $this->addFlash('danger', 'Negalima ištrinti įrašo, nes klientas turi priskirtus objektus.');
             return;
         }
 
         // Proceed with deletion
-        $entityManager->remove($entityInstance);
-        $entityManager->flush();
+        parent::deleteEntity($entityManager, $entityInstance);
     }
 }

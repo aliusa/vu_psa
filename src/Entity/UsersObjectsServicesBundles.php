@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Registry;
 use App\Repository\UsersObjectsServicesBundlesRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
@@ -21,7 +20,7 @@ class UsersObjectsServicesBundles extends BaseEntity
     /**
      * This is the owning side.
      * @see UsersObjects::$users_objects_services_bundles
-     * @var PersistentCollection|UsersObjects
+     * @var \Proxies\__CG__\App\Entity\UsersObjects|UsersObjects
      */
     #[ORM\ManyToOne(targetEntity: UsersObjects::class, inversedBy: 'users_objects_services_bundles')]
     #[ORM\JoinColumn(name: 'users_object_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]

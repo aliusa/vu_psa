@@ -7,7 +7,6 @@ use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Validator\Constraints AS AssertValidator;
 
 #[ORM\Table('users_objects_services')]
@@ -21,7 +20,7 @@ class UsersObjectsServices extends BaseEntity
     /**
      * This is the owning side.
      * @see UsersObjectsServicesBundles::$users_objects_services
-     * @var PersistentCollection|UsersObjectsServicesBundles
+     * @var \Proxies\__CG__\App\Entity\UsersObjectsServicesBundles|UsersObjectsServicesBundles
      */
     #[ORM\ManyToOne(targetEntity: UsersObjectsServicesBundles::class, inversedBy: 'users_objects_services')]
     #[ORM\JoinColumn(name: 'users_objects_services_bundles_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
@@ -30,7 +29,7 @@ class UsersObjectsServices extends BaseEntity
     /**
      * This is the owning side.
      * @see Services::$users_objects_services
-     * @var PersistentCollection|Services
+     * @var \Proxies\__CG__\App\Entity\Services|Services
      */
     #[ORM\ManyToOne(targetEntity: Services::class, inversedBy: 'users_objects_services')]
     #[ORM\JoinColumn(name: 'services_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]

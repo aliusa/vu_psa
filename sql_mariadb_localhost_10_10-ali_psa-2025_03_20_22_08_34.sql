@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `administrators`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `administrators` (
-  `email` varchar(180) NOT NULL,
+  `email` varchar(100) NOT NULL,
   `roles` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`roles`)),
   `password` varchar(255) DEFAULT NULL,
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -41,7 +41,7 @@ CREATE TABLE `administrators` (
 LOCK TABLES `administrators` WRITE;
 /*!40000 ALTER TABLE `administrators` DISABLE KEYS */;
 INSERT INTO `administrators` VALUES
-('info@example.lt','[\"ROLE_ADMIN\"]','$argon2id$v=19$m=65536,t=4,p=1$Qnf6cTqPs99rF/OenGKDPA$GqfAD2Wxi113Gxj46ssjR6ae9su/oYdplISyLGdvNOE',1,'2025-03-02 17:02:01','2025-03-02 17:02:01');
+('info@example.lt','[\"ROLE_ADMIN\"]','$2y$13$am582HAnKA6xFn3DX6igrOlEhC5Yg2Yp2ZC7Ir/KHqyFAwEoZiyIu',1,'2025-03-02 17:02:01','2025-03-10 21:30:37');
 /*!40000 ALTER TABLE `administrators` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,7 +58,7 @@ CREATE TABLE `countries` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
   `ioc` varchar(3) DEFAULT NULL,
-  `iso` varchar(3) DEFAULT NULL,
+  `iso` varchar(2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=197 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -268,6 +268,82 @@ INSERT INTO `countries` VALUES
 UNLOCK TABLES;
 
 --
+-- Table structure for table `invoices`
+--
+
+DROP TABLE IF EXISTS `invoices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `invoices` (
+  `due_date` date DEFAULT NULL,
+  `is_paid` datetime DEFAULT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `users_objects_services_bundles_id` bigint(20) DEFAULT NULL,
+  `series` varchar(255) NOT NULL,
+  `no` int(11) NOT NULL,
+  `period_start` date NOT NULL DEFAULT curdate(),
+  PRIMARY KEY (`id`),
+  KEY `IDX_6A2F2F9527605F7A` (`users_objects_services_bundles_id`),
+  CONSTRAINT `FK_6A2F2F9527605F7A` FOREIGN KEY (`users_objects_services_bundles_id`) REFERENCES `users_objects_services_bundles` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=219 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `invoices`
+--
+
+LOCK TABLES `invoices` WRITE;
+/*!40000 ALTER TABLE `invoices` DISABLE KEYS */;
+INSERT INTO `invoices` VALUES
+('2025-02-28',NULL,213,'2025-03-20 21:21:21','2025-03-20 21:21:21',1,'SAS',1,'2025-01-01'),
+('2025-03-31',NULL,214,'2025-03-20 21:21:21','2025-03-20 21:21:21',1,'SAS',2,'2025-02-01'),
+('2025-04-30',NULL,215,'2025-03-20 21:21:21','2025-03-20 21:21:21',1,'SAS',3,'2025-03-01'),
+('2025-02-28',NULL,216,'2025-03-20 21:39:48','2025-03-20 21:59:27',2,'SAS',4,'2025-01-01'),
+('2025-03-31',NULL,217,'2025-03-20 21:39:48','2025-03-20 21:58:21',2,'SAS',5,'2025-02-01'),
+('2025-04-30',NULL,218,'2025-03-20 21:39:48','2025-03-20 21:39:48',2,'SAS',6,'2025-03-01');
+/*!40000 ALTER TABLE `invoices` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payments`
+--
+
+DROP TABLE IF EXISTS `payments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `payments` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `invoices_id` bigint(20) DEFAULT NULL,
+  `status` varchar(255) NOT NULL,
+  `total` int(11) NOT NULL,
+  `raw_request_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`raw_request_data`)),
+  `redirect_url` varchar(255) NOT NULL,
+  `request_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`request_data`)),
+  `payment_method` varchar(100) NOT NULL,
+  `response_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`response_data`)),
+  `return_data` longtext DEFAULT NULL,
+  `payment_date` datetime DEFAULT NULL,
+  `hash` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_65D29B322454BA75` (`invoices_id`),
+  CONSTRAINT `FK_65D29B322454BA75` FOREIGN KEY (`invoices_id`) REFERENCES `invoices` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payments`
+--
+
+LOCK TABLES `payments` WRITE;
+/*!40000 ALTER TABLE `payments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `payments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `services`
 --
 
@@ -285,7 +361,7 @@ CREATE TABLE `services` (
   `description` longtext DEFAULT NULL,
   `advertise` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -299,7 +375,10 @@ INSERT INTO `services` VALUES
 ('Modemo nuoma',400,'2025-03-02 12:00:00',NULL,2,'2025-03-02 20:58:59','2025-03-02 20:58:59',NULL,0),
 ('Internetas MIDI',1257,'2025-03-02 12:00:00',NULL,3,'2025-03-02 21:32:53','2025-03-06 21:51:22','Turėsite iki 1000 MBPS',1),
 ('Internetas MAXI',1568,'2025-03-02 12:00:00',NULL,4,'2025-03-02 21:35:30','2025-03-06 21:51:21','Turėsite iki 1500 MBPS',1),
-('Tinklo paslaugų mokestis',428,'2025-03-06 12:00:00',NULL,5,'2025-03-06 20:53:09','2025-03-06 20:53:09',NULL,0);
+('Tinklo paslaugų mokestis',428,'2025-03-06 12:00:00',NULL,5,'2025-03-06 20:53:09','2025-03-06 20:53:09',NULL,0),
+('Televizija BAZINIS',1245,'2025-03-13 00:00:00',NULL,6,'2025-03-13 17:47:05','2025-03-13 17:47:05',NULL,1),
+('Televizija PLIUS',1965,'2025-03-13 00:00:00',NULL,7,'2025-03-13 17:47:25','2025-03-19 01:42:18',NULL,1),
+('Kanalų grupė PUKAS',250,'2025-03-13 00:00:00',NULL,8,'2025-03-13 17:56:53','2025-03-14 01:13:02','Kanalai:\r\n* Pūkas\r\n* Pūkas Plius',0);
 /*!40000 ALTER TABLE `services` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,7 +398,9 @@ CREATE TABLE `users` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
+  `roles` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`roles`)),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UNIQ_1483A5E9E7927C74` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -330,8 +411,8 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES
-('tomas.tomauskas@example.com','$2y$13$lCVu0iYaJ/cfXzQas.TIuOxkBPjkqwLCM/yYI4hWY6rhOiF1kQFSG','+37060000001','Tomas','Tomaitis',2,'2025-03-05 22:12:00','2025-03-05 22:12:00'),
-('jonas.jonaitis@example.com','$2y$13$1SAtHlvETik/G6u3Xc9eb.lKPEVqACm4IYQo/o4x0.atRBWWLvTSa','+37060000002','Jonas','Jonaitis',3,'2025-03-06 02:50:11','2025-03-06 02:50:11');
+('tomas.tomauskas@example.com','$2y$13$QBfK87Q9xr5CZvBtIP0wTekA66sfa3hVtvr56Jaf6eNiWSgBUdE5i','+37060000001','Tomas','Tomaitis',2,'2025-03-05 22:12:00','2025-03-14 09:53:11',NULL),
+('jonas.jonaitis@example.com','$2y$13$1SAtHlvETik/G6u3Xc9eb.lKPEVqACm4IYQo/o4x0.atRBWWLvTSa','+37060000002','Jonas','Jonaitis',3,'2025-03-06 02:50:11','2025-03-06 02:50:11',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -356,9 +437,9 @@ CREATE TABLE `users_objects` (
   PRIMARY KEY (`id`),
   KEY `IDX_421AB83967B3B43D` (`users_id`),
   KEY `IDX_421AB839F92F3E70` (`country_id`),
-  CONSTRAINT `FK_421AB83967B3B43D` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `FK_421AB839F92F3E70` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  CONSTRAINT `FK_421AB83967B3B43D` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `FK_421AB839F92F3E70` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -368,7 +449,9 @@ CREATE TABLE `users_objects` (
 LOCK TABLES `users_objects` WRITE;
 /*!40000 ALTER TABLE `users_objects` DISABLE KEYS */;
 INSERT INTO `users_objects` VALUES
-(2,'2025-03-05 22:12:05','2025-03-05 22:36:31',2,101,'Vilnius','Laisvės pr.','13','20','08945');
+(2,'2025-03-05 22:12:05','2025-03-05 22:36:31',2,101,'Vilnius','Laisvės pr.','13','20','08945'),
+(3,'2025-03-11 14:23:55','2025-03-11 14:24:07',3,101,'Vilnius','Gedimino pr.','62','24','56511'),
+(4,'2025-03-14 01:44:31','2025-03-14 01:44:31',2,101,'Vilnius','Vėtrungių g.','19','32','95323');
 /*!40000 ALTER TABLE `users_objects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -386,15 +469,17 @@ CREATE TABLE `users_objects_services` (
   `services_id` bigint(20) DEFAULT NULL,
   `amount` int(11) NOT NULL,
   `unit_price` int(11) NOT NULL,
+  `unit_adjustments` int(11) NOT NULL DEFAULT 0,
+  `unit_total` int(11) NOT NULL,
   `total_price` int(11) NOT NULL,
   `active_to` datetime DEFAULT current_timestamp(),
   `users_objects_services_bundles_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_5B4D7775AEF5A6C1` (`services_id`),
   KEY `IDX_5B4D777527605F7A` (`users_objects_services_bundles_id`),
-  CONSTRAINT `FK_5B4D777527605F7A` FOREIGN KEY (`users_objects_services_bundles_id`) REFERENCES `users_objects_services_bundles` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `FK_5B4D7775AEF5A6C1` FOREIGN KEY (`services_id`) REFERENCES `services` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  CONSTRAINT `FK_5B4D777527605F7A` FOREIGN KEY (`users_objects_services_bundles_id`) REFERENCES `users_objects_services_bundles` (`id`),
+  CONSTRAINT `FK_5B4D7775AEF5A6C1` FOREIGN KEY (`services_id`) REFERENCES `services` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -404,7 +489,10 @@ CREATE TABLE `users_objects_services` (
 LOCK TABLES `users_objects_services` WRITE;
 /*!40000 ALTER TABLE `users_objects_services` DISABLE KEYS */;
 INSERT INTO `users_objects_services` VALUES
-(1,'2025-03-06 02:28:02','2025-03-06 03:06:36',3,4,1245,4980,'2026-03-01 00:00:00',1);
+(1,'2025-01-06 00:32:44','2025-01-06 00:32:44',3,1,1246,121,1367,1367,'2026-03-01 00:00:00',1),
+(2,'2025-01-06 00:32:44','2025-01-06 00:32:44',2,1,2635,21,2656,2656,'2026-03-01 00:00:00',1),
+(3,'2025-01-11 14:24:18','2025-01-11 14:24:18',6,1,1245,21,1266,1266,'2026-03-31 00:00:00',2),
+(4,'2025-01-11 14:24:18','2025-01-11 14:24:18',8,1,250,21,271,271,'2026-03-31 00:00:00',2);
 /*!40000 ALTER TABLE `users_objects_services` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -423,8 +511,8 @@ CREATE TABLE `users_objects_services_bundles` (
   `users_object_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX_9D954DDC45502CCA` (`users_object_id`),
-  CONSTRAINT `FK_9D954DDC45502CCA` FOREIGN KEY (`users_object_id`) REFERENCES `users_objects` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  CONSTRAINT `FK_9D954DDC45502CCA` FOREIGN KEY (`users_object_id`) REFERENCES `users_objects` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -434,7 +522,8 @@ CREATE TABLE `users_objects_services_bundles` (
 LOCK TABLES `users_objects_services_bundles` WRITE;
 /*!40000 ALTER TABLE `users_objects_services_bundles` DISABLE KEYS */;
 INSERT INTO `users_objects_services_bundles` VALUES
-(1,'2025-03-06 00:32:44','2025-03-06 00:32:44','2026-03-01 00:00:00',2);
+(1,'2025-01-06 00:32:44','2025-01-06 00:32:44','2026-03-01 00:00:00',2),
+(2,'2025-01-11 14:24:18','2025-01-11 14:24:18','2026-03-31 00:00:00',3);
 /*!40000 ALTER TABLE `users_objects_services_bundles` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -447,4 +536,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-03-07  0:58:54
+-- Dump completed on 2025-03-20 22:08:34

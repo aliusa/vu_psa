@@ -119,15 +119,12 @@ class CountriesCrudController extends BaseCrudController
         }
 
         // Check for related entities
-        $relatedObjects = $entityManager->getRepository(UsersObjects::class)->findBy(['country' => $entityInstance]);/** @see UsersObjects::$country */
-
-        if (!empty($relatedObjects)) {
+        if (!$entityInstance->users_objects->isEmpty()) {
             $this->addFlash('danger', 'Negalima ištrinti įrašo, nes šalis turi priskirtus objektus.');
             return;
         }
 
         // Proceed with deletion
-        $entityManager->remove($entityInstance);
-        $entityManager->flush();
+        parent::deleteEntity($entityManager, $entityInstance);
     }
 }

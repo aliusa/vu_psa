@@ -68,17 +68,6 @@ class Users extends BaseEntity implements UserInterface, PasswordAuthenticatedUs
         return '[#' . $this->id . '] ' . $this->email;
     }
 
-    public function asArray(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'phone' => $this->phone ?? '',
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'email' => $this->email,
-        ];
-    }
-
     public function getPassword(): ?string
     {
         return $this->password ?? '';

@@ -29,14 +29,20 @@ class Services extends BaseEntity
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     public $description;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     public $active_from;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
     public $active_to;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
     public $advertise;
+
+    public function __construct()
+    {
+        $this->active_from = new \DateTime();
+    }
+
 
     public function __toString()
     {

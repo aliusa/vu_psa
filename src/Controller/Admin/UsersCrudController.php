@@ -63,7 +63,6 @@ class UsersCrudController extends BaseCrudController
                 }
             }/**/
 
-            $fields[] = FormField::addRow();
             $fields[] = EmailField::new('email', 'email')->setColumns('col-6');
             $fields[] = TelephoneField::new('phone', 'phone')->setColumns('col-6')->setFormTypeOption('attr', ['placeholder' => '+370....']);
             $fields[] = TextField::new('first_name', 'first_name')->setColumns('col-6');

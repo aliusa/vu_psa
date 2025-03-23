@@ -53,7 +53,6 @@ class ServicesCrudController extends BaseCrudController
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
 
-            $fields[] = FormField::addRow();
             $fields[] = Field::new('title', 'title')->setColumns('col-6');
             $fields[] = MoneyField::new('price', 'price')->setCurrency('EUR')->setColumns('col-6')->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = CKEditorField::new('description', 'description')

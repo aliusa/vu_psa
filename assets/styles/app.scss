@@ -1,9 +1,14 @@
+@import 'mixin';
+
 :root {
     --bs-primary: #00aeef;
     --bs-primary-rgb: 0, 174, 239;
 }
 body {
-    //
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 //.cursor-pointer {

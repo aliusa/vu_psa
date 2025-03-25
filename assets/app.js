@@ -23,3 +23,9 @@ $('tr[data-href]').each(function (index, object) {
     //return false;//break
     //return;//continue
 });
+
+$(document).ready(function () {
+    setTimeout(function () {
+        $('.ask_question').show();
+    }, 200);
+});

@@ -54,6 +54,15 @@ class Users extends BaseEntity implements UserInterface, PasswordAuthenticatedUs
     #[ORM\OrderBy(['id' => 'DESC'])]
     public $users_objects;
 
+    /**
+     * One User have Many Questions.
+     * @see Questions::$users
+     * @var PersistentCollection|Questions[]
+     */
+    #[ORM\OneToMany(targetEntity: Questions::class, mappedBy: 'users', cascade: ['persist', 'remove'])]
+    #[ORM\OrderBy(['id' => 'DESC'])]
+    public $questions;
+
     public bool $isNew = false;
 
     public function __construct()
@@ -126,5 +135,8 @@ class Users extends BaseEntity implements UserInterface, PasswordAuthenticatedUs
     }
     public function getUsersOjectsList():array{
         return $this->users_objects->toArray();
+    }
+    public function getQuestionsList():array{
+        return $this->questions->toArray();
     }
 }

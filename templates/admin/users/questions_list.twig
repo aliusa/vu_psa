@@ -1,0 +1,26 @@
+<table class="table table-responsive table-striped table-hover table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th>Klausimas</th>
+            <th>Užduota</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for question in field.value %}
+            <tr>
+                <td>
+                    <a class="list-group-item" href="admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\QuestionsCrudController&entityId={{ question.id }}">
+                        {{ question }}
+                    </a>
+                </td>
+                <td>
+                    {{ question.created_at|date('Y-m-d H:i:s') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr class="text-center">
+                <td colspan="20">Klientas neturi užduotų klausimų</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

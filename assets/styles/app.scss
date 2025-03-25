@@ -17,3 +17,21 @@ body {
 tr[data-href] {
     cursor: pointer;
 }
+
+
+//region ask question modal
+.ask_question {
+    right: 1rem;
+    bottom: 1rem;
+    display: none;
+}
+#questionModal.show {
+    display: flex!important;
+}
+#questionModal {
+    flex-direction: column-reverse;
+    >.modal-dialog {
+        margin-right: initial;
+    }
+}
+//endregion ask question modal

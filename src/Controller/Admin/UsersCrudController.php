@@ -85,6 +85,8 @@ class UsersCrudController extends BaseCrudController
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
             /** @see Users::getUsersOjectsList() */
             $fields[] = Field::new('UsersOjectsList', 'Objektai')->setTemplatePath('admin/users/objects_list.twig');
+            /** @see Users::getQuestionsList() */
+            $fields[] = Field::new('getQuestionsList', 'Klausimai')->setTemplatePath('admin/users/questions_list.twig');
 
         }
 

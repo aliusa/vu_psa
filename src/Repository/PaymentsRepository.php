@@ -7,6 +7,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Lock\LockFactory;
 
 /**
+ * @extends BaseRepository<Payments>
  * @method Payments|null find($id, $lockMode = null, $lockVersion = null)
  * @method Payments|null findOneBy(array $criteria, array $orderBy = null)
  * @method Payments[]    findAll()

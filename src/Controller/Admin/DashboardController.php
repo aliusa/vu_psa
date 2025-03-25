@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Administrators;
 use App\Entity\Countries;
 use App\Entity\Invoices;
+use App\Entity\Questions;
 use App\Entity\Services;
 use App\Entity\Users;
 use App\Entity\UsersObjects;
@@ -119,6 +120,8 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Sąskaitos', 'fa-solid fa-shop', Invoices::class),
             MenuItem::section('Paslaugos'),
             MenuItem::linkToCrud('Paslaugos', 'fa-solid fa-shop', Services::class),
+            MenuItem::section('Klausimai'),
+            MenuItem::linkToCrud('Klausimai', 'fa-regular fa-circle-question', Questions::class),
             MenuItem::section('Administratoriai'),
             MenuItem::linkToCrud('Administratoriai', 'fas fa-user-shield', Administrators::class),
             MenuItem::linkToCrud('Šalys', 'fa-solid fa-globe', Countries::class),

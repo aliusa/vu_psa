@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AdministratorsRepository;
+use App\Traits\AdminstampableTrait;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
@@ -19,6 +20,7 @@ class Administrators extends BaseEntity implements UserInterface, PasswordAuthen
 {
     use IdTrait;
     use TimestampableTrait;
+    use AdminstampableTrait;
 
     #[AssertValidator\Length(max: 100)]
     #[ORM\Column(type: Types::STRING, length: 100, unique: true)]

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ServicesRepository;
+use App\Traits\AdminstampableTrait;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
@@ -17,6 +18,7 @@ class Services extends BaseEntity
 {
     use IdTrait;
     use TimestampableTrait;
+    use AdminstampableTrait;
 
     #[AssertValidator\Length(max: 255)]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
@@ -42,7 +44,6 @@ class Services extends BaseEntity
     {
         $this->active_from = new \DateTime();
     }
-
 
     public function __toString()
     {

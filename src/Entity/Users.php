@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
+use App\Traits\AdminstampableTrait;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
@@ -21,6 +22,7 @@ class Users extends BaseEntity implements UserInterface, PasswordAuthenticatedUs
 {
     use IdTrait;
     use TimestampableTrait;
+    use AdminstampableTrait;
 
     #[AssertValidator\Length(max: 255)]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false, unique: true)]

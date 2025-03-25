@@ -3,11 +3,13 @@
 namespace App\Event;
 
 use App\Entity\BaseEntity;
+use App\Traits\AdminstampableTrait;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeCrudActionEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -22,11 +24,12 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     /** @var BaseEntity $entityChanged */
     protected $entityChanged;
 
-    protected ContainerInterface $container;
-
-    public function __construct(MailerInterface $mailer, ContainerInterface $container)
+    public function __construct(
+        MailerInterface $mailer,
+        private ContainerInterface $container,
+        private Security $security
+    )
     {
-        $this->container = $container;
     }
 
     public static function getSubscribedEvents()
@@ -94,6 +97,11 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public function BeforeEntityPersistedEvent(BeforeEntityPersistedEvent $event)
     {
         $namespace = $this->getSubscriberNamespace($event->getEntityInstance());
+
+        /** @see AdminstampableTrait::$admin */
+        if (property_exists($event->getEntityInstance(), 'admin')) {
+            $event->getEntityInstance()->admin = $this->security->getUser();
+        }
 
         if (!$namespace) {
             return;

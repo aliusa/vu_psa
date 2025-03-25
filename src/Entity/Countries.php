@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CountriesRepository;
+use App\Traits\AdminstampableTrait;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
@@ -19,6 +20,7 @@ class Countries extends BaseEntity
 {
     use IdTrait;
     use TimestampableTrait;
+    use AdminstampableTrait;
 
     #[AssertValidator\Length(max: 255)]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]

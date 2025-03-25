@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UsersObjectsRepository;
+use App\Traits\AdminstampableTrait;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
@@ -18,6 +19,7 @@ class UsersObjects extends BaseEntity
 {
     use IdTrait;
     use TimestampableTrait;
+    use AdminstampableTrait;
 
     /**
      * This is the owning side.

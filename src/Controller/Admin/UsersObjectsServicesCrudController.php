@@ -67,6 +67,7 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             $fields[] = MoneyField::new('unit_total', 'unit_total')->setCurrency('EUR');
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR');
             $fields[] = DateField::new('active_to', 'active_to');
+            $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
 
@@ -102,6 +103,7 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             ->add('unit_price')
             ->add('total_price')
             ->add('active_to')
+            ->add('admin')
             ->add('created_at')
         ;
 

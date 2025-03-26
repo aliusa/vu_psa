@@ -1,6 +1,7 @@
 <table class="table table-responsive table-hover table-condensed table-bordered">
     <thead>
-        <tr>
+        <tr class="table-secondary">
+            <th>ID</th>
             <th>Paslaugų paketas</th>
             <th>{{ "created_at"|trans }}</th>
             <th>{{ "active_to"|trans }}</th>
@@ -9,13 +10,19 @@
     <tbody>
         {% for service in services %}
             <tr>
+                <td>{{ service.id }}</td>
                 <td>
                     <a class="list-group-item" href="/admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesCrudController&entityId={{ service.id }}">
                         {{ service.services }}
                     </a>
                 </td>
                 <td>{{ service.created_at|date('Y-m-d H:i:s') }}</td>
-                <td>{{ service.active_to|date('Y-m-d H:i:s') }}</td>
+                <td>
+                    {{ service.active_to|date('Y-m-d') }}
+                    {% if service.isServiceActive() == false %}
+                        <span class="badge text-bg-danger">NEBEAKTYVI</span>
+                    {% endif %}
+                </td>
             </tr>
         {% else %}
             <tr class="text-center">

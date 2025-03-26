@@ -9,10 +9,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -76,6 +76,7 @@ class ServicesCrudController extends BaseCrudController
             $fields[] = MoneyField::new('price', 'price')->setCurrency('EUR');
             $fields[] = Field::new('description', 'description');
             $fields[] = Field::new('advertise', 'Reklamuoti');
+            $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
 
@@ -109,6 +110,7 @@ class ServicesCrudController extends BaseCrudController
             ->add('price')
             ->add('active_from')
             ->add('active_to')
+            ->add('admin')
             ->add('created_at')
             ;
 

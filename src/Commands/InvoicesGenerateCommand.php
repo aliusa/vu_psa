@@ -13,9 +13,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Lock\LockFactory;
 
-class GenerateInvoiceCommand extends BaseCommand
+class InvoicesGenerateCommand extends BaseCommand
 {
-    public static $defaultName = 'invoice:generate';
+    public static $defaultName = 'invoices:generate';
     protected static $defaultDescription = 'Sugeneruoja sąskaitas';
     private \Doctrine\ORM\QueryBuilder $invoicesQuery;
     private \DateTime $today;
@@ -79,9 +79,6 @@ class GenerateInvoiceCommand extends BaseCommand
 
     private function generateInvoice(UsersObjectsServicesBundles $usersObjectsServicesBundles)
     {
-        //dv($usersObjectsServicesBundles);
-        //dv(date_create_from_format('Y-m', $usersObjectsServicesBundles->created_at->format('Y-m')));
-
         //Ar active_to yra 1 mėnesio diena?
         if ($usersObjectsServicesBundles->active_to->format('m') === $usersObjectsServicesBundles->active_to->sub(new DateInterval('P1D'))->format('m')) {
             $dateTo = $usersObjectsServicesBundles->active_to->sub(new DateInterval('P1D'))->format('m');

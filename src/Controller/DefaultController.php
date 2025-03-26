@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Commands\GenerateInvoiceCommand;
 use App\Commands\ResetPaymentscommand;
 use App\Entity\Services;
 use App\Service\StorageService;

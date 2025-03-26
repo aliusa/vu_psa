@@ -63,7 +63,7 @@ class UsersObjectsServicesBundles extends BaseEntity
         return '[#' . $this->getId() . '] ' . $this->getUsersObject()->__toString() . ', ' . $this->created_at->format('Y-m-d H:i');
     }
 
-    public function isActive(): bool
+    public function isBundleActive(): bool
     {
         return $this->active_to > new \DateTime();
     }

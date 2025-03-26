@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Users;
-use App\Entity\UsersObjects;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -12,10 +11,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Event\PostSubmitEvent;
@@ -81,6 +80,7 @@ class UsersCrudController extends BaseCrudController
             $fields[] = Field::new('last_name', 'last_name');
             $fields[] = Field::new('email', 'email');
             $fields[] = Field::new('phone', 'phone');
+            $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
             /** @see Users::getUsersOjectsList() */
@@ -118,6 +118,7 @@ class UsersCrudController extends BaseCrudController
             ->add('last_name')
             ->add('email')
             ->add('phone')
+            ->add('admin')
             ->add('created_at')
         ;
 

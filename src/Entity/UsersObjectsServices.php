@@ -69,7 +69,7 @@ class UsersObjectsServices extends BaseEntity
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
     public int $total_price;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: false, options: ['default' => 'CURRENT_DATE'])]
     public $active_to;
 
     public function __construct()
@@ -96,5 +96,10 @@ class UsersObjectsServices extends BaseEntity
     public function calculateTotalPrice(): void
     {
         $this->total_price = $this->unit_total * ($this->amount ?? 1);
+    }
+
+    public function isServiceActive(): bool
+    {
+        return $this->active_to > new \DateTime();
     }
 }

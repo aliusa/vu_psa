@@ -3,12 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Countries;
-use App\Entity\UsersObjects;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -53,6 +53,7 @@ class CountriesCrudController extends BaseCrudController
             $fields[] = Field::new('title', 'title');
             $fields[] = Field::new('ioc', 'ioc');
             $fields[] = Field::new('iso', 'iso');
+            $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
 
@@ -85,6 +86,7 @@ class CountriesCrudController extends BaseCrudController
             ->add('title')
             ->add('ioc')
             ->add('iso')
+            ->add('admin')
             ->add('created_at')
         ;
 

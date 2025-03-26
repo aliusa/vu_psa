@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
@@ -67,6 +68,7 @@ class AdministratorsCrudController extends BaseCrudController
 
             $fields[] = Field::new('id');
             $fields[] = EmailField::new('email', 'email');
+            $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
         }
@@ -116,6 +118,7 @@ class AdministratorsCrudController extends BaseCrudController
         $filters
             ->add('id')
             ->add('email')
+            ->add('admin')
             ->add('created_at')
             ;
 

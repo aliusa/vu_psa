@@ -73,20 +73,6 @@ class UsersObjects extends BaseEntity
         return implode(' - ', ["[#{$this->getId()}]", $this->users->getFullName(), $this->city, $this->street, $this->house.'-'.$this->flat, $this->zip]);
     }
 
-    public function getActiveUsersObjectsServicesBundlesCount(): int
-    {
-        return $this->users_objects_services_bundles->filter(static function(UsersObjectsServicesBundles $usersObjectsServicesBundles) {
-            return $usersObjectsServicesBundles->isActive();
-        })->count();
-    }
-
-    public function getInactiveUsersObjectsServicesBundlesCount(): int
-    {
-        return $this->users_objects_services_bundles->filter(static function(UsersObjectsServicesBundles $usersObjectsServicesBundles) {
-            return !$usersObjectsServicesBundles->isActive();
-        })->count();
-    }
-
     /**
      * @return UsersObjectsServicesBundles[]|PersistentCollection
      */

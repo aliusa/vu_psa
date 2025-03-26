@@ -63,6 +63,7 @@ class UsersObjectsCrudController extends BaseCrudController
             $fields[] = Field::new('house', 'house');
             $fields[] = Field::new('flat', 'flat');
             $fields[] = Field::new('zip', 'zip');
+            $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
             /** @see UsersObjects::getUsersObjectsServicesBundles() */
@@ -101,6 +102,7 @@ class UsersObjectsCrudController extends BaseCrudController
             ->add('house')
             ->add('flat')
             ->add('zip')
+            ->add('admin')
             ->add('created_at')
         ;
 

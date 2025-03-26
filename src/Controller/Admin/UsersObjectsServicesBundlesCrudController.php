@@ -50,6 +50,7 @@ class UsersObjectsServicesBundlesCrudController extends BaseCrudController
             $fields[] = Field::new('id');
             $fields[] = AssociationField::new('users_object', 'Klientų objektas');
             $fields[] = DateField::new('active_to', 'active_to');
+            $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
             /** @see UsersObjectsServicesBundles::getUsersObjectsServices() */
@@ -84,6 +85,7 @@ class UsersObjectsServicesBundlesCrudController extends BaseCrudController
             ->add('id')
             ->add('users_object')
             ->add('active_to')
+            ->add('admin')
             ->add('created_at')
         ;
 

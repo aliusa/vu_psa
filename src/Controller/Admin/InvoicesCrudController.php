@@ -7,8 +7,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -41,6 +39,8 @@ class InvoicesCrudController extends BaseCrudController
             $fields[] = Field::new('UsersObjectsServicesBundles', 'users_objects_services_bundles');
             /** @see Invoices::getInvoiceTotal() */
             $fields[] = MoneyField::new('getInvoiceTotal', 'total')->setCurrency('EUR');
+            /** @see Invoices::getPeriod() */
+            $fields[] = Field::new('getPeriod', 'Periodas');
             $fields[] = DateField::new('due_date', 'due_date');
             $fields[] = DateTimeField::new('is_paid', 'is_paid');
             $fields[] = DateTimeField::new('created_at', 'created_at');

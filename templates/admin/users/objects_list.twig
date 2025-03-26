@@ -4,31 +4,19 @@
     <thead>
         <tr class="table-secondary">
             <th>Objektas</th>
-            <th>Aktyvūs paslaugų paketai</th>
-            <th>Neaktyvūs paslaugų paketai</th>
         </tr>
     </thead>
     <tbody class="">
         {% for userObject in field.value %}
-            <tr class="border-top">
+            <tr class="">
                 <td>
                     <a class="list-group-item" href="?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5CUsersObjectsCrudController&entityId={{ userObject.id }}">
                         {{ userObject }}
                     </a>
                 </td>
-                <td>
-                    <a href="admin?crudAction=index&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesBundlesCrudController&filters[users_object][comparison]=%3D&filters[users_object][value]={{ userObject.id }}">
-                        {{ userObject.getActiveUsersObjectsServicesBundlesCount() }}
-                    </a>
-                </td>
-                <td>
-                    <a href="admin?crudAction=index&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesBundlesCrudController&filters[users_object][comparison]=%3D&filters[users_object][value]={{ userObject.id }}">
-                        {{ userObject.getInactiveUsersObjectsServicesBundlesCount() }}
-                    </a>
-                </td>
             </tr>
-            <tr>
-                <td colspan="10">
+            <tr class="">
+                <td colspan="10" class="">
                     {% include 'admin/users_objects/bundles_table.twig' with {'userObjectBundles' : userObject.users_objects_services_bundles, 'caption' : 'Objekto paslaugų paketai'} %}
                 </td>
             </tr>

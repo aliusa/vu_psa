@@ -93,4 +93,10 @@ class Administrators extends BaseEntity implements UserInterface, PasswordAuthen
     {
         return $this->getUsername();
     }
+
+    public function __toString(): string
+    {
+        return '[#' . $this->id . '] ' . $this->email;
+    }
+
 }

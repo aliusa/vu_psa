@@ -1,14 +1,16 @@
+{#Failas užkraunamas iš TVS#}
+
 <table class="table table-responsive table-striped table-hover table-condensed table-bordered">
     <thead>
-        <tr>
+        <tr class="table-secondary">
             <th>Objektas</th>
             <th>Aktyvūs paslaugų paketai</th>
             <th>Neaktyvūs paslaugų paketai</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="">
         {% for userObject in field.value %}
-            <tr>
+            <tr class="border-top">
                 <td>
                     <a class="list-group-item" href="?crudAction=detail&crudControllerFqcn=App%5CController%5CAdmin%5CUsersObjectsCrudController&entityId={{ userObject.id }}">
                         {{ userObject }}
@@ -23,6 +25,11 @@
                     <a href="admin?crudAction=index&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesBundlesCrudController&filters[users_object][comparison]=%3D&filters[users_object][value]={{ userObject.id }}">
                         {{ userObject.getInactiveUsersObjectsServicesBundlesCount() }}
                     </a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    {% include 'admin/users_objects/bundles_table.twig' with {'userObjectBundles' : userObject.users_objects_services_bundles, 'caption' : 'Objekto paslaugų paketai'} %}
                 </td>
             </tr>
         {% else %}

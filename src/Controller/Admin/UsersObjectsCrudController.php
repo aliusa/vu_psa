@@ -33,7 +33,7 @@ class UsersObjectsCrudController extends BaseCrudController
             //sąrašas
 
             $fields[] = Field::new('id');
-            $fields[] = AssociationField::new('users', 'Naudotojas');
+            $fields[] = AssociationField::new('users', 'Klientas');
             $fields[] = Field::new('city', 'city');
             $fields[] = Field::new('street', 'street');
             $fields[] = Field::new('house', 'house');
@@ -44,7 +44,7 @@ class UsersObjectsCrudController extends BaseCrudController
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
 
-            $fields[] = AssociationField::new('users', 'Naudotojas')->autocomplete();
+            $fields[] = AssociationField::new('users', 'Klientas')->autocomplete();
             $fields[] = AssociationField::new('country', 'country')->autocomplete()->setColumns('col-6 col-md-2');
             $fields[] = Field::new('city', 'city')->setColumns('col-6 col-md-2');
             $fields[] = Field::new('street', 'street')->setColumns('col-3 col-md-2');
@@ -56,7 +56,7 @@ class UsersObjectsCrudController extends BaseCrudController
             //Peržiūra
 
             $fields[] = Field::new('id');
-            $fields[] = AssociationField::new('users', 'Naudotojas');
+            $fields[] = AssociationField::new('users', 'Klientas');
             $fields[] = AssociationField::new('country', 'country');
             $fields[] = Field::new('city', 'city');
             $fields[] = Field::new('street', 'street');

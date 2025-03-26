@@ -1,0 +1,26 @@
+<table class="table table-responsive table-hover table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th>Paslaugų paketas</th>
+            <th>{{ "created_at"|trans }}</th>
+            <th>{{ "active_to"|trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for service in services %}
+            <tr>
+                <td>
+                    <a class="list-group-item" href="/admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesCrudController&entityId={{ service.id }}">
+                        {{ service.services }}
+                    </a>
+                </td>
+                <td>{{ service.created_at|date('Y-m-d H:i:s') }}</td>
+                <td>{{ service.active_to|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        {% else %}
+            <tr class="text-center">
+                <td colspan="20">Nėra priskirtų paslaugų</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

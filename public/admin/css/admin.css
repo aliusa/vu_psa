@@ -22,3 +22,7 @@
 tr[data-href] {
     cursor: pointer;
 }
+
+.field-value > table > tbody > tr:nth-of-type(odd) {
+    border-top: 2px solid var(--table-cell-color) !important;
+}

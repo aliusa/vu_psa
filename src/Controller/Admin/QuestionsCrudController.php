@@ -35,7 +35,7 @@ class QuestionsCrudController extends BaseCrudController
             //sąrašas
 
             $fields[] = Field::new('id');
-            $fields[] = AssociationField::new('users', 'Naudotojas');
+            $fields[] = AssociationField::new('users', 'Klientas');
             $fields[] = Field::new('email', 'email');
             $fields[] = Field::new('question', 'Klausimas');
             $fields[] = DateTimeField::new('created_at', 'created_at');
@@ -48,7 +48,7 @@ class QuestionsCrudController extends BaseCrudController
             //Peržiūra
 
             $fields[] = Field::new('id');
-            $fields[] = AssociationField::new('users', 'Naudotojas');
+            $fields[] = AssociationField::new('users', 'Klientas');
             $fields[] = Field::new('email', 'email');
             $fields[] = Field::new('question', 'Klausimas');
             $fields[] = DateTimeField::new('created_at', 'created_at');

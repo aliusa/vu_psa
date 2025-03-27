@@ -35,7 +35,7 @@ class DashboardController extends AbstractDashboardController
             'activeUsersServicesBundlesCount' => $this->entityManager->getRepository(UsersObjectsServicesBundles::class)
                 ->createQueryBuilder('item')
                 ->select('COUNT(1)')
-                ->andWhere('item.active_to >= CURRENT_TIMESTAMP()')
+                ->andWhere('item.active_to >= CURRENT_TIMESTAMP() OR item.active_to IS NULL')
                 ->getQuery()->getSingleScalarResult(),
             'unpaidAmount' => $this->entityManager->getRepository(Invoices::class)
                 ->createQueryBuilder('invoices')

@@ -32,8 +32,13 @@ class Administrators extends BaseEntity implements UserInterface, PasswordAuthen
     /**
      * @var string The hashed password
      */
-    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: false)]
     public $password;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     /**
      * A visual identifier that represents this user.

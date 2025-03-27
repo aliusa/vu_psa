@@ -80,14 +80,9 @@ class InvoicesGenerateCommand extends BaseCommand
     private function generateInvoice(UsersObjectsServicesBundles $usersObjectsServicesBundles)
     {
         //Ar active_to yra 1 mėnesio diena?
-        if ($usersObjectsServicesBundles->active_to->format('m') === $usersObjectsServicesBundles->active_to->sub(new DateInterval('P1D'))->format('m')) {
-            $dateTo = $usersObjectsServicesBundles->active_to->sub(new DateInterval('P1D'))->format('m');
-        } else {
-            $dateTo = $usersObjectsServicesBundles->active_to;
-        }
 
         $period = new \DatePeriod(
-            new \DateTime($usersObjectsServicesBundles->created_at->format('Y-m-1')),
+            new \DateTime($usersObjectsServicesBundles->active_from->format('Y-m-1')),
             new \DateInterval('P1M'),
             $this->today
         );
@@ -103,12 +98,13 @@ class InvoicesGenerateCommand extends BaseCommand
             }
 
             $periodStart = clone $value;
-            $dueDate = $value->add(new \DateInterval('P2M'))->sub(new DateInterval('P1D'));
+            $dueDate = $value->add(new \DateInterval('P1M'))->add(new DateInterval('P15D'));
 
             //create invoice
             $invoice = new Invoices();
             $invoice->users_objects_services_bundles = $usersObjectsServicesBundles;
-            $invoice->period_start = $periodStart;
+            $invoice->period_start = clone $periodStart;
+            $invoice->period_end = $periodStart->modify('last day of this month');
             $invoice->due_date = $dueDate;
             $invoice->is_paid = null;
             $invoice->series = 'SAS';

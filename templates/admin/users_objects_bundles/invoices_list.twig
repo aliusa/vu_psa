@@ -4,7 +4,7 @@
     <thead>
         <tr class="table-secondary">
             <th>Sąskaita</th>
-            <th>{{ "created_at"|trans }}</th>
+            <th>Periodas</th>
             <th>{{ "due_date"|trans }}</th>
             <th>{{ "total"|trans }}</th>
             <th>{{ "is_paid"|trans }}</th>
@@ -18,7 +18,7 @@
                         #{{ invoice.id }} {{ invoice.getFormattedSeries() }}
                     </a>
                 </td>
-                <td>{{ invoice.created_at|date('Y-m-d H:i:s') }}</td>
+                <td>{{ invoice.getPeriod() }}</td>
                 <td>
                     {{ invoice.due_date|date('Y-m-d') }}
                     {% if invoice.isDuePassed() %}

@@ -42,8 +42,17 @@ class UsersObjectsServicesBundles extends BaseEntity
     #[ORM\OneToMany(targetEntity: Invoices::class, mappedBy: 'users_objects_services_bundles')]
     public $invoices;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    public ?\DateTimeImmutable $active_to = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: ['default' => 'CURRENT_DATE'])]
+    public \DateTime $active_from;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    public ?\DateTime $active_to = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->active_from = new \DateTime();
+    }
 
     /**
      * @return UsersObjects|PersistentCollection
@@ -65,7 +74,7 @@ class UsersObjectsServicesBundles extends BaseEntity
 
     public function isBundleActive(): bool
     {
-        return $this->active_to > new \DateTime();
+        return !$this->active_to || $this->active_to > new \DateTime();
     }
 
     /**

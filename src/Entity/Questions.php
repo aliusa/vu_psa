@@ -37,6 +37,11 @@ class Questions extends BaseEntity
     #[ORM\JoinColumn(name: 'users_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public ?Users $users = null;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function __toString()
     {
         return '[#' . $this->id . '] ' . $this->question;

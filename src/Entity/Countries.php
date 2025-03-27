@@ -43,6 +43,11 @@ class Countries extends BaseEntity
     #[ORM\OrderBy(['id' => 'DESC'])]
     public $users_objects;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function __toString()
     {
         return '[#' . $this->id . '] ' . $this->title;

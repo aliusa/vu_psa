@@ -66,19 +66,16 @@
             </tr>
         </thead>
         <tbody>
-            {% if invoice.users_objects_services_bundles.users_objects_services.isEmpty() %}
-                <tr>
-                    <td colspan="20">Nėra paslaugų</td>
-                </tr>
-            {% else %}
+        {% set usersObjectsServices = invoice.getInvoiceServices() %}
+            {% if usersObjectsServices %}
                 {% set sumUnitPrice = 0 %}
                 {% set sumUnitPvm = 0 %}
                 {% set sumUnitPriceTotal = 0 %}
                 {% set sumTotalPriceBePvm = 0 %}
                 {% set sumTotalPriceSuPvm = 0 %}
-                {% for users_objects_services in invoice.users_objects_services_bundles.users_objects_services %}
+                {% for users_objects_services in usersObjectsServices %}
                     <tr>
-                        <td>{{ users_objects_services.services.title }}</td>
+                        <td>{{ users_objects_services.services.title }}{% if users_objects_services.isFullPeriod(invoice) == false %}<br/><i class="text-muted">ne visas mėnuo</i>{% endif %}</td>
                         <td>{{ (users_objects_services.unit_price/100)|format_currency('EUR') }}</td>
                         <td>{{ (users_objects_services.unit_adjustments/100)|format_currency('EUR') }}</td>
                         <td>{{ ((users_objects_services.unit_total)/100)|format_currency('EUR') }}</td>
@@ -101,6 +98,10 @@
                         <th>{{ (sumTotalPriceBePvm/100)|format_currency('EUR') }}</th>
                         <th>{{ (sumTotalPriceSuPvm/100)|format_currency('EUR') }}</th>
                     </tr>
+            {% else %}
+                <tr>
+                    <td colspan="20">Nėra paslaugų</td>
+                </tr>
             {% endif %}
         </tbody>
     </table>

@@ -69,11 +69,17 @@ class UsersObjectsServices extends BaseEntity
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
     public int $total_price;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: false, options: ['default' => 'CURRENT_DATE'])]
-    public $active_to;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: ['default' => 'CURRENT_DATE'])]
+    public \DateTime $active_from;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: [])]
+    public \DateTime $active_to;
 
     public function __construct()
     {
+        parent::__construct();
+
+        $this->active_from = new \DateTime();
         if (isset($this->unit_price)) {
             $this->unit_adjustments = $this->unit_price * 0.21;
         }
@@ -101,5 +107,12 @@ class UsersObjectsServices extends BaseEntity
     public function isServiceActive(): bool
     {
         return $this->active_to > new \DateTime();
+    }
+
+    public function isFullPeriod(Invoices $invoices): bool
+    {
+        return $this->active_from <= $invoices->period_start
+            && $this->active_to >= $invoices->period_end;
+            ;
     }
 }

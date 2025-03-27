@@ -46,7 +46,7 @@ class ServicesCrudController extends BaseCrudController
             $fields[] = Field::new('id');
             $fields[] = Field::new('title', 'title');
             $fields[] = MoneyField::new('price', 'price')->setCurrency('EUR');
-            $fields[] = Field::new('active_from', 'active_from');
+            $fields[] = DateField::new('active_from', 'active_from');
             $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = Field::new('advertise', 'Reklamuoti');
 
@@ -76,6 +76,8 @@ class ServicesCrudController extends BaseCrudController
             $fields[] = MoneyField::new('price', 'price')->setCurrency('EUR');
             $fields[] = Field::new('description', 'description');
             $fields[] = Field::new('advertise', 'Reklamuoti');
+            $fields[] = DateField::new('active_from', 'active_from');
+            $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');

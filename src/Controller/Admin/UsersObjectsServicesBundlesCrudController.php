@@ -35,13 +35,15 @@ class UsersObjectsServicesBundlesCrudController extends BaseCrudController
             $fields[] = Field::new('id');
             $fields[] = AssociationField::new('users_object', 'Klientų objektas');
             $fields[] = Field::new('ServicesCount', 'Paslaugos');/** @see UsersObjectsServicesBundles::getServicesCount() */
+            $fields[] = DateField::new('active_from', 'active_from');
             $fields[] = DateField::new('active_to', 'active_to');
-            $fields[] = DateTimeField::new('created_at', 'created_at');
+            //$fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
 
-            $fields[] = AssociationField::new('users_object', 'Klientų objektas')->autocomplete();/** @see UsersObjectsServicesBundles::$users_object */
+            $fields[] = AssociationField::new('users_object', 'Klientų objektas')->autocomplete()->setFormTypeOption('required', true);/** @see UsersObjectsServicesBundles::$users_object */
+            $fields[] = DateField::new('active_from', 'active_from');
             $fields[] = DateField::new('active_to', 'active_to');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
@@ -49,6 +51,7 @@ class UsersObjectsServicesBundlesCrudController extends BaseCrudController
 
             $fields[] = Field::new('id');
             $fields[] = AssociationField::new('users_object', 'Klientų objektas');
+            $fields[] = DateField::new('active_from', 'active_from');
             $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
@@ -84,6 +87,7 @@ class UsersObjectsServicesBundlesCrudController extends BaseCrudController
         $filters
             ->add('id')
             ->add('users_object')
+            ->add('active_from')
             ->add('active_to')
             ->add('admin')
             ->add('created_at')

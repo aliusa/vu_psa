@@ -32,7 +32,10 @@ class Invoices extends BaseEntity
     public $users_objects_services_bundles;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: ['default' => 'CURRENT_DATE'])]
-    public $period_start;
+    public \DateTime $period_start;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: [])]
+    public \DateTime $period_end;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true, options: [])]
     public $due_date;
@@ -57,6 +60,7 @@ class Invoices extends BaseEntity
 
     public function __construct()
     {
+        parent::__construct();
         $this->payments = new ArrayCollection();
     }
 
@@ -94,7 +98,11 @@ class Invoices extends BaseEntity
 
     public function getInvoiceServices()
     {
-        return $this->users_objects_services_bundles->getUsersObjectsServices();
+        return $this->users_objects_services_bundles->getUsersObjectsServices()->filter(function (UsersObjectsServices $usersObjectsServices) {
+            return $usersObjectsServices->active_from <= $this->period_end
+                && $this->period_start <= $usersObjectsServices->active_to
+                ;
+        });
     }
 
     public function getNo(): string
@@ -117,9 +125,8 @@ class Invoices extends BaseEntity
      * @return string "2025 m. Vasaris"
      * @throws \DateInvalidOperationException
      */
-    public function getPeriod()
+    public function getPeriod(): string
     {
-        $lastPeriod = $this->period_start->sub(new \DateInterval('P1M'));
         $month = match ($this->period_start->format('n')) {
             '1' => 'Sausis',
             '2' => 'Vasaris',
@@ -135,6 +142,6 @@ class Invoices extends BaseEntity
             '12' => 'Gruodis',
         };
 
-        return $lastPeriod->format('Y') . ' m. ' . $month;
+        return $this->period_start->format('Y') . ' m. ' . $month;
     }
 }

@@ -41,14 +41,23 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             $fields[] = MoneyField::new('unit_adjustments', 'unit_adjustments')->setCurrency('EUR');
             $fields[] = MoneyField::new('unit_total', 'unit_total')->setCurrency('EUR');
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR');
+            //$fields[] = DateField::new('active_from', 'active_from');
             $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
 
-            $fields[] = AssociationField::new('users_objects_services_bundles', 'users_objects_services_bundles')->autocomplete()->setColumns('col-12 col-md-6');/** @see UsersObjectsServices::$users_objects_services_bundles */
-            $fields[] = AssociationField::new('services', 'services')->autocomplete()->setColumns('col-12 col-md-6');/** @see UsersObjectsServices::$services */
+            /** @see UsersObjectsServices::$users_objects_services_bundles */
+            $fields[] = AssociationField::new('users_objects_services_bundles', 'users_objects_services_bundles')
+                ->autocomplete()
+                ->setColumns('col-12 col-md-6')
+                ->setFormTypeOption('required', true);
+            /** @see UsersObjectsServices::$services */
+            $fields[] = AssociationField::new('services', 'services')
+                ->autocomplete()
+                ->setColumns('col-12 col-md-6')
+                ->setFormTypeOption('required', true);
             $fields[] = Field::new('amount', 'amount')->setColumns('col-4');
             $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR')->setColumns('col-4')->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = MoneyField::new('unit_adjustments', 'unit_adjustments')->setCurrency('EUR')->setColumns('col-4')->setFormTypeOption('attr', ['placeholder' => '00.00']);
@@ -66,6 +75,7 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             $fields[] = MoneyField::new('unit_adjustments', 'unit_adjustments')->setCurrency('EUR');
             $fields[] = MoneyField::new('unit_total', 'unit_total')->setCurrency('EUR');
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR');
+            $fields[] = DateField::new('active_from', 'active_from');
             $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
@@ -102,6 +112,7 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             ->add('amount')
             ->add('unit_price')
             ->add('total_price')
+            ->add('active_from')
             ->add('active_to')
             ->add('admin')
             ->add('created_at')

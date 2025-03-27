@@ -68,6 +68,11 @@ class UsersObjects extends BaseEntity
     #[ORM\JoinColumn(name: 'users_objects_services_bundles_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $users_objects_services_bundles;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function __toString()
     {
         return implode(' - ', ["[#{$this->getId()}]", $this->users->getFullName(), $this->city, $this->street, $this->house.'-'.$this->flat, $this->zip]);

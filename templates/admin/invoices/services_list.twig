@@ -3,6 +3,7 @@
 <table class="table table-responsive table-hover table-condensed table-bordered">
     <thead>
         <tr class="table-secondary">
+            <th>ID</th>
             <th class="w-50">Paslauga</th>
             <th>{{ "unit_price"|trans }}</th>
             <th>{{ "unit_adjustments"|trans }}</th>
@@ -11,6 +12,8 @@
             <th>Suma be PVM</th>
             <th>Suma su PVM</th>
             <th>Priskirta</th>
+            <th>Aktyvi nuo</th>
+            <th>Aktyvi iki</th>
         </tr>
     </thead>
     <tbody>
@@ -26,6 +29,7 @@
             {% set sumTotalPriceSuPvm = 0 %}
             {% for users_objects_services in field.value %}
                 <tr>
+                    <td>{{ users_objects_services.services.id }}</td>
                     <td>
                         <a class="list-group-item" href="/admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesCrudController&entityId={{ users_objects_services.id }}">
                             {{ users_objects_services.services.title }}
@@ -38,21 +42,33 @@
                     <td>{{ (users_objects_services.unit_price * users_objects_services.amount/100)|format_currency('EUR') }}</td>
                     <td>{{ (users_objects_services.total_price/100)|format_currency('EUR') }}</td>
                     <td class="text-nowrap">{{ users_objects_services.created_at|date('Y-m-d H:i') }}</td>
+                    <td class="text-nowrap">{{ users_objects_services.active_from|date('Y-m-d') }}</td>
+                    <td class="text-nowrap">
+                        {{ users_objects_services.active_to|date('Y-m-d') }}
+                        {% if users_objects_services.isFullPeriod(field.formattedValue.invoice) == false %}
+                            <span class="badge text-bg-danger">NE VISAS MĖN.</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% set sumUnitPrice = sumUnitPrice + users_objects_services.unit_price %}
                 {% set sumUnitPvm = sumUnitPvm + users_objects_services.unit_adjustments %}
+                {% set sumUnitPriceTotal = sumUnitPriceTotal + users_objects_services.unit_total %}
                 {% set sumTotalPriceBePvm = sumTotalPriceBePvm + users_objects_services.unit_price * users_objects_services.amount %}
                 {% set sumTotalPriceSuPvm = sumTotalPriceSuPvm + users_objects_services.total_price %}
+            {% else %}
+                <tr class="text-center">
+                    <td colspan="20">Nėra priskirtų paslaugų</td>
+                </tr>
             {% endfor %}
             <tr class="table-light">
-                <th></th>
+                <th colspan="2"></th>
                 <th>{{ (sumUnitPrice/100)|format_currency('EUR') }}</th>
                 <th>{{ (sumUnitPvm/100)|format_currency('EUR') }}</th>
                 <th>{{ (sumUnitPriceTotal/100)|format_currency('EUR') }}</th>
                 <th></th>
                 <th>{{ (sumTotalPriceBePvm/100)|format_currency('EUR') }}</th>
                 <th>{{ (sumTotalPriceSuPvm/100)|format_currency('EUR') }}</th>
-                <th></th>
+                <th colspan="3"></th>
             </tr>
         {% endif %}
     </tbody>

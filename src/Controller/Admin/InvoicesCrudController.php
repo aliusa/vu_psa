@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Invoices;
+use App\Entity\UsersObjectsServices;
+use Doctrine\Common\Collections\ArrayCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -67,15 +69,25 @@ class InvoicesCrudController extends BaseCrudController
             $fields[] = Field::new('UsersObjectsServicesBundles', 'users_objects_services_bundles');
             ///** @see Invoices::getInvoiceTotal() */
             //$fields[] = MoneyField::new('getInvoiceTotal', 'total')->setCurrency('EUR');
-            $fields[] = DateField::new('due_date', 'due_date');
             $fields[] = DateTimeField::new('is_paid', 'is_paid');
             $fields[] = Field::new('series', 'Serija');
             /** @see Invoices::getNo() */
             $fields[] = Field::new('getNo', 'Numeris');
+            /** @see Invoices::getPeriod() */
+            $fields[] = Field::new('period', 'Periodas');
+            $fields[] = DateField::new('due_date', 'due_date');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
             /** @see Invoices::getInvoiceServices() */
-            $fields[] = Field::new('getInvoiceServices', 'Priskirtos paslaugos')->setTemplatePath('admin/invoices/services_list.twig');
+            $fields[] = Field::new('getInvoiceServices', 'Priskirtos paslaugos')->setTemplatePath('admin/invoices/services_list.twig')
+                ->formatValue(
+                /** @var ArrayCollection|UsersObjectsServices[] $value */
+                    static function ($value, Invoices $invoices) {
+                        return [
+                            'service' => $value,
+                            'invoice' => $invoices,
+                        ];
+                    });
 
         }
 
@@ -108,6 +120,8 @@ class InvoicesCrudController extends BaseCrudController
             //->add('getInvoiceTotal')
             ->add('due_date')
             //->add('is_paid')
+            ->add('period_start')
+            ->add('period_end')
             ->add('created_at')
         ;
 

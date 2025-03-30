@@ -35,7 +35,7 @@ class Countries extends BaseEntity
     public string $iso;
 
     /**
-     * One User have Many UsersObjects.
+     * One Country have Many UsersObjects.
      * @see UsersObjects::$country
      * @var PersistentCollection|UsersObjects[]
      */

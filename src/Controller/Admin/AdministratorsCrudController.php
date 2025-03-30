@@ -15,6 +15,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -42,7 +44,7 @@ class AdministratorsCrudController extends BaseCrudController
         if ($pageName === Crud::PAGE_INDEX) {
             //sąrašas
 
-            $fields[] = Field::new('id');
+            $fields[] = IdField::new('id');
             $fields[] = Field::new('email', 'email');
             $fields[] = Field::new('created_at', 'created_at');
 
@@ -66,8 +68,11 @@ class AdministratorsCrudController extends BaseCrudController
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
-            $fields[] = Field::new('id');
+            $fields[] = FormField::addColumn(8);
             $fields[] = EmailField::new('email', 'email');
+
+            $fields[] = FormField::addColumn(4);
+            $fields[] = IdField::new('id');
             $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');

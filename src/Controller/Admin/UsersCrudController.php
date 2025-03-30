@@ -15,6 +15,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Event\PostSubmitEvent;
@@ -45,7 +47,7 @@ class UsersCrudController extends BaseCrudController
         if ($pageName === Crud::PAGE_INDEX) {
             //sąrašas
 
-            $fields[] = Field::new('id');
+            $fields[] = IdField::new('id');
             $fields[] = Field::new('first_name', 'first_name');
             $fields[] = Field::new('last_name', 'last_name');
             $fields[] = Field::new('email', 'email');
@@ -75,18 +77,23 @@ class UsersCrudController extends BaseCrudController
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
-            $fields[] = Field::new('id');
+            $fields[] = FormField::addColumn(8);
             $fields[] = Field::new('first_name', 'first_name');
             $fields[] = Field::new('last_name', 'last_name');
             $fields[] = Field::new('email', 'email');
-            $fields[] = Field::new('phone', 'phone');
+            $fields[] = TelephoneField::new('phone', 'phone');
+
+            $fields[] = FormField::addColumn(4);
+            $fields[] = IdField::new('id');
             $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
+
+            $fields[] = FormField::addColumn(12);
             /** @see Users::getUsersOjectsList() */
-            $fields[] = Field::new('UsersOjectsList', 'Objektai')->setTemplatePath('admin/users/objects_list.twig');
+            $fields[] = Field::new('UsersOjectsList', 'Kleinto objektai')->setTemplatePath('admin/users/objects_list.twig');
             /** @see Users::getQuestionsList() */
-            $fields[] = Field::new('getQuestionsList', 'Klausimai')->setTemplatePath('admin/users/questions_list.twig');
+            $fields[] = Field::new('getQuestionsList', 'Užduoti klausimai')->setTemplatePath('admin/users/questions_list.twig');
 
         }
 

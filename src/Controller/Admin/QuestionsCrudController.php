@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -34,7 +35,7 @@ class QuestionsCrudController extends BaseCrudController
         if ($pageName === Crud::PAGE_INDEX) {
             //sąrašas
 
-            $fields[] = Field::new('id');
+            $fields[] = IdField::new('id');
             $fields[] = AssociationField::new('users', 'Klientas');
             $fields[] = Field::new('email', 'email');
             $fields[] = Field::new('question', 'Klausimas');
@@ -47,10 +48,13 @@ class QuestionsCrudController extends BaseCrudController
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
-            $fields[] = Field::new('id');
+            $fields[] = FormField::addColumn(8);
             $fields[] = AssociationField::new('users', 'Klientas');
             $fields[] = Field::new('email', 'email');
             $fields[] = Field::new('question', 'Klausimas');
+
+            $fields[] = FormField::addColumn(4);
+            $fields[] = IdField::new('id');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
         }

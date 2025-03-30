@@ -11,7 +11,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
 
 class UsersObjectsServicesCrudController extends BaseCrudController
 {
@@ -33,13 +36,12 @@ class UsersObjectsServicesCrudController extends BaseCrudController
         if ($pageName === Crud::PAGE_INDEX) {
             //sąrašas
 
-            $fields[] = Field::new('id');
+            $fields[] = IdField::new('id');
             $fields[] = AssociationField::new('users_objects_services_bundles', 'users_objects_services_bundles');
             $fields[] = AssociationField::new('services', 'service');
             $fields[] = Field::new('amount', 'amount');
             $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR');
-            $fields[] = MoneyField::new('unit_adjustments', 'unit_adjustments')->setCurrency('EUR');
-            $fields[] = MoneyField::new('unit_total', 'unit_total')->setCurrency('EUR');
+            //$fields[] = PercentField::new('unit_vat', 'unit_vat');
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR');
             //$fields[] = DateField::new('active_from', 'active_from');
             $fields[] = DateField::new('active_to', 'active_to');
@@ -54,29 +56,35 @@ class UsersObjectsServicesCrudController extends BaseCrudController
                 ->setColumns('col-12 col-md-6')
                 ->setFormTypeOption('required', true);
             /** @see UsersObjectsServices::$services */
-            $fields[] = AssociationField::new('services', 'services')
+            $fields[] = AssociationField::new('services', 'service')
                 ->autocomplete()
                 ->setColumns('col-12 col-md-6')
                 ->setFormTypeOption('required', true);
-            $fields[] = Field::new('amount', 'amount')->setColumns('col-4');
-            $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR')->setColumns('col-4')->setFormTypeOption('attr', ['placeholder' => '00.00']);
-            $fields[] = MoneyField::new('unit_adjustments', 'unit_adjustments')->setCurrency('EUR')->setColumns('col-4')->setFormTypeOption('attr', ['placeholder' => '00.00']);
-            $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR')->setColumns('col-4')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
+            $fields[] = Field::new('amount', 'amount')->setColumns('col-3');
+            $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR')->setColumns('col-3')->setFormTypeOption('attr', ['placeholder' => '00.00']);
+            $fields[] = PercentField::new('unit_vat', 'unit_vat')->setColumns('col-3')->setFormTypeOption('attr', ['placeholder' => '00.00']);
+            $fields[] = MoneyField::new('unit_price_vat', 'unit_price_vat')->setCurrency('EUR')->setColumns('col-3')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
+            $fields[] = MoneyField::new('total_price_vat', 'total_price_vat')->setCurrency('EUR')->setColumns('col-3')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
+            $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR')->setColumns('col-3')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = DateField::new('active_to', 'active_to');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
-            $fields[] = Field::new('id');
+            $fields[] = FormField::addColumn(8);
             $fields[] = AssociationField::new('users_objects_services_bundles', 'users_objects_services_bundles');
             $fields[] = AssociationField::new('services', 'service');
             $fields[] = Field::new('amount', 'amount');
             $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR');
-            $fields[] = MoneyField::new('unit_adjustments', 'unit_adjustments')->setCurrency('EUR');
-            $fields[] = MoneyField::new('unit_total', 'unit_total')->setCurrency('EUR');
+            $fields[] = PercentField::new('unit_vat', 'unit_vat');
+            $fields[] = MoneyField::new('unit_price_vat', 'unit_price_vat')->setCurrency('EUR');
+            $fields[] = MoneyField::new('total_price_vat', 'total_price_vat')->setCurrency('EUR');
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR');
             $fields[] = DateField::new('active_from', 'active_from');
             $fields[] = DateField::new('active_to', 'active_to');
+
+            $fields[] = FormField::addColumn(4);
+            $fields[] = IdField::new('id');
             $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');

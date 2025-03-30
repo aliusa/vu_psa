@@ -15,6 +15,7 @@ abstract class BaseCrudController extends AbstractCrudController
         $fields = parent::configureFields($pageName);
 
         if ($pageName === Crud::PAGE_INDEX) {
+            //sąrašas
 
             //Hide fields in listing
             $fields = array_filter($fields, static function(Field $item) {
@@ -29,6 +30,7 @@ abstract class BaseCrudController extends AbstractCrudController
             }
 
         } elseif ($pageName === Crud::PAGE_EDIT) {
+            //Redagavimas
 
             foreach ($fields as $key => $field) {
                 if (in_array($field->getAsDto()->getProperty(), ['created_at', 'updated_at'])) {
@@ -38,6 +40,7 @@ abstract class BaseCrudController extends AbstractCrudController
             }
 
         } elseif ($pageName === Crud::PAGE_NEW) {
+            //Kūrimas
 
             foreach ($fields as $key => $field) {
                 if (in_array($field->getAsDto()->getProperty(), ['created_at', 'updated_at'])) {
@@ -46,6 +49,7 @@ abstract class BaseCrudController extends AbstractCrudController
             }
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
+            //Peržiūra
 
             //
 

@@ -3,13 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\UsersObjectsServices;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<UsersObjectsServices>
+ * @extends BaseRepository<UsersObjectsServices>
  */
-class UsersObjectsServicesRepository extends ServiceEntityRepository
+class UsersObjectsServicesRepository extends BaseRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

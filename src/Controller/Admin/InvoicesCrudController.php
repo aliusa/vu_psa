@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Invoices;
+use App\Entity\Users;
 use App\Entity\UsersObjectsServices;
 use Doctrine\Common\Collections\ArrayCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -12,6 +13,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 
 class InvoicesCrudController extends BaseCrudController
@@ -34,9 +37,14 @@ class InvoicesCrudController extends BaseCrudController
         if ($pageName === Crud::PAGE_INDEX) {
             //sąrašas
 
-            $fields[] = Field::new('id');
+            $fields[] = IdField::new('id');
             /** @see Invoices::getUser() */
-            $fields[] = Field::new('User', 'Klientas');
+            $fields[] = Field::new('User', 'Klientas')->formatValue(function (\Proxies\__CG__\App\Entity\Users|Users $value) {
+                if ($value->email) {
+                    return "<a href='admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\UsersCrudController&entityId={$value->getId()}'>{$value->email}</a>";
+                }
+                return null;
+            });
             /** @see Invoices::getUsersObjectsServicesBundles() */
             $fields[] = Field::new('UsersObjectsServicesBundles', 'users_objects_services_bundles');
             /** @see Invoices::getInvoiceTotal() */
@@ -62,9 +70,15 @@ class InvoicesCrudController extends BaseCrudController
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
-            $fields[] = Field::new('id');
+            $fields[] = FormField::addColumn(8);
             /** @see Invoices::getUser() */
-            $fields[] = Field::new('User', 'Klientas');
+            $fields[] = Field::new('User', 'Klientas')
+                ->formatValue(function (\Proxies\__CG__\App\Entity\Users|Users $value) {
+                    if ($value->email) {
+                        return "<a href='admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\UsersCrudController&entityId={$value->getId()}'>{$value->email}</a>";
+                    }
+                    return null;
+                });
             /** @see Invoices::getUsersObjectsServicesBundles() */
             $fields[] = Field::new('UsersObjectsServicesBundles', 'users_objects_services_bundles');
             ///** @see Invoices::getInvoiceTotal() */
@@ -76,8 +90,13 @@ class InvoicesCrudController extends BaseCrudController
             /** @see Invoices::getPeriod() */
             $fields[] = Field::new('period', 'Periodas');
             $fields[] = DateField::new('due_date', 'due_date');
+
+            $fields[] = FormField::addColumn(4);
+            $fields[] = IdField::new('id');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
+
+            $fields[] = FormField::addColumn(12);
             /** @see Invoices::getInvoiceServices() */
             $fields[] = Field::new('getInvoiceServices', 'Priskirtos paslaugos')->setTemplatePath('admin/invoices/services_list.twig')
                 ->formatValue(
@@ -87,7 +106,8 @@ class InvoicesCrudController extends BaseCrudController
                             'service' => $value,
                             'invoice' => $invoices,
                         ];
-                    });
+                    }
+                );
 
         }
 

@@ -57,46 +57,41 @@
         <thead>
             <tr class="table-secondary">
                 <th class="w-50">Paslauga</th>
+                <th>{{ "unit_price_vat"|trans }}</th>
                 <th>{{ "unit_price"|trans }}</th>
-                <th>{{ "unit_adjustments"|trans }}</th>
-                <th>{{ "unit_total"|trans }}</th>
                 <th>{{ "amount"|trans }}</th>
-                <th>Suma be PVM</th>
-                <th>Suma su PVM</th>
+                <th>{{ "total_price_vat"|trans }}</th>
+                <th>{{ "total_price"|trans }}</th>
             </tr>
         </thead>
         <tbody>
         {% set usersObjectsServices = invoice.getInvoiceServices() %}
             {% if usersObjectsServices %}
-                {% set sumUnitPrice = 0 %}
-                {% set sumUnitPvm = 0 %}
-                {% set sumUnitPriceTotal = 0 %}
-                {% set sumTotalPriceBePvm = 0 %}
-                {% set sumTotalPriceSuPvm = 0 %}
+                {% set unit_price_vat = 0 %}
+                {% set unit_price = 0 %}
+                {% set total_price_vat = 0 %}
+                {% set total_price = 0 %}
                 {% for users_objects_services in usersObjectsServices %}
                     <tr>
                         <td>{{ users_objects_services.services.title }}{% if users_objects_services.isFullPeriod(invoice) == false %}<br/><i class="text-muted">ne visas mėnuo</i>{% endif %}</td>
-                        <td>{{ (users_objects_services.unit_price/100)|format_currency('EUR') }}</td>
-                        <td>{{ (users_objects_services.unit_adjustments/100)|format_currency('EUR') }}</td>
-                        <td>{{ ((users_objects_services.unit_total)/100)|format_currency('EUR') }}</td>
+                        <td>{{ (users_objects_services.getAdjustedUnitPriceVat(invoice)/100)|format_currency('EUR') }}</td>
+                        <td>{{ (users_objects_services.getAdjustedUnitPrice(invoice)/100)|format_currency('EUR') }}</td>
                         <td>{{ users_objects_services.amount }}</td>
-                        <td>{{ (users_objects_services.unit_price * users_objects_services.amount/100)|format_currency('EUR') }}</td>
-                        <td>{{ (users_objects_services.total_price/100)|format_currency('EUR') }}</td>
+                        <td>{{ (users_objects_services.getAdjustedTotalPriceVat(invoice)/100)|format_currency('EUR') }}</td>
+                        <td>{{ (users_objects_services.getAdjustedTotalPrice(invoice)/100)|format_currency('EUR') }}</td>
                     </tr>
-                    {% set sumUnitPrice = sumUnitPrice + users_objects_services.unit_price %}
-                    {% set sumUnitPvm = sumUnitPvm + users_objects_services.unit_adjustments %}
-                    {% set sumUnitPriceTotal = sumUnitPriceTotal + users_objects_services.unit_total %}
-                    {% set sumTotalPriceBePvm = sumTotalPriceBePvm + users_objects_services.unit_price * users_objects_services.amount %}
-                    {% set sumTotalPriceSuPvm = sumTotalPriceSuPvm + users_objects_services.total_price %}
+                    {% set unit_price_vat = unit_price_vat + users_objects_services.getAdjustedUnitPriceVat(invoice) %}
+                    {% set unit_price = unit_price + users_objects_services.getAdjustedUnitPrice(invoice) %}
+                    {% set total_price_vat = total_price_vat + users_objects_services.getAdjustedTotalPriceVat(invoice) %}
+                    {% set total_price = total_price + users_objects_services.getAdjustedTotalPrice(invoice) %}
                 {% endfor %}
                     <tr class="table-light">
                         <th></th>
-                        <th>{{ (sumUnitPrice/100)|format_currency('EUR') }}</th>
-                        <th>{{ (sumUnitPvm/100)|format_currency('EUR') }}</th>
-                        <th>{{ (sumUnitPriceTotal/100)|format_currency('EUR') }}</th>
+                        <th>{{ (unit_price_vat/100)|format_currency('EUR') }}</th>
+                        <th>{{ (unit_price/100)|format_currency('EUR') }}</th>
                         <th></th>
-                        <th>{{ (sumTotalPriceBePvm/100)|format_currency('EUR') }}</th>
-                        <th>{{ (sumTotalPriceSuPvm/100)|format_currency('EUR') }}</th>
+                        <th>{{ (total_price_vat/100)|format_currency('EUR') }}</th>
+                        <th class="table-primary">{{ (total_price/100)|format_currency('EUR') }}</th>
                     </tr>
             {% else %}
                 <tr>

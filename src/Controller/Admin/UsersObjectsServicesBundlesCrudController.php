@@ -11,6 +11,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class UsersObjectsServicesBundlesCrudController extends BaseCrudController
 {
@@ -32,7 +34,7 @@ class UsersObjectsServicesBundlesCrudController extends BaseCrudController
         if ($pageName === Crud::PAGE_INDEX) {
             //sąrašas
 
-            $fields[] = Field::new('id');
+            $fields[] = IdField::new('id');
             $fields[] = AssociationField::new('users_object', 'Klientų objektas');
             $fields[] = Field::new('ServicesCount', 'Paslaugos');/** @see UsersObjectsServicesBundles::getServicesCount() */
             $fields[] = DateField::new('active_from', 'active_from');
@@ -49,13 +51,18 @@ class UsersObjectsServicesBundlesCrudController extends BaseCrudController
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
-            $fields[] = Field::new('id');
+            $fields[] = FormField::addColumn(8);
             $fields[] = AssociationField::new('users_object', 'Klientų objektas');
             $fields[] = DateField::new('active_from', 'active_from');
             $fields[] = DateField::new('active_to', 'active_to');
+
+            $fields[] = FormField::addColumn(4);
+            $fields[] = IdField::new('id');
             $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
+
+            $fields[] = FormField::addColumn(12);
             /** @see UsersObjectsServicesBundles::getUsersObjectsServices() */
             $fields[] = Field::new('getUsersObjectsServices', 'Paslaugos')->setTemplatePath('admin/users_objects_bundles/services_list.twig');
             /** @see UsersObjectsServicesBundles::getInvoices() */

@@ -96,6 +96,9 @@ class Invoices extends BaseEntity
         return vsprintf("%s-%05d", [$this->series, $this->getNo()]);
     }
 
+    /**
+     * @return ArrayCollection|UsersObjectsServices[]
+     */
     public function getInvoiceServices()
     {
         return $this->users_objects_services_bundles->getUsersObjectsServices()->filter(function (UsersObjectsServices $usersObjectsServices) {
@@ -114,7 +117,7 @@ class Invoices extends BaseEntity
     {
         $total = 0;
         foreach ($this->getInvoiceServices() as $invoiceService) {
-            $total += $invoiceService->total_price;
+            $total += $invoiceService->getAdjustedTotalPrice($this);
         }
         return $total;
     }

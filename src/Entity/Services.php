@@ -35,7 +35,7 @@ class Services extends BaseEntity
     public \DateTime $active_from;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true, options: [])]
-    public \DateTime $active_to;
+    public ?\DateTime $active_to = null;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
     public $advertise;

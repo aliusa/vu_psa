@@ -20,10 +20,10 @@
                 <td>{{ service.created_at|date('Y-m-d H:i:s') }}</td>
                 <td>{{ service.active_from|date('Y-m-d') }}</td>
 
-                {% set isServiceActive = service.isServiceActive() %}
-                <td class="{{ isServiceActive ? 'text-success' : 'text-danger' }}">
+                {% set isUsersObjectsServicesActive = service.isUsersObjectsServicesActive() %}
+                <td class="{{ isUsersObjectsServicesActive ? 'text-success' : 'text-danger' }}">
                     {{ service.active_to|date('Y-m-d') }}
-                    {% if isServiceActive == false %}
+                    {% if isUsersObjectsServicesActive == false %}
                         <span class="badge text-bg-danger">NEBEAKTYVI</span>
                     {% endif %}
                 </td>

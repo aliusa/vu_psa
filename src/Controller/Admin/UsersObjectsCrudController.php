@@ -11,6 +11,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class UsersObjectsCrudController extends BaseCrudController
 {
@@ -32,7 +34,7 @@ class UsersObjectsCrudController extends BaseCrudController
         if ($pageName === Crud::PAGE_INDEX) {
             //sąrašas
 
-            $fields[] = Field::new('id');
+            $fields[] = IdField::new('id');
             $fields[] = AssociationField::new('users', 'Klientas');
             $fields[] = Field::new('city', 'city');
             $fields[] = Field::new('street', 'street');
@@ -55,7 +57,7 @@ class UsersObjectsCrudController extends BaseCrudController
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
-            $fields[] = Field::new('id');
+            $fields[] = FormField::addColumn(8);
             $fields[] = AssociationField::new('users', 'Klientas');
             $fields[] = AssociationField::new('country', 'country');
             $fields[] = Field::new('city', 'city');
@@ -63,9 +65,14 @@ class UsersObjectsCrudController extends BaseCrudController
             $fields[] = Field::new('house', 'house');
             $fields[] = Field::new('flat', 'flat');
             $fields[] = Field::new('zip', 'zip');
+
+            $fields[] = FormField::addColumn(4);
+            $fields[] = IdField::new('id');
             $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
+
+            $fields[] = FormField::addColumn(12);
             /** @see UsersObjects::getUsersObjectsServicesBundles() */
             $fields[] = Field::new('UsersObjectsServicesBundles', 'Paslaugų paketai')->setTemplatePath('admin/users_objects/bundles_list.twig');
 

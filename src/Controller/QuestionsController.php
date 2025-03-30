@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Payments;
 use App\Entity\Questions;
 use App\Entity\Users;
+use App\Service\ConfigService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -16,8 +16,14 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class QuestionsController extends BaseController
 {
     #[Route('/questions/new', methods: ['POST'])]
-    public function new(EntityManagerInterface $entityManager): Response
+    public function new(
+        EntityManagerInterface $entityManager,
+        ConfigService $configService,
+    ): Response
     {
+        if (!$configService->getConfigValue(ConfigService::C_QUESTIONS_CAN_ASK)) {
+            return new Response('');
+        }
         $formBuilder = $this->createFormBuilder(null, [
             'action' => '/questions/new',
             'method' => 'POST',

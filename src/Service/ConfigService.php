@@ -18,12 +18,18 @@ class ConfigService
 
 
     public const C_VAT = 'vat';
+    public const C_QUESTIONS_CAN_ASK = 'questions_can_ask';
 
     protected $available_configs = [
         self::C_VAT => [
             'description' => 'PVM %',
             'default_value' => 21,
             'type' => self::TYPE_FLOAT,
+        ],
+        self::C_QUESTIONS_CAN_ASK => [
+            'description' => 'Ar galima siųsti užduoti klausimą',
+            'default_value' => true,
+            'type' => self::TYPE_BOOL,
         ],
     ];
 

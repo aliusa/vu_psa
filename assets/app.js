@@ -25,7 +25,9 @@ $('tr[data-href]').each(function (index, object) {
 });
 
 $(document).ready(function () {
-    setTimeout(function () {
-        $('.ask_question').show();
-    }, 200);
+    if ($('#questionModal form').length) {
+        setTimeout(function () {
+            $('.ask_question').show();
+        }, 200);
+    }
 });

@@ -50,7 +50,7 @@ class UsersCrudController extends BaseCrudController
             $fields[] = IdField::new('id');
             $fields[] = Field::new('first_name', 'first_name');
             $fields[] = Field::new('last_name', 'last_name');
-            $fields[] = Field::new('email', 'email');
+            $fields[] = EmailField::new('email', 'email');
             //$fields[] = Field::new('phone', 'phone');
             //$fields[] = Field::new('ownedAmount');todo:uncomment
             $fields[] = DateTimeField::new('created_at', 'created_at');
@@ -80,7 +80,7 @@ class UsersCrudController extends BaseCrudController
             $fields[] = FormField::addColumn(8);
             $fields[] = Field::new('first_name', 'first_name');
             $fields[] = Field::new('last_name', 'last_name');
-            $fields[] = Field::new('email', 'email');
+            $fields[] = EmailField::new('email', 'email');
             $fields[] = TelephoneField::new('phone', 'phone');
 
             $fields[] = FormField::addColumn(4);

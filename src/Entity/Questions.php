@@ -23,7 +23,7 @@ class Questions extends BaseEntity
     #[ORM\Column(type: Types::TEXT, length: 1000, nullable: false)]
     public string $question;
 
-    //#[AssertValidator\Email]
+    #[AssertValidator\Email]
     #[AssertValidator\Length(max: 250)]
     #[ORM\Column(type: Types::STRING, length: 250, nullable: true)]
     public ?string $email = null;

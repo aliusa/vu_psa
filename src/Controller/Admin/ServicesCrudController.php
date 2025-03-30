@@ -51,6 +51,7 @@ class ServicesCrudController extends BaseCrudController
             $fields[] = DateField::new('active_from', 'active_from');
             $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = Field::new('advertise', 'Reklamuoti');
+            $fields[] = AssociationField::new('services_categories', 'Kategorija');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
@@ -64,6 +65,11 @@ class ServicesCrudController extends BaseCrudController
                     ],
                 ])
             ;
+            /** @see Services::$services_categories */
+            $fields[] = AssociationField::new('services_categories', 'Kategorija')
+                ->autocomplete()
+                ->setColumns('col-12 col-md-6')
+                ->setFormTypeOption('required', true);
             $fields[] = DateField::new('active_from', 'active_from')->setColumns('col-6');
             $fields[] = DateField::new('active_to', 'active_to')->setColumns('col-6');
             $fields[] = Field::new('advertise', 'Reklamuoti');
@@ -78,6 +84,7 @@ class ServicesCrudController extends BaseCrudController
             $fields[] = MoneyField::new('price', 'price')->setCurrency('EUR');
             $fields[] = Field::new('description', 'description');
             $fields[] = Field::new('advertise', 'Reklamuoti');
+            $fields[] = AssociationField::new('services_categories', 'Kategorija');
             $fields[] = DateField::new('active_from', 'active_from');
             $fields[] = DateField::new('active_to', 'active_to');
 
@@ -117,6 +124,8 @@ class ServicesCrudController extends BaseCrudController
             ->add('price')
             ->add('active_from')
             ->add('active_to')
+            ->add('advertise')
+            ->add('services_categories')
             ->add('admin')
             ->add('created_at')
             ;

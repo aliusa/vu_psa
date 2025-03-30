@@ -3,10 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Administrators;
+use App\Entity\Config;
 use App\Entity\Countries;
 use App\Entity\Invoices;
 use App\Entity\Questions;
 use App\Entity\Services;
+use App\Entity\ServicesCategories;
+use App\Entity\ServicesPromotions;
 use App\Entity\Users;
 use App\Entity\UsersObjects;
 use App\Entity\UsersObjectsServices;
@@ -120,11 +123,15 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Sąskaitos', 'fa-solid fa-receipt', Invoices::class),
             MenuItem::section('Paslaugos'),
             MenuItem::linkToCrud('Paslaugos', 'fa-solid fa-shop', Services::class),
+            MenuItem::linkToCrud('Paslaugų kategorijos', 'fa-solid fa-layer-group', ServicesCategories::class),
+            MenuItem::linkToCrud('Akcijos', 'fa-solid fa-percent', ServicesPromotions::class),
             MenuItem::section('Klausimai'),
             MenuItem::linkToCrud('Klausimai', 'fa-regular fa-circle-question', Questions::class),
             MenuItem::section('Administratoriai'),
             MenuItem::linkToCrud('Administratoriai', 'fas fa-user-shield', Administrators::class),
             MenuItem::linkToCrud('Šalys', 'fa-solid fa-globe', Countries::class),
+            MenuItem::section('Nustatymai'),
+            MenuItem::linkToCrud('Nustatymai', 'fa-solid fa-wrench', Config::class),
         ];
 
         //yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');

@@ -1,0 +1,53 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\ServicesCategoriesRepository;
+use App\Traits\AdminstampableTrait;
+use App\Traits\IdTrait;
+use App\Traits\TimestampableTrait;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
+use Symfony\Component\Validator\Constraints as AssertValidator;
+
+#[ORM\Table('services_categories')]
+#[ORM\Entity(repositoryClass: ServicesCategoriesRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+class ServicesCategories extends BaseEntity
+{
+    use IdTrait;
+    use TimestampableTrait;
+    use AdminstampableTrait;
+
+    /**
+     * One category have Many services.
+     * @see Services::$services_categories
+     * @var PersistentCollection|Services[]
+     */
+    #[ORM\OneToMany(targetEntity: Services::class, mappedBy: 'services_categories')]
+    public $services;
+
+    /**
+     * One category have Many services.
+     * @see ServicesPromotions::$services_categories
+     * @var PersistentCollection|ServicesPromotions[]
+     */
+    #[ORM\OneToMany(targetEntity: ServicesPromotions::class, mappedBy: 'services_categories')]
+    public $services_promotions;
+
+    #[AssertValidator\Length(max: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
+    public string $title;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function __toString()
+    {
+        return implode(' - ', ["[#{$this->getId()}]", $this->title]);
+    }
+}

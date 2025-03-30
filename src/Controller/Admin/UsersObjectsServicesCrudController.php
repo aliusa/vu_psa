@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\UsersObjectsServices;
+use App\Service\ConfigService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -18,7 +19,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
 
 class UsersObjectsServicesCrudController extends BaseCrudController
 {
-    public function __construct()
+    public function __construct(
+        private ConfigService $configService,
+    )
     {
         //
     }
@@ -62,7 +65,8 @@ class UsersObjectsServicesCrudController extends BaseCrudController
                 ->setFormTypeOption('required', true);
             $fields[] = Field::new('amount', 'amount')->setColumns('col-3');
             $fields[] = MoneyField::new('unit_price', 'unit_price')->setCurrency('EUR')->setColumns('col-3')->setFormTypeOption('attr', ['placeholder' => '00.00']);
-            $fields[] = PercentField::new('unit_vat', 'unit_vat')->setColumns('col-3')->setFormTypeOption('attr', ['placeholder' => '00.00']);
+            $fields[] = PercentField::new('unit_vat', 'unit_vat')->setColumns('col-3')->setFormTypeOption('attr', ['placeholder' => '00.00'])
+            ->setHelp('<a href="admin?crudAction=index&crudControllerFqcn=App\Controller\Admin\ConfigCrudController&filters[key][comparison]=like&filters[key][value]='.ConfigService::C_VAT.'">Numatyta reikšmė: '.$this->configService->getConfigValue(ConfigService::C_VAT).'</a>');
             $fields[] = MoneyField::new('unit_price_vat', 'unit_price_vat')->setCurrency('EUR')->setColumns('col-3')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = MoneyField::new('total_price_vat', 'total_price_vat')->setCurrency('EUR')->setColumns('col-3')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR')->setColumns('col-3')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
@@ -148,5 +152,15 @@ class UsersObjectsServicesCrudController extends BaseCrudController
         ;
 
         return $crud;
+    }
+    public function createEntity(string $entityFqcn)
+    {
+        $usersObjectService = new UsersObjectsServices();
+
+        // Set VAT using the ConfigService
+        $vatValue = $this->configService->getConfigValue(ConfigService::C_VAT, 21) / 100;
+        $usersObjectService->setVat($vatValue);
+
+        return $usersObjectService;
     }
 }

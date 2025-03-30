@@ -52,8 +52,8 @@ class UsersObjectsServices extends BaseEntity
      * @var float PVM %.
      */
     #[AssertValidator\Range(min: 0, max: 100)]
-    #[ORM\Column(type: Types::FLOAT, nullable: false, precision: 2, options: ['default' => 21])]
-    public float $unit_vat;
+    #[ORM\Column(type: Types::FLOAT, nullable: false, precision: 2, options: ['default' => 0])]
+    public float $unit_vat = 0;
 
     /**
      * @var float Vnt. kaina be PVM.

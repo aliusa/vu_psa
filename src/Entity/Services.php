@@ -40,6 +40,15 @@ class Services extends BaseEntity
     #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
     public $advertise;
 
+    /**
+     * This is the owning side.
+     * @see ServicesCategories::$services
+     * @var \Proxies\__CG__\App\Entity\ServicesCategories|ServicesCategories
+     */
+    #[ORM\ManyToOne(targetEntity: ServicesCategories::class, inversedBy: 'services')]
+    #[ORM\JoinColumn(name: 'services_categories_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
+    public $services_categories;
+
     public function __construct()
     {
         parent::__construct();

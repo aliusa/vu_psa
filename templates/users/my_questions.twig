@@ -1,0 +1,23 @@
+{% extends 'base.twig' %}
+
+{% block title %}Mano klausimai{% endblock %}
+
+{% block body %}
+    {% if questions_answers %}
+        <div class="list-group">
+            {% for questions_answer in questions_answers %}
+                <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ questions_answer.questions.question }}</h5>
+                        <small>{{ questions_answer.created_at|date('Y-m-d') }}</small>
+                    </div>
+                    <p class="mb-1">{{ questions_answer.answer }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Neturite užduotų klausimų
+        </div>
+    {% endif %}
+{% endblock %}

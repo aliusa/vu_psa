@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Invoices;
+use App\Entity\Questions;
+use App\Entity\QuestionsAnswers;
 use App\Entity\UsersObjects;
 use App\Entity\UsersObjectsServices;
 use App\Entity\UsersObjectsServicesBundles;
@@ -106,6 +108,26 @@ class UsersController extends BaseController
 
         return $this->render('users/invoice_view.twig', [
             'invoice' => reset($invoiceFound),
+        ]);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/users/my_questions', 'my_questions', methods: ['GET'])]
+    public function my_questions(EntityManagerInterface $entityManager): Response
+    {
+        /** @var QuestionsAnswers[] $questionsAnswers */
+        $questionsAnswers = $entityManager->getRepository(QuestionsAnswers::class)
+            ->createQueryBuilder('questions_answers')
+            ->innerJoin('questions_answers.questions', 'questions')/** @see QuestionsAnswers::$questions */
+            ->andWhere('questions.users = :users')/** @see Questions::$users */
+            ->setParameter('users', $this->getUser())
+            ->addOrderBy('questions_answers.id', 'DESC')/** @see QuestionsAnswers::$id */
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return $this->render('users/my_questions.twig', [
+            'questions_answers' => $questionsAnswers,
         ]);
     }
 }

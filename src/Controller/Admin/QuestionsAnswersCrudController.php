@@ -3,6 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Questions;
+use App\Entity\QuestionsAnswers;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -12,19 +15,24 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 
-class QuestionsCrudController extends BaseCrudController
+class QuestionsAnswersCrudController extends BaseCrudController
 {
-    public function __construct()
+    public function __construct(
+        protected RequestStack $requestStack,
+        protected ManagerRegistry $managerRegistry,
+    )
     {
+        parent::__construct();
     }
 
     public static function getEntityFqcn(): string
     {
-        return Questions::class;
+        return QuestionsAnswers::class;
     }
 
     public function configureFields(string $pageName): iterable
@@ -37,31 +45,28 @@ class QuestionsCrudController extends BaseCrudController
             //sąrašas
 
             $fields[] = IdField::new('id');
-            $fields[] = AssociationField::new('users', 'Klientas');
-            $fields[] = Field::new('email', 'email');
-            $fields[] = Field::new('question', 'Klausimas');
+            $fields[] = AssociationField::new('questions', 'Klausimas');
+            $fields[] = TextField::new('answer', 'Atsakymas');
+            $fields[] = TextField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
 
-            //
+            $fields[] = AssociationField::new('questions', 'Klausimas')->autocomplete()->setFormTypeOption('required', true)->setFormTypeOption('disabled', 'disabled');
+            $fields[] = Field::new('answer', 'Atsakymas');
+
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
             $fields[] = FormField::addColumn(8);
-            $fields[] = AssociationField::new('users', 'Klientas');
-            $fields[] = Field::new('email', 'email');
-            $fields[] = Field::new('question', 'Klausimas');
+            $fields[] = AssociationField::new('questions', 'Klausimas');
+            $fields[] = Field::new('answer', 'Atsakymas');
 
             $fields[] = FormField::addColumn(4);
             $fields[] = IdField::new('id');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
-
-            $fields[] = FormField::addColumn(12);
-            /** @see Questions::getQuestionsAnswers() */
-            $fields[] = Field::new('getQuestionsAnswers', 'Atsakymai')->setTemplatePath('admin/questions/answers_list.twig');
         }
 
 
@@ -70,12 +75,6 @@ class QuestionsCrudController extends BaseCrudController
         }
 
         return $fields;
-
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
     }
 
 
@@ -85,27 +84,6 @@ class QuestionsCrudController extends BaseCrudController
         $actions->remove(Crud::PAGE_INDEX, Action::NEW);
         $actions->remove(Crud::PAGE_INDEX, Action::EDIT);
         $actions->remove(Crud::PAGE_INDEX, Action::DELETE);
-        $actions->remove(Crud::PAGE_DETAIL, Action::EDIT);
-        $actions->remove(Crud::PAGE_DETAIL, Action::DELETE);
-
-        $actions->add(Crud::PAGE_INDEX, Action::DETAIL);
-
-
-        /** @see static::answer() */
-        $actions->add(Crud::PAGE_INDEX, Action::new('Atsakyti')
-            ->linkToUrl(function (Questions $questions) {
-                /** @var AdminUrlGenerator $adminUrlGenerator */
-                $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-
-                $questionsAnswersCrudLink = $adminUrlGenerator
-                    ->setController(QuestionsAnswersCrudController::class)
-                    ->set('questions_id', $questions->getId())
-                    ->setAction(Action::NEW)
-                    ->generateUrl();
-                return $questionsAnswersCrudLink;
-            })
-            ->setIcon('fa-solid fa-comment')
-        );
 
         return $actions;
     }
@@ -118,8 +96,8 @@ class QuestionsCrudController extends BaseCrudController
 
         $filters
             ->add('id')
-            ->add('question')
-            ->add('users')
+            ->add('questions')
+            ->add('answer')
             ->add('created_at')
         ;
 
@@ -135,15 +113,42 @@ class QuestionsCrudController extends BaseCrudController
             // the labels used to refer to this entity in titles, buttons, etc.
             ->setEntityLabelInSingular(function (?Questions $entity, ?string $pageName) {
                 return match ($pageName) {
-                    Crud::PAGE_INDEX, Crud::PAGE_NEW => 'Klausimą',
-                    Crud::PAGE_EDIT => "Klausimas #{$entity->getId()}",
+                    Crud::PAGE_INDEX, Crud::PAGE_NEW => 'Klausimo atsakymą',
+                    Crud::PAGE_EDIT => "Klausimo atsakymas #{$entity->getId()}",
                     Crud::PAGE_DETAIL => $entity->__tostring(),
-                    default => 'Klausimas',
+                    default => 'Klausimo atsakymas',
                 };
             })
-            ->setEntityLabelInPlural('Klausimai')
+            ->setEntityLabelInPlural('Klausimo atsakymai')
         ;
 
         return $crud;
+    }
+
+    public function createEntity(string $entityFqcn)
+    {
+        /** @var QuestionsAnswers $questionsAnswers */
+        $questionsAnswers = parent::createEntity($entityFqcn);
+        $id = $this->requestStack->getCurrentRequest()->query->get('questions_id');
+        $questionsAnswers->questions = $this->managerRegistry->getRepository(Questions::class)->find($id);
+        return $questionsAnswers;
+    }
+
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        parent::persistEntity($entityManager, $entityInstance);
+
+        /** @var QuestionsAnswers $entityInstance */
+
+        /** @var AdminUrlGenerator $adminUrlGenerator */
+        $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
+
+        $questionsAnswersCrudLink = $adminUrlGenerator
+            ->setController(QuestionsCrudController::class)
+            ->set('entityId', $entityInstance->questions->getId())
+            ->setAction(Action::DETAIL)
+            ->generateUrl();
+
+        (new RedirectResponse($questionsAnswersCrudLink))->send();
     }
 }

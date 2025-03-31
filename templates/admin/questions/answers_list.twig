@@ -1,0 +1,24 @@
+{#Failas užkraunamas iš TVS#}
+
+<table class="table table-responsive table-striped table-hover table-condensed table-bordered">
+    <thead>
+    <tr class="table-secondary">
+        <th>Atsakymas</th>
+        <th>{{ "admin"|trans }}</th>
+        <th>Atsakyta</th>
+    </tr>
+    </thead>
+    <tbody class="">
+    {% for questionsAnswer in field.value %}
+        <tr class="">
+            <td>{{ questionsAnswer.answer }}</td>
+            <td>{{ questionsAnswer.admin }}</td>
+            <td>{{ questionsAnswer.created_at|date('Y-m-d H:i:s') }}</td>
+        </tr>
+    {% else %}
+        <tr class="text-center">
+            <td colspan="20">Klientas neturi objektų</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

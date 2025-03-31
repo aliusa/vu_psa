@@ -7,6 +7,7 @@ use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
 use Symfony\Component\Validator\Constraints as AssertValidator;
 
@@ -37,6 +38,14 @@ class Questions extends BaseEntity
     #[ORM\JoinColumn(name: 'users_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public ?Users $users = null;
 
+    /**
+     * One questions have Many answers.
+     * @see QuestionsAnswers::$questions
+     * @var PersistentCollection|QuestionsAnswers[]
+     */
+    #[ORM\OneToMany(targetEntity: QuestionsAnswers::class, mappedBy: 'questions')]
+    public $questions_answers;
+
     public function __construct()
     {
         parent::__construct();
@@ -45,5 +54,10 @@ class Questions extends BaseEntity
     public function __toString()
     {
         return '[#' . $this->id . '] ' . $this->question;
+    }
+
+    public function getQuestionsAnswers(): array
+    {
+        return $this->questions_answers->toArray();
     }
 }

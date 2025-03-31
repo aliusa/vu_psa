@@ -28,7 +28,7 @@ abstract class BaseController extends AbstractController
         protected TranslatorInterface $translator,
         RequestStack $requestStack,
         protected MailerManager $mailerManager,
-        protected ManagerRegistry $managerRegistry
+        protected ManagerRegistry $managerRegistry,
     )
     {
         $this->request = $requestStack->getCurrentRequest();

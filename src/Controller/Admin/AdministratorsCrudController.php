@@ -26,7 +26,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AdministratorsCrudController extends BaseCrudController
 {
-    public function __construct(private UserPasswordHasherInterface $userPasswordHasher)
+    public function __construct(
+        private UserPasswordHasherInterface $userPasswordHasher,
+    )
     {
     }
 

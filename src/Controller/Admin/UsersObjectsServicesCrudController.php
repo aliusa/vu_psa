@@ -23,7 +23,7 @@ class UsersObjectsServicesCrudController extends BaseCrudController
         private ConfigService $configService,
     )
     {
-        //
+        parent::__construct();
     }
 
     public static function getEntityFqcn(): string

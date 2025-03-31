@@ -29,6 +29,7 @@ class ServicesCrudController extends BaseCrudController
         private UserPasswordHasherInterface $userPasswordHasher
     )
     {
+        parent::__construct();
     }
 
     public static function getEntityFqcn(): string

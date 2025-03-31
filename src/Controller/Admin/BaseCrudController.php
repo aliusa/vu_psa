@@ -9,6 +9,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 
 abstract class BaseCrudController extends AbstractCrudController
 {
+    public function __construct()
+    {
+        //parent::__construct();
+    }
+
     public function configureFields(string $pageName): iterable
     {
         /** @var Field[] $fields */

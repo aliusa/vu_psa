@@ -10,7 +10,7 @@
     </thead>
     <tbody class="">
     {% for questionsAnswer in field.value %}
-        <tr class="">
+        <tr class="" data-href="/admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\QuestionsAnswersCrudController&entityId={{ questionsAnswer.id }}">
             <td>{{ questionsAnswer.answer }}</td>
             <td>{{ questionsAnswer.admin }}</td>
             <td>{{ questionsAnswer.created_at|date('Y-m-d H:i:s') }}</td>

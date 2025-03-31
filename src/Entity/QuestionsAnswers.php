@@ -41,6 +41,6 @@ class QuestionsAnswers extends BaseEntity
 
     public function __toString()
     {
-        return '[#' . $this->id . '] ' . $this->answer;
+        return '[#' . $this->id . '] ' . $this->questions->question;
     }
 }

@@ -65,6 +65,7 @@ class QuestionsAnswersCrudController extends BaseCrudController
 
             $fields[] = FormField::addColumn(4);
             $fields[] = IdField::new('id');
+            $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
         }
@@ -85,6 +86,10 @@ class QuestionsAnswersCrudController extends BaseCrudController
         $actions->remove(Crud::PAGE_INDEX, Action::EDIT);
         $actions->remove(Crud::PAGE_INDEX, Action::DELETE);
 
+        $actions->remove(Crud::PAGE_DETAIL, Action::INDEX);
+        $actions->remove(Crud::PAGE_DETAIL, Action::EDIT);
+        $actions->remove(Crud::PAGE_DETAIL, Action::DELETE);
+
         return $actions;
     }
 
@@ -98,6 +103,7 @@ class QuestionsAnswersCrudController extends BaseCrudController
             ->add('id')
             ->add('questions')
             ->add('answer')
+            ->add('admin')
             ->add('created_at')
         ;
 
@@ -111,7 +117,7 @@ class QuestionsAnswersCrudController extends BaseCrudController
         $crud
             ->setDefaultSort(['id' => 'DESC'])
             // the labels used to refer to this entity in titles, buttons, etc.
-            ->setEntityLabelInSingular(function (?Questions $entity, ?string $pageName) {
+            ->setEntityLabelInSingular(function (?QuestionsAnswers $entity, ?string $pageName) {
                 return match ($pageName) {
                     Crud::PAGE_INDEX, Crud::PAGE_NEW => 'Klausimo atsakymą',
                     Crud::PAGE_EDIT => "Klausimo atsakymas #{$entity->getId()}",

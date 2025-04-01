@@ -37,6 +37,9 @@ class Invoices extends BaseEntity
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: [])]
     public \DateTime $period_end;
 
+    /**
+     * Ne imtinai
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true, options: [])]
     public $due_date;
 

@@ -49,6 +49,12 @@
                     {% endif %}
                 </td>
             </tr>
+            {% if invoice.is_paid %}
+                <tr>
+                    <th>Apmokėjimo būdas</th>
+                    <td>{{ invoice.payments.last().payment_method }}</td>
+                </tr>
+            {% endif %}
         </thead>
     </table>
 

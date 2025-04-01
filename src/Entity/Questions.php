@@ -43,7 +43,7 @@ class Questions extends BaseEntity
      * @see QuestionsAnswers::$questions
      * @var PersistentCollection|QuestionsAnswers[]
      */
-    #[ORM\OneToMany(targetEntity: QuestionsAnswers::class, mappedBy: 'questions')]
+    #[ORM\OneToMany(targetEntity: QuestionsAnswers::class, mappedBy: 'questions', cascade: ['persist', 'remove'])]
     public $questions_answers;
 
     public function __construct()

@@ -76,9 +76,15 @@ class UsersObjectsServices extends BaseEntity
     #[ORM\Column(type: Types::FLOAT, nullable: false, precision: 2)]
     public float $total_price_vat;
 
+    /**
+     * Imtinai
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: ['default' => 'CURRENT_DATE'])]
     public \DateTime $active_from;
 
+    /**
+     * Imtinai
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: [])]
     public \DateTime $active_to;
     private int $daysInMonthTotal = 0;

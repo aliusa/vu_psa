@@ -8,12 +8,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
 
 class ServicesPromotionsCrudController extends BaseCrudController
 {
@@ -36,27 +38,46 @@ class ServicesPromotionsCrudController extends BaseCrudController
             //sąrašas
 
             $fields[] = IdField::new('id');
-            $fields[] = AssociationField::new('services_categories', 'Paslaugų kategorija');
-            $fields[] = NumberField::new('discount', 'discount')->setNumDecimals(2);
+            $fields[] = AssociationField::new('services', 'service');
+            $fields[] = PercentField::new('discount', 'discount')
+                ->setNumDecimals(2)
+                //->formatValue(function ($value) {
+                //    return $value . ' %';
+                //})
+            ;
             $fields[] = IntegerField::new('months', 'months');
+            $fields[] = DateField::new('active_from', 'active_from');
+            $fields[] = DateField::new('active_to', 'active_to');
             $fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
 
-            $fields[] = AssociationField::new('services_categories', 'Paslaugų kategorija')->autocomplete()->setFormTypeOption('required', true);
-            $fields[] = NumberField::new('discount', 'discount')->setNumDecimals(2)
-                ->setHelp('Įveskite nuolaidą procentais (%) nuo 1 iki 100.')
+            $fields[] = AssociationField::new('services', 'service')->autocomplete()->setFormTypeOption('required', true)->setColumns('col-md-4');
+            $fields[] = PercentField::new('discount', 'discount')
+                ->setNumDecimals(2)
+                ->setHelp('Įveskite nuolaidą procentais (%) nuo 0 iki 100.')
+                ->setColumns('col-md-4')
+                ->setFormTypeOption('attr', ['placeholder' => '00.00'])
             ;
-            $fields[] = NumberField::new('months', 'months')->setHelp('Kiek mėnesių taikyti nuolaidą. 1-12');
+            $fields[] = NumberField::new('months', 'months')->setHelp('Kiek mėnesių taikyti nuolaidą. 1-12')->setColumns('col-md-4');
+            $fields[] = DateField::new('active_from', 'active_from')->setColumns('col-md-4')->setHelp('Imtinai');
+            $fields[] = DateField::new('active_to', 'active_to')->setColumns('col-md-4')->setHelp('Imtinai');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
             $fields[] = FormField::addColumn(8);
-            $fields[] = AssociationField::new('services_categories', 'Paslaugų kategorija');
-            $fields[] = NumberField::new('discount', 'discount')->setNumDecimals(2);
+            $fields[] = AssociationField::new('services', 'service');
+            $fields[] = PercentField::new('discount', 'discount')
+                ->setNumDecimals(2)
+                //->formatValue(function ($value) {
+                //    return $value . ' %';
+                //})
+            ;
             $fields[] = IntegerField::new('months', 'months')->setHelp('Kiek mėnesių taikyti nuolaidą. 1-12.');
+            $fields[] = DateField::new('active_from', 'active_from')->setHelp('Imtinai');
+            $fields[] = DateField::new('active_to', 'active_to')->setHelp('Imtinai');
 
             $fields[] = FormField::addColumn(4);
             $fields[] = IdField::new('id');
@@ -90,7 +111,7 @@ class ServicesPromotionsCrudController extends BaseCrudController
 
         $filters
             ->add('id')
-            ->add('services_categories')
+            ->add('services')
             ->add('discount')
             ->add('admin')
             ->add('created_at')

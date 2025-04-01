@@ -22,19 +22,19 @@ class ServicesPromotions extends BaseEntity
 
     /**
      * This is the owning side.
-     * @see ServicesCategories::$services_promotions
-     * @var \Proxies\__CG__\App\Entity\ServicesCategories|ServicesCategories
+     * @see Services::$services_promotions
+     * @var \Proxies\__CG__\App\Entity\Services|Services
      */
-    #[ORM\ManyToOne(targetEntity: ServicesCategories::class, inversedBy: 'services_promotions')]
-    #[ORM\JoinColumn(name: 'services_categories_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
-    public $services_categories;
+    #[ORM\ManyToOne(targetEntity: Services::class, inversedBy: 'services_promotions')]
+    #[ORM\JoinColumn(name: 'services_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
+    public $services;
 
     /**
-     * @var int Kiek procentų nuolaida. Nuo 0.
+     * @var float Kiek procentų nuolaida. Nuo 0.
      */
-    #[AssertValidator\Range(min: 1, max: 100)]
-    #[ORM\Column(type: Types::FLOAT, nullable: false, precision: 2)]
-    public $discount = 1;
+    #[AssertValidator\Range(min: 0, max: 100)]
+    #[ORM\Column(type: Types::FLOAT, nullable: false, precision: 2, options: ['default' => 0])]
+    public float $discount = 0;
 
     /**
      * @var int Kiek mėnesių taikyti nuolaidą
@@ -43,13 +43,27 @@ class ServicesPromotions extends BaseEntity
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
     public int $months = 1;
 
+    /**
+     * Imtinai
+     */
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: ['default' => 'CURRENT_DATE'])]
+    public \DateTime $active_from;
+
+    /**
+     * Imtinai
+     */
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: [])]
+    public \DateTime $active_to;
+
     public function __construct()
     {
         parent::__construct();
+        $this->active_from = new \DateTime();
+        $this->active_to = (new \DateTime());
     }
 
     public function __toString(): string
     {
-        return implode(' - ', ["[#{$this->getId()}]"]);
+        return implode(' - ', ["[#{$this->getId()}]", $this->services->title, $this->discount.' %']);
     }
 }

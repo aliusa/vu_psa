@@ -45,16 +45,16 @@ class UsersObjectsServicesBundlesCrudController extends BaseCrudController
             //Redagavimas, kūrimas
 
             $fields[] = AssociationField::new('users_object', 'Klientų objektas')->autocomplete()->setFormTypeOption('required', true);/** @see UsersObjectsServicesBundles::$users_object */
-            $fields[] = DateField::new('active_from', 'active_from');
-            $fields[] = DateField::new('active_to', 'active_to');
+            $fields[] = DateField::new('active_from', 'active_from')->setHelp('Imtinai');
+            $fields[] = DateField::new('active_to', 'active_to')->setHelp('Imtinai');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
             $fields[] = FormField::addColumn(8);
             $fields[] = AssociationField::new('users_object', 'Klientų objektas');
-            $fields[] = DateField::new('active_from', 'active_from');
-            $fields[] = DateField::new('active_to', 'active_to');
+            $fields[] = DateField::new('active_from', 'active_from')->setHelp('Imtinai');
+            $fields[] = DateField::new('active_to', 'active_to')->setHelp('Imtinai');
 
             $fields[] = FormField::addColumn(4);
             $fields[] = IdField::new('id');

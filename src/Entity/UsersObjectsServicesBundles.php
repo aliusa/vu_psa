@@ -42,9 +42,15 @@ class UsersObjectsServicesBundles extends BaseEntity
     #[ORM\OneToMany(targetEntity: Invoices::class, mappedBy: 'users_objects_services_bundles')]
     public $invoices;
 
+    /**
+     * Imtinai
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: ['default' => 'CURRENT_DATE'])]
     public \DateTime $active_from;
 
+    /**
+     * Imtinai
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     public ?\DateTime $active_to = null;
 

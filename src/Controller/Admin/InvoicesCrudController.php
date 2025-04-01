@@ -86,10 +86,10 @@ class InvoicesCrudController extends BaseCrudController
             $fields[] = DateTimeField::new('is_paid', 'is_paid');
             $fields[] = Field::new('series', 'Serija');
             /** @see Invoices::getNo() */
-            $fields[] = Field::new('getNo', 'Numeris');
+            $fields[] = Field::new('getNo', 'Serijos numeris');
             /** @see Invoices::getPeriod() */
             $fields[] = Field::new('period', 'Periodas');
-            $fields[] = DateField::new('due_date', 'due_date');
+            $fields[] = DateField::new('due_date', 'due_date')->setHelp('Ne imtinai');
 
             $fields[] = FormField::addColumn(4);
             $fields[] = IdField::new('id');

@@ -71,8 +71,8 @@ class ServicesCrudController extends BaseCrudController
                 ->autocomplete()
                 ->setColumns('col-12 col-md-6')
                 ->setFormTypeOption('required', true);
-            $fields[] = DateField::new('active_from', 'active_from')->setColumns('col-6');
-            $fields[] = DateField::new('active_to', 'active_to')->setColumns('col-6');
+            $fields[] = DateField::new('active_from', 'active_from')->setColumns('col-6')->setHelp('Imtinai');
+            $fields[] = DateField::new('active_to', 'active_to')->setColumns('col-6')->setHelp('Imtinai');
             $fields[] = Field::new('advertise', 'Reklamuoti');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
@@ -86,8 +86,8 @@ class ServicesCrudController extends BaseCrudController
             $fields[] = Field::new('description', 'description');
             $fields[] = Field::new('advertise', 'Reklamuoti');
             $fields[] = AssociationField::new('services_categories', 'Kategorija');
-            $fields[] = DateField::new('active_from', 'active_from');
-            $fields[] = DateField::new('active_to', 'active_to');
+            $fields[] = DateField::new('active_from', 'active_from')->setHelp('Imtinai');
+            $fields[] = DateField::new('active_to', 'active_to')->setHelp('Imtinai');
 
             $fields[] = FormField::addColumn(4);
             $fields[] = IdField::new('id');

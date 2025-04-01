@@ -5,7 +5,10 @@
         <tr class="table-secondary">
             <th>Sąskaita</th>
             <th>Periodas</th>
-            <th>{{ "due_date"|trans }}</th>
+            <th
+                    data-bs-toggle="tooltip"
+                    data-bs-title="Ne imtinai"
+            >{{ "due_date"|trans }}</th>
             <th>{{ "total"|trans }}</th>
             <th>{{ "is_paid"|trans }}</th>
         </tr>

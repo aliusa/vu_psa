@@ -8,6 +8,7 @@ use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
 use Symfony\Component\Validator\Constraints as AssertValidator;
 
@@ -31,9 +32,15 @@ class Services extends BaseEntity
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     public $description;
 
+    /**
+     * Imtinai
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: ['default' => 'CURRENT_DATE'])]
     public \DateTime $active_from;
 
+    /**
+     * Imtinai
+     */
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true, options: [])]
     public ?\DateTime $active_to = null;
 
@@ -48,6 +55,14 @@ class Services extends BaseEntity
     #[ORM\ManyToOne(targetEntity: ServicesCategories::class, inversedBy: 'services')]
     #[ORM\JoinColumn(name: 'services_categories_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $services_categories;
+
+    /**
+     * One category have Many services.
+     * @see ServicesPromotions::$services
+     * @var PersistentCollection|ServicesPromotions[]
+     */
+    #[ORM\OneToMany(targetEntity: ServicesPromotions::class, mappedBy: 'services')]
+    public $services_promotions;
 
     public function __construct()
     {

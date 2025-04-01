@@ -70,7 +70,7 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             $fields[] = MoneyField::new('unit_price_vat', 'unit_price_vat')->setCurrency('EUR')->setColumns('col-3')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = MoneyField::new('total_price_vat', 'total_price_vat')->setCurrency('EUR')->setColumns('col-3')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR')->setColumns('col-3')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
-            $fields[] = DateField::new('active_to', 'active_to');
+            $fields[] = DateField::new('active_to', 'active_to')->setHelp('Imtinai');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
@@ -84,8 +84,8 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             $fields[] = MoneyField::new('unit_price_vat', 'unit_price_vat')->setCurrency('EUR');
             $fields[] = MoneyField::new('total_price_vat', 'total_price_vat')->setCurrency('EUR');
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR');
-            $fields[] = DateField::new('active_from', 'active_from');
-            $fields[] = DateField::new('active_to', 'active_to');
+            $fields[] = DateField::new('active_from', 'active_from')->setHelp('Imtinai');
+            $fields[] = DateField::new('active_to', 'active_to')->setHelp('Imtinai');
 
             $fields[] = FormField::addColumn(4);
             $fields[] = IdField::new('id');

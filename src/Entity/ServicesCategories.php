@@ -29,14 +29,6 @@ class ServicesCategories extends BaseEntity
     #[ORM\OneToMany(targetEntity: Services::class, mappedBy: 'services_categories')]
     public $services;
 
-    /**
-     * One category have Many services.
-     * @see ServicesPromotions::$services_categories
-     * @var PersistentCollection|ServicesPromotions[]
-     */
-    #[ORM\OneToMany(targetEntity: ServicesPromotions::class, mappedBy: 'services_categories')]
-    public $services_promotions;
-
     #[AssertValidator\Length(max: 255)]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     public string $title;

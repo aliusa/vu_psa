@@ -58,8 +58,10 @@ class ServicesPromotions extends BaseEntity
     public function __construct()
     {
         parent::__construct();
-        $this->active_from = new \DateTime();
-        $this->active_to = (new \DateTime());
+        if (!isset($this->active_from)) {
+            $this->active_from = new \DateTime();
+            $this->active_to = (new \DateTime())->add(new \DateInterval('P1Y'))->sub(new \DateInterval('P1D'));
+        }
     }
 
     public function __toString(): string

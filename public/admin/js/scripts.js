@@ -1,3 +1,8 @@
+/**
+ * Admin dalyje įtraukiamas failas.
+ * Failo nereikia compile'inti.
+ */
+
 class CmsDatepicker {
     static init($context = null){
         var inputSelector = "[type='date']";
@@ -30,6 +35,7 @@ class CmsDatepicker {
         $.extend(c, config);
 
         let instance = flatpickr(context, c);
+        console.log(instance);
 
 
         let dateRange = $input.data('date-range');
@@ -59,39 +65,17 @@ class CmsDatepicker {
 $(document).ready(function () {
     CmsDatepicker.init()
 
-
-    $(".autosubmit :input").on('change', function (){
-        $(this).closest('.content').find('button.action-saveAndContinue').click();
-    })
-
-    //$.datetimepicker.setLocale('en');
-
-    // $('input[datetimepicker="datetimepicker"]').datetimepicker({
-    //     format: 'Y-m-d H:i',
-    //     lang: 'lt',
-    // });
-    // $('input[datetimepicker="datepicker"]').datetimepicker({
-    //     format: 'Y-m-d',
-    //     lang: 'lt',
-    // });
-
-
+    //Paspaudus tab'ą - pakeičia nuorodos hash'ą
     $('.form-tabs [data-bs-toggle="tab"]').on('shown.bs.tab', function (event){
         window.location.hash = event.currentTarget.attributes.href.value.substring(1)
     })
-
     var currentTab = window.location.hash ? window.location.hash.substring(1) : null;
-
-    //console.log($('.form-tabs [data-bs-toggle="tab"][href="#'+currentTab+'"]'))
-    //$('.form-tabs [data-bs-toggle="tab"][href="#'+currentTab+'"]').click()
-
-
     var triggerEl = document.querySelector('.form-tabs [data-bs-toggle="tab"][href="#'+currentTab+'"]')
     $(triggerEl).closest('.nav-tabs').find('.nav-link').removeClass('active');
     $(triggerEl).addClass('active');
-
     $(triggerEl).closest('.form-tabs').find('.tab-pane').removeClass('active');
     $(triggerEl).closest('.form-tabs').find('.tab-pane#' + currentTab).addClass('active');
+
 
     $('tr[data-href]').each(function (index, object) {
         console.log(this, index, object);
@@ -104,5 +88,7 @@ $(document).ready(function () {
         return false;//break
         return;//continue
     });
-});
 
+
+    //
+});

@@ -8,11 +8,15 @@ Easyadmin Admin bundle 4
 * MariaDB 10.10 - 11.8
 
 ## Scripts
+### Fix permissions
 ```shell
 chmod -R 0755 config/ src/ var/ public/
 chown -R $(pc_user) bin/ migrations/ config/ src/ var/ public/
 chmod -R 0777 assets/ uploads/ vendor/ var/ public/ importmap.php
+```
 
+### ...
+```shell
 composer update
 composer validate
 php bin/console cache:clear --env=dev && php bin/console cache:clear --env=prod

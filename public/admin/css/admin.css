@@ -22,3 +22,7 @@
 tr[data-href] {
     cursor: pointer;
 }
+
+input.form-control.flatpickr-input {
+    background-color: initial!important;
+}

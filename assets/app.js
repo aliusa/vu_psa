@@ -4,6 +4,11 @@
  * This file will be included onto the page via the importmap() Twig function,
  * which should already be in your base.html.twig.
  */
+/**
+ * Frontend'e įtraukiamas failas.
+ * Failą būtina compole'inti su `php bin/console asset-map:compile -v`
+ */
+
 import './styles/app.scss';
 //import { Alert } from 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/+esm';
 //import fortawesomefontawesomeFree from 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/+esm';

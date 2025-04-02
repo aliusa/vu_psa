@@ -26,7 +26,7 @@ class ServicesCategories extends BaseEntity
      * @see Services::$services_categories
      * @var PersistentCollection|Services[]
      */
-    #[ORM\OneToMany(targetEntity: Services::class, mappedBy: 'services_categories')]
+    #[ORM\OneToMany(targetEntity: Services::class, mappedBy: 'services_categories', cascade: [])]
     public $services;
 
     #[AssertValidator\Length(max: 255)]

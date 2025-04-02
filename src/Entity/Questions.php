@@ -34,7 +34,7 @@ class Questions extends BaseEntity
      * @see Users::$questions
      * @var \Proxies\__CG__\App\Entity\Users|Users
      */
-    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'questions')]
+    #[ORM\ManyToOne(targetEntity: Users::class, cascade: [], inversedBy: 'questions')]
     #[ORM\JoinColumn(name: 'users_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public ?Users $users = null;
 

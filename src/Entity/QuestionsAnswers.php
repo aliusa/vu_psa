@@ -25,7 +25,7 @@ class QuestionsAnswers extends BaseEntity
      * @see Questions::$questions_answers
      * @var \Proxies\__CG__\App\Entity\Questions|Questions
      */
-    #[ORM\ManyToOne(targetEntity: Questions::class, inversedBy: 'questions_answers', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: Questions::class, cascade: ['persist', 'remove'], inversedBy: 'questions_answers')]
     #[ORM\JoinColumn(name: 'questions_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public Questions $questions;
 

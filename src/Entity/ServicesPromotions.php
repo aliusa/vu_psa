@@ -25,7 +25,7 @@ class ServicesPromotions extends BaseEntity
      * @see Services::$services_promotions
      * @var \Proxies\__CG__\App\Entity\Services|Services
      */
-    #[ORM\ManyToOne(targetEntity: Services::class, inversedBy: 'services_promotions')]
+    #[ORM\ManyToOne(targetEntity: Services::class, cascade: [], inversedBy: 'services_promotions')]
     #[ORM\JoinColumn(name: 'services_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $services;
 

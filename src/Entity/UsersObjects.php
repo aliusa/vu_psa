@@ -26,7 +26,7 @@ class UsersObjects extends BaseEntity
      * @see Users::$users_objects
      * @var \Proxies\__CG__\App\Entity\Users|Users
      */
-    #[ORM\ManyToOne(targetEntity: Users::class, inversedBy: 'users_objects')]
+    #[ORM\ManyToOne(targetEntity: Users::class, cascade: [], inversedBy: 'users_objects')]
     #[ORM\JoinColumn(name: 'users_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $users;
 
@@ -35,7 +35,7 @@ class UsersObjects extends BaseEntity
      * @see Countries::$users_objects
      * @var \Proxies\__CG__\App\Entity\Countries|Countries
      */
-    #[ORM\ManyToOne(targetEntity: Countries::class, inversedBy: 'users_objects')]
+    #[ORM\ManyToOne(targetEntity: Countries::class, cascade: [], inversedBy: 'users_objects')]
     #[ORM\JoinColumn(name: 'country_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $country;
 
@@ -64,7 +64,7 @@ class UsersObjects extends BaseEntity
      * @see UsersObjectsServicesBundles::$users_object
      * @var PersistentCollection|UsersObjectsServicesBundles[]
      */
-    #[ORM\OneToMany(targetEntity: UsersObjectsServicesBundles::class, mappedBy: 'users_object')]
+    #[ORM\OneToMany(targetEntity: UsersObjectsServicesBundles::class, mappedBy: 'users_object', cascade: [])]
     #[ORM\JoinColumn(name: 'users_objects_services_bundles_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $users_objects_services_bundles;
 

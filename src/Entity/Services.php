@@ -52,7 +52,7 @@ class Services extends BaseEntity
      * @see ServicesCategories::$services
      * @var \Proxies\__CG__\App\Entity\ServicesCategories|ServicesCategories
      */
-    #[ORM\ManyToOne(targetEntity: ServicesCategories::class, inversedBy: 'services')]
+    #[ORM\ManyToOne(targetEntity: ServicesCategories::class, cascade: [], inversedBy: 'services')]
     #[ORM\JoinColumn(name: 'services_categories_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $services_categories;
 
@@ -61,7 +61,7 @@ class Services extends BaseEntity
      * @see ServicesPromotions::$services
      * @var PersistentCollection|ServicesPromotions[]
      */
-    #[ORM\OneToMany(targetEntity: ServicesPromotions::class, mappedBy: 'services')]
+    #[ORM\OneToMany(targetEntity: ServicesPromotions::class, mappedBy: 'services', cascade: [])]
     public $services_promotions;
 
     public function __construct()

@@ -24,7 +24,7 @@ class UsersObjectsServices extends BaseEntity
      * @see UsersObjectsServicesBundles::$users_objects_services
      * @var \Proxies\__CG__\App\Entity\UsersObjectsServicesBundles|UsersObjectsServicesBundles
      */
-    #[ORM\ManyToOne(targetEntity: UsersObjectsServicesBundles::class, inversedBy: 'users_objects_services')]
+    #[ORM\ManyToOne(targetEntity: UsersObjectsServicesBundles::class, cascade: [], inversedBy: 'users_objects_services')]
     #[ORM\JoinColumn(name: 'users_objects_services_bundles_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $users_objects_services_bundles;
 

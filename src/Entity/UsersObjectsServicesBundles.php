@@ -24,7 +24,7 @@ class UsersObjectsServicesBundles extends BaseEntity
      * @see UsersObjects::$users_objects_services_bundles
      * @var \Proxies\__CG__\App\Entity\UsersObjects|UsersObjects
      */
-    #[ORM\ManyToOne(targetEntity: UsersObjects::class, inversedBy: 'users_objects_services_bundles')]
+    #[ORM\ManyToOne(targetEntity: UsersObjects::class, cascade: [], inversedBy: 'users_objects_services_bundles')]
     #[ORM\JoinColumn(name: 'users_object_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $users_object;
 
@@ -32,14 +32,14 @@ class UsersObjectsServicesBundles extends BaseEntity
      * @see UsersObjectsServices::$users_objects_services_bundles
      * @var PersistentCollection|UsersObjectsServices[]
      */
-    #[ORM\OneToMany(targetEntity: UsersObjectsServices::class, mappedBy: 'users_objects_services_bundles')]
+    #[ORM\OneToMany(targetEntity: UsersObjectsServices::class, mappedBy: 'users_objects_services_bundles', cascade: [])]
     public $users_objects_services;
 
     /**
      * @see Invoices::$users_objects_services_bundles
      * @var PersistentCollection|Invoices[]
      */
-    #[ORM\OneToMany(targetEntity: Invoices::class, mappedBy: 'users_objects_services_bundles')]
+    #[ORM\OneToMany(targetEntity: Invoices::class, mappedBy: 'users_objects_services_bundles', cascade: [])]
     public $invoices;
 
     /**

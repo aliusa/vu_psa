@@ -24,7 +24,7 @@ class Payments extends BaseEntity
      * @see Invoices::$payments
      * @var Invoices
      */
-    #[ORM\ManyToOne(targetEntity: Invoices::class, inversedBy: 'payments')]
+    #[ORM\ManyToOne(targetEntity: Invoices::class, cascade: [], inversedBy: 'payments')]
     #[ORM\JoinColumn(name: 'invoices_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public Invoices $invoices;
 

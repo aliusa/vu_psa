@@ -39,7 +39,7 @@ class Countries extends BaseEntity
      * @see UsersObjects::$country
      * @var PersistentCollection|UsersObjects[]
      */
-    #[ORM\OneToMany(targetEntity: UsersObjects::class, mappedBy: 'country')]
+    #[ORM\OneToMany(targetEntity: UsersObjects::class, mappedBy: 'country', cascade: [])]
     #[ORM\OrderBy(['id' => 'DESC'])]
     public $users_objects;
 

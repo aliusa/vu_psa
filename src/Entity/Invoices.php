@@ -27,7 +27,7 @@ class Invoices extends BaseEntity
      * @see UsersObjectsServicesBundles::$invoices
      * @var UsersObjectsServicesBundles
      */
-    #[ORM\ManyToOne(targetEntity: UsersObjectsServicesBundles::class, inversedBy: 'invoices')]
+    #[ORM\ManyToOne(targetEntity: UsersObjectsServicesBundles::class, cascade: [], inversedBy: 'invoices')]
     #[ORM\JoinColumn(name: 'users_objects_services_bundles_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $users_objects_services_bundles;
 

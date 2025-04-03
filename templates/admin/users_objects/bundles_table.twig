@@ -25,8 +25,14 @@
                 <td>{{ userObjectBundle.getUsersObjectsServices().count() }}</td>
                 <td>{{ userObjectBundle.getInvoices().count() }}</td>
                 <td>{{ userObjectBundle.created_at|date('Y-m-d H:i:s') }}</td>
-                <td>{{ userObjectBundle.active_from|date('Y-m-d') }}</td>
-                <td class="{% if userObjectBundle.isBundleActive() %}text-success{% else %}text-danger{% endif %}">{{ userObjectBundle.active_t ? userObjectBundle.active_to|date('Y-m-d') : null }}</td>
+                <td
+                        data-bs-toggle="tooltip"
+                        data-bs-title="Imtinai"
+                >{{ userObjectBundle.active_from|date('Y-m-d') }}</td>
+                <td class="{% if userObjectBundle.isBundleActive() %}text-success{% else %}text-danger{% endif %}"
+                    data-bs-toggle="tooltip"
+                    data-bs-title="Imtinai"
+                >{{ userObjectBundle.active_t ? userObjectBundle.active_to|date('Y-m-d') : null }}</td>
             </tr>
         {% else %}
             <tr class="text-center">

@@ -22,7 +22,10 @@
                     </a>
                 </td>
                 <td>{{ invoice.getPeriod() }}</td>
-                <td>
+                <td
+                        data-bs-toggle="tooltip"
+                        data-bs-title="Imtinai"
+                >
                     {{ invoice.due_date|date('Y-m-d') }}
                     {% if invoice.isDuePassed() %}
                         <span class="badge text-bg-danger">VĖLUOJAMA</span>

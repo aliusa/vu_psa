@@ -24,10 +24,16 @@
                     </a>
                 </td>
                 <td>{{ service.created_at|date('Y-m-d H:i:s') }}</td>
-                <td>{{ service.active_from|date('Y-m-d') }}</td>
+                <td
+                        data-bs-toggle="tooltip"
+                        data-bs-title="Imtinai"
+                >{{ service.active_from|date('Y-m-d') }}</td>
 
                 {% set isUsersObjectsServicesActive = service.isUsersObjectsServicesActive() %}
-                <td class="{{ isUsersObjectsServicesActive ? 'text-success' : 'text-danger' }}">
+                <td class="{{ isUsersObjectsServicesActive ? 'text-success' : 'text-danger' }}"
+                    data-bs-toggle="tooltip"
+                    data-bs-title="Imtinai"
+                >
                     {{ service.active_to|date('Y-m-d') }}
                     {% if isUsersObjectsServicesActive == false %}
                         <span class="badge text-bg-danger">NEBEAKTYVI</span>

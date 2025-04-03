@@ -74,4 +74,12 @@ class Services extends BaseEntity
     {
         return implode(' - ', ["[#{$this->getId()}]", $this->title]);
     }
+
+    /**
+     * @return ServicesPromotions[]|PersistentCollection
+     */
+    public function getServicesPromotions(): PersistentCollection|array
+    {
+        return $this->services_promotions->toArray();
+    }
 }

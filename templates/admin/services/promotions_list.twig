@@ -1,0 +1,42 @@
+{#Failas užkraunamas iš TVS#}
+
+<table class="table table-responsive table-hover table-condensed table-bordered">
+    <thead>
+    <tr class="table-secondary">
+        <th>ID</th>
+        <th>Nuolaida</th>
+        <th>{{ "months"|trans }}</th>
+        <th
+                data-bs-toggle="tooltip"
+                data-bs-title="Imtinai"
+        >{{ "active_from"|trans }}</th>
+        <th
+                data-bs-toggle="tooltip"
+                data-bs-title="Imtinai"
+        >{{ "active_to"|trans }}</abbr></th>
+        <th>{{ "created_at"|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for servicesPromotion in field.value %}
+        <tr data-href="/admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\ServicesPromotionsCrudController&entityId={{ servicesPromotion.id }}">
+            <td>#{{ servicesPromotion.id }}</td>
+            <td>{{ (servicesPromotion.discount*100)|number_format(2) }} %</td>
+            <td>{{ servicesPromotion.months }}</td>
+            <td
+                    data-bs-toggle="tooltip"
+                    data-bs-title="Imtinai"
+            >{{ servicesPromotion.active_from|date('Y-m-d') }}</td>
+            <td
+                    data-bs-toggle="tooltip"
+                    data-bs-title="Imtinai"
+            >{{ servicesPromotion.active_to|date('Y-m-d') }}</td>
+            <td>{{ servicesPromotion.created_at|date('Y-m-d H:i:s') }}</td>
+        </tr>
+    {% else %}
+        <tr class="text-center">
+            <td colspan="20">Nėra priskirtų akcijų</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

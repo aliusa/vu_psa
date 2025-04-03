@@ -8,6 +8,7 @@ use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
 use Symfony\Component\Validator\Constraints as AssertValidator;
 
@@ -55,6 +56,13 @@ class ServicesPromotions extends BaseEntity
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: [])]
     public \DateTime $active_to;
 
+    /**
+     * @see UsersObjectsServicesPromotions::$users_objects_services
+     * @var PersistentCollection|UsersObjectsServicesPromotions[]
+     */
+    #[ORM\OneToMany(targetEntity: UsersObjectsServicesPromotions::class, mappedBy: 'users_objects_services', cascade: [])]
+    public $users_objects_services_promotions;
+
     public function __construct()
     {
         parent::__construct();
@@ -66,6 +74,6 @@ class ServicesPromotions extends BaseEntity
 
     public function __toString(): string
     {
-        return implode(' - ', ["[#{$this->getId()}]", $this->services->title, $this->discount.' %']);
+        return implode(' - ', ["[#{$this->getId()}]", $this->services->title, ($this->discount*100).' %']);
     }
 }

@@ -6,4 +6,4 @@ monolog:
       path: "%kernel.logs_dir%/google/%kernel.environment%.log"
       level: debug
       channels: [ google ]
-      max_files: 30
+      max_files: 90

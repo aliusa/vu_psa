@@ -92,7 +92,7 @@ class UsersCrudController extends BaseCrudController
 
             $fields[] = FormField::addColumn(12);
             /** @see Users::getUsersOjectsList() */
-            $fields[] = Field::new('UsersOjectsList', 'Kleinto objektai')->setTemplatePath('admin/users/objects_list.twig');
+            $fields[] = Field::new('UsersOjectsList', 'Kliento objektai')->setTemplatePath('admin/users/objects_list.twig');
             /** @see Users::getQuestionsList() */
             $fields[] = Field::new('getQuestionsList', 'Užduoti klausimai')->setTemplatePath('admin/users/questions_list.twig');
 

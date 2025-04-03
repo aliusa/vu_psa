@@ -2,13 +2,16 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\ServicesPromotions;
 use App\Entity\UsersObjectsServices;
 use App\Service\ConfigService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -71,6 +74,21 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             $fields[] = MoneyField::new('total_price_vat', 'total_price_vat')->setCurrency('EUR')->setColumns('col-3')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = MoneyField::new('total_price', 'total_price')->setCurrency('EUR')->setColumns('col-3')->setDisabled(true)->setFormTypeOption('attr', ['placeholder' => '00.00']);
             $fields[] = DateField::new('active_to', 'active_to')->setHelp('Imtinai');
+            /** @see UsersObjectsServices::getServicesPromotions() */
+            /** @see UsersObjectsServices::setServicesPromotions() */
+            $fields[] = ChoiceField::new('servicesPromotions', 'Akcijos')
+                ->allowMultipleChoices(true)
+                ->renderExpanded(true)
+                ->setChoices(static function(UsersObjectsServices $usersObjectsServices, FieldDto $fieldDto) {
+                    $items = [];
+                    /** @var ServicesPromotions $item */
+                    foreach ($usersObjectsServices->services->services_promotions->toArray() as $item) {
+                        $items[$item->__toString()] = $item;
+                    }
+                    return $items;
+                })
+                ->setColumns('col-12 col-md-6')
+                ;
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
@@ -92,6 +110,10 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
+
+            $fields[] = FormField::addColumn(12);
+            /** @see UsersObjectsServices::getServicesPromotionsList() */
+            $fields[] = Field::new('getServicesPromotionsList', 'Akcijos')->setTemplatePath('admin/users_objects_services/services_promotions_list.twig');
 
         }
 

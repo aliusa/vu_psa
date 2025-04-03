@@ -45,14 +45,20 @@
                     <td>{{ (users_objects_services.getAdjustedTotalPriceVat(field.formattedValue.invoice)/100)|format_currency('EUR') }}</td>
                     <td>{{ (users_objects_services.getAdjustedTotalPrice(field.formattedValue.invoice)/100)|format_currency('EUR') }}</td>
                     <td class="text-nowrap">{{ users_objects_services.created_at|date('Y-m-d H:i') }}</td>
-                    <td class="text-nowrap">
+                    <td class="text-nowrap"
+                        data-bs-toggle="tooltip"
+                        data-bs-title="Imtinai"
+                    >
                         {{ users_objects_services.active_from|date('Y-m-d') }}
                         {% if users_objects_services.active_from > field.formattedValue.invoice.period_start %}
                             <br/>
                             <span class="badge text-bg-secondary">NE VISAS MĖN.</span>
                         {% endif %}
                     </td>
-                    <td class="text-nowrap {% if users_objects_services.active_to > "now"|date("Y-m-d") %}text-success{% endif %}">
+                    <td class="text-nowrap {% if users_objects_services.active_to > "now"|date("Y-m-d") %}text-success{% endif %}"
+                        data-bs-toggle="tooltip"
+                        data-bs-title="Imtinai"
+                    >
                         {{ users_objects_services.active_to|date('Y-m-d') }}
                         {% if users_objects_services.active_to < field.formattedValue.invoice.period_end %}
                             <br/>

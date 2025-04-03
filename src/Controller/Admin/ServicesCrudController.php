@@ -95,6 +95,10 @@ class ServicesCrudController extends BaseCrudController
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
 
+            $fields[] = FormField::addColumn(12);
+            /** @see Services::getServicesPromotions() */
+            $fields[] = Field::new('getServicesPromotions', 'Akcijos')->setTemplatePath('admin/services/promotions_list.twig');
+
         }
 
         if(empty($fields)){

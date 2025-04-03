@@ -2,12 +2,16 @@
 
 namespace App\Entity;
 
+use App\EventListener\UsersObjectsServicesPromotionsListener;
+use App\Registry;
 use App\Repository\UsersObjectsServicesRepository;
 use App\Traits\AdminstampableTrait;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Constraints AS AssertValidator;
 
 #[ORM\Table('users_objects_services')]
@@ -33,7 +37,7 @@ class UsersObjectsServices extends BaseEntity
      * @see Services::$users_objects_services
      * @var \Proxies\__CG__\App\Entity\Services|Services
      */
-    #[ORM\ManyToOne(targetEntity: Services::class, inversedBy: 'users_objects_services')]
+    #[ORM\ManyToOne(targetEntity: Services::class, cascade: [], inversedBy: 'users_objects_services')]
     #[ORM\JoinColumn(name: 'services_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
     public $services;
 
@@ -87,11 +91,22 @@ class UsersObjectsServices extends BaseEntity
      */
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false, options: [])]
     public \DateTime $active_to;
+
+    /**
+     * @see UsersObjectsServicesPromotions::$users_objects_services
+     * @var PersistentCollection|UsersObjectsServicesPromotions[]
+     */
+    #[ORM\OneToMany(targetEntity: UsersObjectsServicesPromotions::class, mappedBy: 'users_objects_services', cascade: ['persist'])]
+    public $users_objects_services_promotions;
+
+
     private int $daysInMonthTotal = 0;
     private int $daysInMonth = 0;
     private float $daysInMonthPercentage = 100;
 
-    public function __construct()
+    public function __construct(
+        private Security $security,
+    )
     {
         parent::__construct();
 
@@ -132,6 +147,8 @@ class UsersObjectsServices extends BaseEntity
         $this->unit_vat = $vat;
     }
 
+
+    //region invoice
     /**
      * @param Invoices $invoices
      * @return float 0-100
@@ -189,5 +206,73 @@ class UsersObjectsServices extends BaseEntity
             return $this->total_price;
         }
         return $this->getAdjustedMoney($invoices, $this->total_price);
+    }
+    //endregion invoice
+
+    public function getServicesPromotions()
+    {
+        $promotions = [];
+        /** @var UsersObjectsServicesPromotions $value */
+        foreach ($this->users_objects_services_promotions->toArray() as $value) {
+            $promotions[$value->services_promotions->__toString()] = $value->services_promotions;
+        }
+        return $promotions;
+    }
+
+    /**
+     * @param ServicesPromotions[] $array
+     */
+    public function setServicesPromotions($servicesPromotions)
+    {
+        if (empty($servicesPromotions)) {
+            //$this->users_objects_services_promotions->clear();//neveikia
+            foreach ($this->users_objects_services_promotions as $element) {
+                $this->users_objects_services_promotions->removeElement($element);
+                Registry::getDoctrineManager()->remove($element);
+            }
+            Registry::getDoctrineManager()->flush();
+        } else {
+            $this->users_objects_services_promotions->filter(function(UsersObjectsServicesPromotions $usersObjectsServicesPromotions) use ($servicesPromotions) {
+                foreach ($servicesPromotions as $servicesPromotion) {
+                    if ($usersObjectsServicesPromotions->services_promotions->getId() === $servicesPromotion->getId()) {
+                        return true;
+                    } else {
+                        //$this->users_objects_services_promotions->removeElement($usersObjectsServicesPromotions);
+                    }
+                }
+                return false;
+            });
+
+
+            foreach ($servicesPromotions as $servicesPromotion) {
+                $exists = $this->users_objects_services_promotions->exists(static function(int $key, UsersObjectsServicesPromotions $usersObjectsServicesPromotions) use ($servicesPromotion) {
+                    if ($usersObjectsServicesPromotions->services_promotions->getId() === $servicesPromotion->getId()) {
+                        return true;
+                    }
+                });
+                if ($exists) {
+                    //
+                } else {
+                    $usersObjectsServicesPromotion = new UsersObjectsServicesPromotions();
+                    $usersObjectsServicesPromotion->users_objects_services = $this;
+                    $usersObjectsServicesPromotion->services_promotions = $servicesPromotion;
+                    /**
+                     * @see UsersObjectsServicesPromotionsListener
+                     * prideda admin'ą
+                     */
+                    $this->users_objects_services_promotions->add($usersObjectsServicesPromotion);
+                }
+            }
+
+
+        }
+    }
+
+    /**
+     * @return UsersObjectsServicesPromotions[]
+     */
+    public function getServicesPromotionsList()
+    {
+        return $this->users_objects_services_promotions->toArray();
     }
 }

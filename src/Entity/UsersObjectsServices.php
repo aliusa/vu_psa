@@ -8,10 +8,10 @@ use App\Repository\UsersObjectsServicesRepository;
 use App\Traits\AdminstampableTrait;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Constraints AS AssertValidator;
 
 #[ORM\Table('users_objects_services')]
@@ -104,9 +104,7 @@ class UsersObjectsServices extends BaseEntity
     private int $daysInMonth = 0;
     private float $daysInMonthPercentage = 100;
 
-    public function __construct(
-        private Security $security,
-    )
+    public function __construct()
     {
         parent::__construct();
 
@@ -114,6 +112,7 @@ class UsersObjectsServices extends BaseEntity
         if (!$this->unit_price_vat) {
             $this->unit_price_vat = $this->unit_price - $this->unit_price * 0.21;
         }
+        $this->users_objects_services_promotions = new ArrayCollection();
     }
 
     public function __toString()

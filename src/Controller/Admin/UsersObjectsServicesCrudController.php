@@ -80,6 +80,10 @@ class UsersObjectsServicesCrudController extends BaseCrudController
                 ->allowMultipleChoices(true)
                 ->renderExpanded(true)
                 ->setChoices(static function(UsersObjectsServices $usersObjectsServices, FieldDto $fieldDto) {
+                    if (!$usersObjectsServices->services) {
+                        return [];
+                    }
+
                     $items = [];
                     /** @var ServicesPromotions $item */
                     foreach ($usersObjectsServices->services->services_promotions->toArray() as $item) {

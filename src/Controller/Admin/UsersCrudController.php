@@ -65,14 +65,14 @@ class UsersCrudController extends BaseCrudController
                 }
             }/**/
 
-            $fields[] = EmailField::new('email', 'email')->setColumns('col-6');
-            $fields[] = TelephoneField::new('phone', 'phone')->setColumns('col-6')->setFormTypeOption('attr', ['placeholder' => '+370....']);
-            $fields[] = TextField::new('first_name', 'first_name')->setColumns('col-6');
-            $fields[] = TextField::new('last_name', 'last_name')->setColumns('col-6');
+            $fields[] = EmailField::new('email', 'email')->setColumns('col-md-6');
+            $fields[] = TelephoneField::new('phone', 'phone')->setColumns('col-md-6')->setFormTypeOption('attr', ['placeholder' => '+370....']);
+            $fields[] = TextField::new('first_name', 'first_name')->setColumns('col-md-6');
+            $fields[] = TextField::new('last_name', 'last_name')->setColumns('col-md-6');
             $fields[] = TextField::new('password', 'password')
                 ->setFormTypeOptions(['mapped' => false])
                 ->setFormType(PasswordType::class)
-                ->setColumns('col-6')
+                ->setColumns('col-md-6')
             ;
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Commands\ResetPaymentscommand;
 use App\Entity\Services;
+use App\Entity\Structures;
 use App\Service\StorageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -57,5 +58,18 @@ class DefaultController extends BaseController
 
         // return new Response(""), if you used NullOutput()
         return new Response('ok');
+    }
+
+    #[Route(path: '/{slug}', priority: -1)]
+    public function structure(string $slug, EntityManagerInterface $entityManager)
+    {
+        $structure = $this->managerRegistry->getRepository(Structures::class)->findOneBy(['slug' => $slug, 'visible' => true]);
+        if (!$structure) {
+            return $this->redirectToRoute('home_index');
+        }
+
+        return $this->render('structure/show.twig', [
+            'structure' => $structure,
+        ]);
     }
 }

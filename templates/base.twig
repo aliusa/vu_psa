@@ -105,6 +105,8 @@
                 {% endfor %}
             {% endfor %}
 
+            {% block title_top_wrap %}<h2>{% block title_top %}{% endblock %}</h2>{% endblock %}
+
             {% block body %}{% endblock %}
         </div>
         <button class="btn btn-link position-absolute ask_question" data-bs-toggle="modal" data-bs-target="#questionModal">
@@ -129,6 +131,7 @@
         </div>
 
         <footer class="bg-light text-center py-3">
+            <a class="" href="/slapukai">Slapukai</a>
             © Copyright 2025. Visos teisės saugomos.
         </footer>
 

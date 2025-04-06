@@ -60,7 +60,6 @@ abstract class BaseCrudController extends AbstractCrudController
 
         }
 
-
         return $fields;
     }
 

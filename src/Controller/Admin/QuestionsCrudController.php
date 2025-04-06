@@ -71,12 +71,6 @@ class QuestionsCrudController extends BaseCrudController
         }
 
         return $fields;
-
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
     }
 
 

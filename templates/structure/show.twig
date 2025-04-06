@@ -1,0 +1,16 @@
+{% extends 'base.twig' %}
+
+{% block title %}{{ structure.title }}{% endblock %}
+
+{% block title_top %}{{ structure.title }}{% endblock %}
+
+{% block body %}
+    <div class="text">
+        <div>
+            {{ structure.description|raw }}
+        </div>
+        <div>
+            <small class="text-muted">Atnaujinimo data: {{ structure.updated_at|date('Y-m-d H:i:s') }}</small>
+        </div>
+    </div>
+{% endblock %}

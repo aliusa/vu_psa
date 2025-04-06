@@ -53,7 +53,7 @@ class AdministratorsCrudController extends BaseCrudController
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
 
-            $fields[] = EmailField::new('email', 'email')->setColumns('col-6');
+            $fields[] = EmailField::new('email', 'email')->setColumns('col-md-6');
             $fields[] = ChoiceField::new('roles')
                 ->setChoices([
                     'SuperAdmin' => 'ROLE_SUPER_ADMIN',
@@ -61,7 +61,7 @@ class AdministratorsCrudController extends BaseCrudController
                     //'User' => 'ROLE_USER',
                 ])
                 ->allowMultipleChoices()
-                ->setColumns('col-6')
+                ->setColumns('col-md-6')
             ;
             $fields[] = TextField::new('password', 'password')
                 ->setFormTypeOptions(['mapped' => false])

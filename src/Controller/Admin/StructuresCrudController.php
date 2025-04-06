@@ -2,71 +2,66 @@
 
 namespace App\Controller\Admin;
 
-use App\Controller\Admin\Field\CKEditorField;
-use App\Entity\Services;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Structures;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ServicesCrudController extends BaseCrudController
+class StructuresCrudController extends BaseCrudController
 {
-    public function __construct(
-        private TranslatorInterface $translator,
-        private AdminUrlGenerator $adminUrlGenerator,
-        private EntityManagerInterface $entityManager,
-        private UserPasswordHasherInterface $userPasswordHasher
-    )
+    public function __construct()
     {
         parent::__construct();
     }
 
     public static function getEntityFqcn(): string
     {
-        return Services::class;
+        return Structures::class;
     }
-
 
     public function configureFields(string $pageName): iterable
     {
         /** @var Field[] $fields */
         $fields = [];
 
+
         if ($pageName === Crud::PAGE_INDEX) {
             //sąrašas
 
             $fields[] = IdField::new('id');
             $fields[] = Field::new('title', 'title');
-            $fields[] = MoneyField::new('price', 'price')->setCurrency('EUR');
-            $fields[] = DateField::new('active_from', 'active_from');
-            $fields[] = DateField::new('active_to', 'active_to');
-            $fields[] = Field::new('advertise', 'Reklamuoti');
-            $fields[] = AssociationField::new('services_categories', 'Kategorija');
+            $fields[] = Field::new('slug', 'slug')->setColumns('col-md-6');
+            $fields[] = TextEditorField::new('description', 'description');
+            $fields[] = BooleanField::new('visible', 'visible');
+            $fields[] = DateTimeField::new('created_at', 'created_at');
 
         } elseif (in_array($pageName, [Crud::PAGE_EDIT, Crud::PAGE_NEW])) {
             //Redagavimas, kūrimas
 
+            $fields[] = FormField::addColumn(8);
             $fields[] = Field::new('title', 'title')->setColumns('col-md-6');
-            $fields[] = MoneyField::new('price', 'price')->setCurrency('EUR')->setColumns('col-md-6')->setFormTypeOption('attr', ['placeholder' => '00.00']);
+            $fields[] = Field::new('slug', 'slug')->setColumns('col-md-6');
+
+            $fields[] = FormField::addColumn(4);
+            $fields[] = BooleanField::new('visible', 'visible')->setColumns('col-md-6');
+
+
+            $fields[] = FormField::addColumn(12);
             $fields[] = Field::new('description')
                 ->setFormType(CKEditorType::class)
                 ->setFormTypeOptions([
                     'config'=>[
                         //'width' => '100%',
-                        'height' => '300',
+                        'height' => '600',
                         /** @see CKEditorConfiguration */
                         'toolbar' => 'full',//basic/standard/full
                         //'filebrowserUploadRoute' => 'post_ckeditor_image',//crash'ina
@@ -76,49 +71,33 @@ class ServicesCrudController extends BaseCrudController
                     ],
                     'attr' => ['rows' => '20'] ,
                 ])
-                ->setColumns('col-12')
+                ->setColumns('col-12');
             ;
-            /** @see Services::$services_categories */
-            $fields[] = AssociationField::new('services_categories', 'Kategorija')
-                ->autocomplete()
-                ->setColumns('col-12 col-md-6')
-                ->setFormTypeOption('required', true);
-            $fields[] = DateField::new('active_from', 'active_from')->setColumns('col-md-6')->setHelp('Imtinai');
-            $fields[] = DateField::new('active_to', 'active_to')->setColumns('col-md-6')->setHelp('Imtinai');
-            $fields[] = Field::new('advertise', 'Reklamuoti');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
 
-            //$fields = parent::configureFields($pageName);
-
             $fields[] = FormField::addColumn(8);
             $fields[] = Field::new('title', 'title');
-            $fields[] = MoneyField::new('price', 'price')->setCurrency('EUR');
+            $fields[] = Field::new('slug', 'slug');
             $fields[] = TextEditorField::new('description', 'description');
-            $fields[] = Field::new('advertise', 'Reklamuoti');
-            $fields[] = AssociationField::new('services_categories', 'Kategorija');
-            $fields[] = DateField::new('active_from', 'active_from')->setHelp('Imtinai');
-            $fields[] = DateField::new('active_to', 'active_to')->setHelp('Imtinai');
+            $fields[] = BooleanField::new('visible', 'visible')->setColumns('col-md-6');
 
             $fields[] = FormField::addColumn(4);
             $fields[] = IdField::new('id');
             $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');
-
-            $fields[] = FormField::addColumn(12);
-            /** @see Services::getServicesPromotions() */
-            $fields[] = Field::new('getServicesPromotions', 'Akcijos')->setTemplatePath('admin/services/promotions_list.twig');
-
         }
 
-        if(empty($fields)){
+
+        if (empty($fields)) {
             $fields = parent::configureFields($pageName);
         }
 
         return $fields;
     }
+
 
     public function configureActions(Actions $actions): Actions
     {
@@ -138,14 +117,9 @@ class ServicesCrudController extends BaseCrudController
         $filters
             ->add('id')
             ->add('title')
-            ->add('price')
-            ->add('active_from')
-            ->add('active_to')
-            ->add('advertise')
-            ->add('services_categories')
-            ->add('admin')
+            ->add('description')
             ->add('created_at')
-            ;
+        ;
 
         return $filters;
     }
@@ -160,15 +134,15 @@ class ServicesCrudController extends BaseCrudController
         $crud
             ->setDefaultSort(['id' => 'DESC'])
             // the labels used to refer to this entity in titles, buttons, etc.
-            ->setEntityLabelInSingular(function (?Services $entity, ?string $pageName) {
+            ->setEntityLabelInSingular(function (?Structures $entity, ?string $pageName) {
                 return match ($pageName) {
-                    Crud::PAGE_INDEX, Crud::PAGE_NEW => 'Paslaugą',
-                    Crud::PAGE_EDIT => "Paslauga #{$entity->getId()}",
+                    Crud::PAGE_INDEX, Crud::PAGE_NEW => 'Įrašą',
+                    Crud::PAGE_EDIT => "Įrašas #{$entity->getId()}",
                     Crud::PAGE_DETAIL => $entity->__tostring(),
-                    default => 'Paslauga',
+                    default => 'Įrašas',
                 };
             })
-            ->setEntityLabelInPlural('Paslaugos')
+            ->setEntityLabelInPlural('Įrašai')
         ;
 
         return $crud;

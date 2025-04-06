@@ -10,6 +10,7 @@ use App\Entity\Questions;
 use App\Entity\Services;
 use App\Entity\ServicesCategories;
 use App\Entity\ServicesPromotions;
+use App\Entity\Structures;
 use App\Entity\Users;
 use App\Entity\UsersObjects;
 use App\Entity\UsersObjectsServices;
@@ -131,6 +132,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Administratoriai', 'fas fa-user-shield', Administrators::class),
             MenuItem::linkToCrud('Šalys', 'fa-solid fa-globe', Countries::class),
             MenuItem::section('Nustatymai'),
+            MenuItem::linkToCrud('Struktūra', 'fa-solid fa-folder-tree', Structures::class),
             MenuItem::linkToCrud('Nustatymai', 'fa-solid fa-wrench', Config::class),
         ];
 

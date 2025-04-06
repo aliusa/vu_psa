@@ -84,7 +84,7 @@ class InvoicesGenerateCommand extends BaseCommand
         $period = new \DatePeriod(
             new \DateTime($usersObjectsServicesBundles->active_from->format('Y-m-1')),
             new \DateInterval('P1M'),
-            $this->today
+            (new \DateTime($this->today->format('Y-m-1')))->sub(new \DateInterval('P1D')),
         );
         foreach ($period as $key => $value) {
             $invoices = $this->invoicesQuery

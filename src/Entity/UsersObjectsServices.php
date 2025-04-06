@@ -175,14 +175,27 @@ class UsersObjectsServices extends BaseEntity
     {
         return round($this->getDaysInMonthPercentage($invoices) / 100 * $money, 2);
     }
+
+    /**
+     * Vieneto kaina be PVM.
+     * @param Invoices $invoices
+     * @return float|int
+     */
     public function getAdjustedUnitPriceVat(Invoices $invoices)
     {
+        dv($this->users_objects_services_promotions->toArray());
         if ($this->isFullPeriod($invoices)) {
             return $this->unit_price_vat;
         }
         return $this->getAdjustedMoney($invoices, $this->unit_price_vat);
     }
 
+    /**
+     * Vnt. kaina su PVM.
+     *
+     * @param Invoices $invoices
+     * @return float|int
+     */
     public function getAdjustedUnitPrice(Invoices $invoices)
     {
         if ($this->isFullPeriod($invoices)) {
@@ -191,6 +204,11 @@ class UsersObjectsServices extends BaseEntity
         return $this->getAdjustedMoney($invoices, $this->unit_price);
     }
 
+    /**
+     * Viso kaina be PVM.
+     * @param Invoices $invoices
+     * @return float
+     */
     public function getAdjustedTotalPriceVat(Invoices $invoices)
     {
         if ($this->isFullPeriod($invoices)) {
@@ -199,6 +217,11 @@ class UsersObjectsServices extends BaseEntity
         return $this->getAdjustedMoney($invoices, $this->total_price_vat);
     }
 
+    /**
+     * Viso kaina su PVM.
+     * @param Invoices $invoices
+     * @return float
+     */
     public function getAdjustedTotalPrice(Invoices $invoices)
     {
         if ($this->isFullPeriod($invoices)) {
@@ -224,7 +247,8 @@ class UsersObjectsServices extends BaseEntity
     public function setServicesPromotions($servicesPromotions)
     {
         if (empty($servicesPromotions)) {
-            //$this->users_objects_services_promotions->clear();//neveikia
+            //Išimti visus
+
             foreach ($this->users_objects_services_promotions as $element) {
                 $this->users_objects_services_promotions->removeElement($element);
                 Registry::getDoctrineManager()->remove($element);
@@ -236,13 +260,17 @@ class UsersObjectsServices extends BaseEntity
                     if ($usersObjectsServicesPromotions->services_promotions->getId() === $servicesPromotion->getId()) {
                         return true;
                     } else {
-                        //$this->users_objects_services_promotions->removeElement($usersObjectsServicesPromotions);
+                        //
                     }
                 }
-                return false;
+
+                //Išimti nebeegzsituojantį
+                $this->users_objects_services_promotions->removeElement($usersObjectsServicesPromotions);
+                Registry::getDoctrineManager()->remove($usersObjectsServicesPromotions);
             });
 
 
+            //Pridėti naują
             foreach ($servicesPromotions as $servicesPromotion) {
                 $exists = $this->users_objects_services_promotions->exists(static function(int $key, UsersObjectsServicesPromotions $usersObjectsServicesPromotions) use ($servicesPromotion) {
                     if ($usersObjectsServicesPromotions->services_promotions->getId() === $servicesPromotion->getId()) {
@@ -262,7 +290,6 @@ class UsersObjectsServices extends BaseEntity
                     $this->users_objects_services_promotions->add($usersObjectsServicesPromotion);
                 }
             }
-
 
         }
     }

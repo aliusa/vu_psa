@@ -183,7 +183,7 @@ class UsersObjectsServices extends BaseEntity
      */
     public function getAdjustedUnitPriceVat(Invoices $invoices)
     {
-        dv($this->users_objects_services_promotions->toArray());
+        //dv($this->users_objects_services_promotions->toArray());
         if ($this->isFullPeriod($invoices)) {
             return $this->unit_price_vat;
         }
@@ -233,64 +233,113 @@ class UsersObjectsServices extends BaseEntity
 
     public function getServicesPromotions()
     {
-        $promotions = [];
-        /** @var UsersObjectsServicesPromotions $value */
-        foreach ($this->users_objects_services_promotions->toArray() as $value) {
-            $promotions[$value->services_promotions->__toString()] = $value->services_promotions;
+        if (UsersObjectsServicesPromotions::MULTIPLE) {
+            //multiple
+            $promotions = [];
+            /** @var UsersObjectsServicesPromotions $value */
+            foreach ($this->users_objects_services_promotions->toArray() as $value) {
+                $promotions[$value->services_promotions->__toString()] = $value->services_promotions;
+            }
+            return $promotions;
+        } else {
+            /** @var UsersObjectsServicesPromotions $users_objects_services_promotion */
+            if ($users_objects_services_promotion = $this->users_objects_services_promotions->first()) {
+                return $users_objects_services_promotion->services_promotions;
+            } else {
+                return null;
+            }
         }
-        return $promotions;
     }
 
     /**
-     * @param ServicesPromotions[] $array
+     * @param ServicesPromotions[]|ServicesPromotions $servicesPromotions
      */
     public function setServicesPromotions($servicesPromotions)
     {
-        if (empty($servicesPromotions)) {
-            //Išimti visus
+        if (UsersObjectsServicesPromotions::MULTIPLE) {
+            //multiple
 
-            foreach ($this->users_objects_services_promotions as $element) {
-                $this->users_objects_services_promotions->removeElement($element);
-                Registry::getDoctrineManager()->remove($element);
-            }
-            Registry::getDoctrineManager()->flush();
-        } else {
-            $this->users_objects_services_promotions->filter(function(UsersObjectsServicesPromotions $usersObjectsServicesPromotions) use ($servicesPromotions) {
+            if (empty($servicesPromotions)) {
+                //Išimti visus
+
+                foreach ($this->users_objects_services_promotions as $element) {
+                    $this->users_objects_services_promotions->removeElement($element);
+                    Registry::getDoctrineManager()->remove($element);
+                }
+                Registry::getDoctrineManager()->flush();
+            } else {
+                $this->users_objects_services_promotions->filter(function (UsersObjectsServicesPromotions $usersObjectsServicesPromotions) use ($servicesPromotions) {
+                    foreach ($servicesPromotions as $servicesPromotion) {
+                        if ($usersObjectsServicesPromotions->services_promotions->getId() === $servicesPromotion->getId()) {
+                            return true;
+                        } else {
+                            //
+                        }
+                    }
+
+                    //Išimti nebeegzsituojantį
+                    $this->users_objects_services_promotions->removeElement($usersObjectsServicesPromotions);
+                    Registry::getDoctrineManager()->remove($usersObjectsServicesPromotions);
+                });
+
+
+                //Pridėti naują
                 foreach ($servicesPromotions as $servicesPromotion) {
-                    if ($usersObjectsServicesPromotions->services_promotions->getId() === $servicesPromotion->getId()) {
+                    $exists = $this->users_objects_services_promotions->exists(static function (int $key, UsersObjectsServicesPromotions $usersObjectsServicesPromotions) use ($servicesPromotion) {
+                        if ($usersObjectsServicesPromotions->services_promotions->getId() === $servicesPromotion->getId()) {
+                            return true;
+                        }
+                    });
+                    if ($exists) {
+                        //
+                    } else {
+                        $usersObjectsServicesPromotion = new UsersObjectsServicesPromotions();
+                        $usersObjectsServicesPromotion->users_objects_services = $this;
+                        $usersObjectsServicesPromotion->services_promotions = $servicesPromotion;
+                        /**
+                         * @see UsersObjectsServicesPromotionsListener
+                         * prideda admin'ą
+                         */
+                        $this->users_objects_services_promotions->add($usersObjectsServicesPromotion);
+                    }
+                }
+
+            }
+        } else {
+            //single
+
+            if ($servicesPromotions) {
+                $this->users_objects_services_promotions->filter(function (UsersObjectsServicesPromotions $usersObjectsServicesPromotions) use ($servicesPromotions) {
+                    if ($usersObjectsServicesPromotions->services_promotions->getId() === $servicesPromotions->getId()) {
                         return true;
                     } else {
                         //
                     }
-                }
 
-                //Išimti nebeegzsituojantį
-                $this->users_objects_services_promotions->removeElement($usersObjectsServicesPromotions);
-                Registry::getDoctrineManager()->remove($usersObjectsServicesPromotions);
-            });
-
-
-            //Pridėti naują
-            foreach ($servicesPromotions as $servicesPromotion) {
-                $exists = $this->users_objects_services_promotions->exists(static function(int $key, UsersObjectsServicesPromotions $usersObjectsServicesPromotions) use ($servicesPromotion) {
-                    if ($usersObjectsServicesPromotions->services_promotions->getId() === $servicesPromotion->getId()) {
-                        return true;
-                    }
+                    //Išimti nebeegzsituojantį
+                    $this->users_objects_services_promotions->removeElement($usersObjectsServicesPromotions);
+                    Registry::getDoctrineManager()->remove($usersObjectsServicesPromotions);
                 });
-                if ($exists) {
+                if ($this->users_objects_services_promotions->count()) {
                     //
                 } else {
                     $usersObjectsServicesPromotion = new UsersObjectsServicesPromotions();
                     $usersObjectsServicesPromotion->users_objects_services = $this;
-                    $usersObjectsServicesPromotion->services_promotions = $servicesPromotion;
+                    $usersObjectsServicesPromotion->services_promotions = $servicesPromotions;
                     /**
                      * @see UsersObjectsServicesPromotionsListener
                      * prideda admin'ą
                      */
                     $this->users_objects_services_promotions->add($usersObjectsServicesPromotion);
                 }
-            }
 
+            } else {
+                //Išimti visus
+                foreach ($this->users_objects_services_promotions as $element) {
+                    $this->users_objects_services_promotions->removeElement($element);
+                    Registry::getDoctrineManager()->remove($element);
+                }
+            }
         }
     }
 

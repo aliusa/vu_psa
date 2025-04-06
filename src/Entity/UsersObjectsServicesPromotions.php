@@ -17,6 +17,8 @@ use Symfony\Component\Validator\Constraints as AssertValidator;
 #[ORM\HasLifecycleCallbacks]
 class UsersObjectsServicesPromotions extends BaseEntity
 {
+    public const MULTIPLE = false;
+
     use IdTrait;
     use TimestampableTrait;
     use AdminstampableTrait;

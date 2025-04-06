@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\ServicesPromotions;
 use App\Entity\UsersObjectsServices;
+use App\Entity\UsersObjectsServicesPromotions;
 use App\Service\ConfigService;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -77,7 +78,7 @@ class UsersObjectsServicesCrudController extends BaseCrudController
             /** @see UsersObjectsServices::getServicesPromotions() */
             /** @see UsersObjectsServices::setServicesPromotions() */
             $fields[] = ChoiceField::new('servicesPromotions', 'Akcijos')
-                ->allowMultipleChoices(true)
+                ->allowMultipleChoices(UsersObjectsServicesPromotions::MULTIPLE)
                 ->renderExpanded(true)
                 ->setChoices(static function(UsersObjectsServices $usersObjectsServices, FieldDto $fieldDto) {
                     if (!$usersObjectsServices->services) {
@@ -85,7 +86,7 @@ class UsersObjectsServicesCrudController extends BaseCrudController
                     }
 
                     $items = [];
-                    /** @var ServicesPromotions $item */
+                    /** @var ServicesPromotions|\Proxies\__CG__\App\Entity\ServicesPromotions $item */
                     foreach ($usersObjectsServices->services->services_promotions->toArray() as $item) {
                         $items[$item->__toString()] = $item;
                     }

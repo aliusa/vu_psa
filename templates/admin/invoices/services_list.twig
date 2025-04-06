@@ -38,6 +38,12 @@
                         <a class="list-group-item" href="/admin?crudAction=detail&crudControllerFqcn=App\Controller\Admin\UsersObjectsServicesCrudController&entityId={{ users_objects_services.id }}">
                             {{ users_objects_services.services.title }}
                         </a>
+                        {% set servicesPromotions = users_objects_services.getServicesPromotionsByInvoice(field.formattedValue.invoice) %}
+                        {% if servicesPromotions %}
+                            {% for servicesPromotion in servicesPromotions %}
+                                <i>Akcija „{{ servicesPromotion.services.title }}“ -{{ servicesPromotion.discount*100 }}%</i>
+                            {% endfor %}
+                        {% endif %}
                     </td>
                     <td>{{ (users_objects_services.getAdjustedUnitPriceVat(field.formattedValue.invoice)/100)|format_currency('EUR') }}</td>
                     <td>{{ (users_objects_services.getAdjustedUnitPrice(field.formattedValue.invoice)/100)|format_currency('EUR') }}</td>

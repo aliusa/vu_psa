@@ -79,7 +79,18 @@
                 {% set total_price = 0 %}
                 {% for users_objects_services in usersObjectsServices %}
                     <tr>
-                        <td>{{ users_objects_services.services.title }}{% if users_objects_services.isFullPeriod(invoice) == false %}<br/><i class="text-muted">ne visas mėnuo</i>{% endif %}</td>
+                        <td>{{ users_objects_services.services.title }}
+                            {% if users_objects_services.isFullPeriod(invoice) == false %}<br/><i class="text-muted">ne visas mėnuo</i>{% endif %}
+
+                            {% set servicesPromotions = users_objects_services.getServicesPromotionsByInvoice(invoice) %}
+                            {% if servicesPromotions %}
+                                {% for servicesPromotion in servicesPromotions %}
+                                    <br/>
+                                    <i class="text-muted">Akcija „{{ servicesPromotion.services.title }}“ -{{ servicesPromotion.discount*100 }}%</i>
+                                {% endfor %}
+                            {% endif %}
+
+                        </td>
                         <td>{{ (users_objects_services.getAdjustedUnitPriceVat(invoice)/100)|format_currency('EUR') }}</td>
                         <td>{{ (users_objects_services.getAdjustedUnitPrice(invoice)/100)|format_currency('EUR') }}</td>
                         <td>{{ users_objects_services.amount }}</td>

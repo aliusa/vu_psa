@@ -154,80 +154,109 @@ class UsersObjectsServices extends BaseEntity
      */
     protected function getDaysInMonthPercentage(Invoices $invoices): float
     {
-        if (!$this->daysInMonthTotal) {
-            $this->daysInMonth = $this->daysInMonthTotal = $invoices->period_start->diff($invoices->period_end)->days + 1;
+        $this->daysInMonth = $this->daysInMonthTotal = $invoices->period_start->diff($invoices->period_end)->days + 1;
 
-            //Jeigu prasidėjo pvz 10dieną
-            if ($this->active_from > $invoices->period_start) {
-                //tada 9dienų nėra
-                $this->daysInMonth -= $invoices->period_start->diff($this->active_from)->days;
-            }
-            if ($this->active_to < $invoices->period_end) {
-                $this->daysInMonth -= $invoices->period_end->diff($this->active_to)->days;
-            }
-            return $this->daysInMonthPercentage = round($this->daysInMonth / $this->daysInMonthTotal * 100, 2);
+        //Jeigu prasidėjo pvz 10dieną
+        if ($this->active_from > $invoices->period_start) {
+            //tada 9dienų nėra
+            $this->daysInMonth -= $invoices->period_start->diff($this->active_from)->days;
         }
-
-        return $this->daysInMonthPercentage;
+        if ($this->active_to < $invoices->period_end) {
+            $this->daysInMonth -= $invoices->period_end->diff($this->active_to)->days;
+        }
+        return $this->daysInMonthPercentage = round($this->daysInMonth / $this->daysInMonthTotal * 100, 2);
     }
 
     protected function getAdjustedMoney(Invoices $invoices, float $money): float
     {
-        return round($this->getDaysInMonthPercentage($invoices) / 100 * $money, 2);
+        return floor($this->getDaysInMonthPercentage($invoices) / 100 * $money);
+    }
+
+    private function getAdjustedPrice(float $basePrice, Invoices $invoice): float
+    {
+        $promotions = $this->getServicesPromotionsByInvoice($invoice);
+        if (!empty($promotions)) {
+            $promotion = reset($promotions);
+            $price = $basePrice - $basePrice * $promotion->discount;
+        } else {
+            $price = $basePrice;
+        }
+
+        return $this->isFullPeriod($invoice)
+            ? $price
+            : $this->getAdjustedMoney($invoice, $price);
     }
 
     /**
      * Vieneto kaina be PVM.
-     * @param Invoices $invoices
-     * @return float|int
+     * @param Invoices $invoice
+     * @return float
      */
-    public function getAdjustedUnitPriceVat(Invoices $invoices)
+    public function getAdjustedUnitPriceVat(Invoices $invoice): float
     {
-        //dv($this->users_objects_services_promotions->toArray());
-        if ($this->isFullPeriod($invoices)) {
-            return $this->unit_price_vat;
-        }
-        return $this->getAdjustedMoney($invoices, $this->unit_price_vat);
+        return floor($this->getAdjustedPrice($this->unit_price_vat, $invoice));
     }
 
     /**
      * Vnt. kaina su PVM.
      *
-     * @param Invoices $invoices
-     * @return float|int
+     * @param Invoices $invoice
+     * @return float
      */
-    public function getAdjustedUnitPrice(Invoices $invoices)
+    public function getAdjustedUnitPrice(Invoices $invoice)
     {
-        if ($this->isFullPeriod($invoices)) {
-            return $this->unit_price;
-        }
-        return $this->getAdjustedMoney($invoices, $this->unit_price);
+        return floor($this->getAdjustedPrice($this->unit_price, $invoice));
     }
 
     /**
      * Viso kaina be PVM.
-     * @param Invoices $invoices
+     * @param Invoices $invoice
      * @return float
      */
-    public function getAdjustedTotalPriceVat(Invoices $invoices)
+    public function getAdjustedTotalPriceVat(Invoices $invoice)
     {
-        if ($this->isFullPeriod($invoices)) {
-            return $this->total_price_vat;
-        }
-        return $this->getAdjustedMoney($invoices, $this->total_price_vat);
+        return floor($this->getAdjustedPrice($this->total_price_vat, $invoice));
     }
 
     /**
      * Viso kaina su PVM.
-     * @param Invoices $invoices
+     * @param Invoices $invoice
      * @return float
      */
-    public function getAdjustedTotalPrice(Invoices $invoices)
+    public function getAdjustedTotalPrice(Invoices $invoice)
     {
-        if ($this->isFullPeriod($invoices)) {
-            return $this->total_price;
+        return floor($this->getAdjustedPrice($this->total_price, $invoice));
+    }
+
+    /**
+     * @param Invoices $invoice
+     * @return ServicesPromotions[]
+     */
+    public function getServicesPromotionsByInvoice(Invoices $invoice): array
+    {
+        if ($this->users_objects_services_promotions->isEmpty()) {
+            return [];
         }
-        return $this->getAdjustedMoney($invoices, $this->total_price);
+
+        /** @var ArrayCollection|UsersObjectsServicesPromotions[] $usersObjectsServicesPromotions */
+        $usersObjectsServicesPromotions = $this->users_objects_services_promotions->filter(function (UsersObjectsServicesPromotions $usersObjectsServicesPromotions) use ($invoice) {
+            //Jei akcijos galiojimas jau pasibaigęs. Jeigu netyčia priskyrė nebegaliojančią akciją.
+            if ($usersObjectsServicesPromotions->services_promotions->active_to <= $invoice->period_start) {
+                return false;
+            }
+
+            $mexIkiKadaGalimaAtsiimti = (new \DateTime($this->active_from->format('Y-m-01')))->add(new \DateInterval('P' . $usersObjectsServicesPromotions->services_promotions->months . 'M'));
+            if ($invoice->period_start < $mexIkiKadaGalimaAtsiimti) {
+                return true;
+            }
+
+            return false;
+        });
+
+        //Sąrašui paruošti
+        return $usersObjectsServicesPromotions->map(function (UsersObjectsServicesPromotions $usersObjectsServicesPromotion) {
+            return $usersObjectsServicesPromotion->services_promotions;
+        })->toArray();
     }
     //endregion invoice
 

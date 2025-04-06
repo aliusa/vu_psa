@@ -119,8 +119,8 @@ class Invoices extends BaseEntity
     public function getInvoiceTotal(): int
     {
         $total = 0;
-        foreach ($this->getInvoiceServices() as $invoiceService) {
-            $total += $invoiceService->getAdjustedTotalPrice($this);
+        foreach ($this->getInvoiceServices() as $usersObjectsService) {
+            $total += $usersObjectsService->getAdjustedTotalPrice($this);
         }
         return $total;
     }

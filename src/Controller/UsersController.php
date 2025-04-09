@@ -9,6 +9,7 @@ use App\Entity\UsersObjects;
 use App\Entity\UsersObjectsServices;
 use App\Entity\UsersObjectsServicesBundles;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
@@ -88,7 +89,9 @@ class UsersController extends BaseController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/users/invoices/{id}',name: 'invoicesId', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
-    public function invoicesId(EntityManagerInterface $entityManager): Response
+    public function invoicesId(
+        EntityManagerInterface $entityManager,
+    ): Response
     {
         /** @var Invoices[] $invoice */
         $invoiceFound = $entityManager->getRepository(Invoices::class)

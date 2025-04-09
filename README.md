@@ -25,3 +25,8 @@ php bin/console importmap:install
 php bin/console asset-map:compile
 php bin/console doctrine:schema:update --force
 ```
+
+### Unit testai
+```shell
+php bin/phpunit
+```

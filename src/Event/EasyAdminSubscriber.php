@@ -32,7 +32,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     {
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         //https://symfony.com/bundles/EasyAdminBundle/master/events.html
         return [

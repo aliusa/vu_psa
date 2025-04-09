@@ -6,6 +6,7 @@ use App\Entity\Enum\PaymentsStatus;
 use App\Entity\Invoices;
 use App\Entity\Payments;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
@@ -19,7 +20,11 @@ class PaymentsController extends BaseController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/payments/pay/{id}', name: 'payments/pay', requirements: ['id' => Requirement::DIGITS])]
-    public function pay(EntityManagerInterface $entityManager, Invoices $invoices): Response
+    public function pay(
+        EntityManagerInterface $entityManager,
+        #[MapEntity(id: 'id')]
+        Invoices $invoices,
+    ): Response
     {
         if ($invoices->is_paid) {
             return $this->redirect($this->generateUrl('app_index'));

@@ -6,6 +6,7 @@ use App\Entity\Enum\PaymentsStatus;
 use App\Entity\Invoices;
 use App\Entity\Payments;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -102,14 +103,18 @@ class PaymentsController extends BaseController
         ]));
     }
 
-    #[IsGranted('ROLE_USER')]
     #[Route('/payments/callback', name: 'payments/callback')]
-    public function callback(EntityManagerInterface $entityManager): Response
+    public function callback(
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger,
+    ): Response
     {
         $data = $this->request->request->all();
-        $payment = $this->getPaymentFromOrderid($data);
+        $logger->debug('payments/callback', $data, $this->request->query->all());
+
+        $payment = $this->getPaymentFromRequest(static::ACCEPT_URL_SALT);
         if (!$payment) {
-            return $this->redirect('app_index');
+            return $this->json('');
         }
 
         $payment->response_data = $data;
@@ -128,10 +133,13 @@ class PaymentsController extends BaseController
     public function accept(EntityManagerInterface $entityManager): Response
     {
         $payment = $this->getPaymentFromRequest(static::ACCEPT_URL_SALT);
-        if ($payment) {
-            //
+        if (!$payment) {
+            $this->addFlash('danger', 'Įvyko klaida');
         }
-        $this->addFlash('success', 'Payment accepted');
+
+        if ($payment->payment_date) {
+            $this->addFlash('success', 'Sąskaita apmokėta');
+        }
 
         /** @see UsersController::invoicesId() */
         return $this->redirect($this->generateUrl('invoicesId', [
@@ -145,6 +153,10 @@ class PaymentsController extends BaseController
      */
     public function getPaymentFromOrderid(array $params): ?Payments
     {
+        if (!isset($params['orderid'])) {
+            return null;
+        }
+
         return $this->managerRegistry->getManager()->getRepository(Payments::class)->findOneBy(['id' => $params['orderid']]);
     }
 

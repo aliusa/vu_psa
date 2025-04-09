@@ -36,3 +36,10 @@ $(document).ready(function () {
         }, 200);
     }
 });
+
+var popoverTriggerList = $('[data-bs-toggle="popover"]');
+var popoverList = popoverTriggerList.map(function (index, object) {
+    return new bootstrap.Popover(object, {
+        html: true,
+    });
+})

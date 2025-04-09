@@ -2,30 +2,29 @@
 
 namespace App;
 
-use App\Entity\Invoices;
-use App\Repository\InvoicesRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 
 class Registry
 {
     protected static ?ContainerInterface $container = null;
     protected static ?ManagerRegistry $doctrine = null;
     private static ?Registry $instance = null;
+    private static Kernel|Application $kernelApp;
 
     public function __construct()
     {
-        /** @var Kernel|Application $kernelApp */
-        $kernelApp = $GLOBALS['app'];
+        static::$kernelApp = $GLOBALS['app'];
 
-        if ($kernelApp instanceof Kernel) {
-            static::$container = $kernelApp->getContainer();
-            static::$doctrine = $kernelApp->getContainer()->get('doctrine');
-        } elseif ($kernelApp instanceof Application) {
-            static::$container = $kernelApp->getKernel()->getContainer();
-            static::$doctrine = $kernelApp->getKernel()->getContainer()->get('doctrine');
+        if (static::$kernelApp instanceof Kernel) {
+            static::$container = static::$kernelApp->getContainer();
+            static::$doctrine = static::$kernelApp->getContainer()->get('doctrine');
+        } elseif (static::$kernelApp instanceof Application) {
+            static::$container = static::$kernelApp->getKernel()->getContainer();
+            static::$doctrine = static::$kernelApp->getKernel()->getContainer()->get('doctrine');
         }
 
         return self::class;
@@ -46,5 +45,16 @@ class Registry
     public static function getDoctrineManager(): \Doctrine\Persistence\ObjectManager
     {
         return static::getDoctrine()->getManager();
+    }
+
+    public static function getRouter(): Router
+    {
+        is_null(self::$instance) && static::$instance = new self();
+        return static::$container->get('router');
+    }
+    public static function getKernel(): Kernel
+    {
+        is_null(self::$instance) && static::$instance = new self();
+        return static::$kernelApp;
     }
 }

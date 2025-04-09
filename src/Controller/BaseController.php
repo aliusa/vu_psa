@@ -29,6 +29,7 @@ abstract class BaseController extends AbstractController
         RequestStack $requestStack,
         protected MailerManager $mailerManager,
         protected ManagerRegistry $managerRegistry,
+        protected KernelInterface $kernel,
     )
     {
         $this->request = $requestStack->getCurrentRequest();

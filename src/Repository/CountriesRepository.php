@@ -5,9 +5,6 @@ namespace App\Repository;
 use App\Entity\Countries;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends BaseRepository<Countries>
- */
 class CountriesRepository extends BaseRepository
 {
     public function __construct(ManagerRegistry $registry)

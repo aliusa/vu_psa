@@ -2,13 +2,12 @@
 
 namespace App\Entity;
 
-use App\Registry;
+use App\Entity\Payments\BasePayment;
 use App\Repository\PaymentsRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
 use Symfony\Component\Validator\Constraints as AssertValidator;
 
 #[ORM\Table('payments')]
@@ -64,18 +63,7 @@ class Payments extends BaseEntity
     {
         parent::__construct(...func_get_args());
         //$this->users_objects = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->hash = $this->generateHash();
-    }
-
-    protected function generateHash(): string
-    {
-        do {
-            $hash = sha1(microtime() . rand(0, 10000));
-            //siek tiek palaukiam, kad generuojant hash, laikas pasikeistu
-            usleep(100);
-        } while (Registry::getDoctrineManager()->getRepository(Payments::class)->findOneBy(['hash' => $hash]) != null);
-
-        return $hash;
+        //$this->hash = BasePayment::generateHash();
     }
 
     public function __toString()

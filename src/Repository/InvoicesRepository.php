@@ -10,7 +10,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Invoices|null findOneBy(array $criteria, array $orderBy = null)
  * @method Invoices[]    findAll()
  * @method Invoices[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @extends BaseRepository<Invoices>
  */
 class InvoicesRepository extends BaseRepository
 {

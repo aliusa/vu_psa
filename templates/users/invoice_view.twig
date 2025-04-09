@@ -45,7 +45,14 @@
                         {% endif %}
                     {% else %}
                         <span class="badge text-bg-danger">{{ "no"|trans }}</span>
-                        <a href="/payments/pay/{{ invoice.id }}" class="text-primary">Apmokėti</a>
+                        <span class="btn btn-link px-0"
+                           data-bs-toggle="popover" data-bs-content='
+                           <ul class="list-unstyled">
+                                <li><a href="/payments/pay/{{ invoice.id }}?method=paysera" class="text-primary">Paysera</a></li>
+                                <li><a href="/payments/pay/{{ invoice.id }}?method=test" class="text-primary">Testinė mokėjimų sistema</a></li>
+                            </div>' data-bs-html="true"
+                        >Apmokėti</span>
+
                     {% endif %}
                 </td>
             </tr>

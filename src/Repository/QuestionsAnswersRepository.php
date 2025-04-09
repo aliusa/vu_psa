@@ -6,7 +6,6 @@ use App\Entity\QuestionsAnswers;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends BaseRepository<QuestionsAnswers>
  * @method QuestionsAnswers|null find($id, $lockMode = null, $lockVersion = null)
  * @method QuestionsAnswers|null findOneBy(array $criteria, array $orderBy = null)
  * @method QuestionsAnswers[]    findAll()

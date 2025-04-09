@@ -6,7 +6,6 @@ use App\Entity\ServicesPromotions;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends BaseRepository<ServicesPromotions>
  * @method ServicesPromotions|null find($id, $lockMode = null, $lockVersion = null)
  * @method ServicesPromotions|null findOneBy(array $criteria, array $orderBy = null)
  * @method ServicesPromotions[]    findAll()

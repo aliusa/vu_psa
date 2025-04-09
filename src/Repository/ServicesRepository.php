@@ -5,9 +5,6 @@ namespace App\Repository;
 use App\Entity\Services;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends BaseRepository<Services>
- */
 class ServicesRepository extends BaseRepository
 {
     public function __construct(ManagerRegistry $registry)

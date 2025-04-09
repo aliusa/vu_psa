@@ -33,43 +33,17 @@ class PaymentsController extends BaseController
         $params = $this->request->request->all();
         //$invoice = $this->getInvoiceFromPaymentData($params);
 
-        $payment = new Payments();
-        $payment->status = PaymentsStatus::PAYMENT_STATUS_PENDING;
-        $payment->invoices = $invoices;
-        $payment->total = $invoices->getInvoiceTotal();
-        $payment->payment_method = 'test';
-        //$payment->request_data = WebToPay::buildRequest($data);
-        //$payment->redirect_url = WebToPay::PAYSERA_PAY_URL;
-        $payment->redirect_url = $this->buildUrl($this->generateUrl('payments/test'));
-        $this->managerRegistry->getManager()->persist($payment);
-        $this->managerRegistry->getManager()->flush();
+        /** @var Payments\BasePayment $paymentType */
+        $paymentType = match ($this->request->get('method')) {
+            'test' => new Payments\TestPayment(),
+            'paysera' => new Payments\PayseraPayment(),
+            default => null,
+        };
+        if (!$paymentType) {
+            return $this->redirect($this->generateUrl('app_index'));
+        }
 
-        $data = [
-            'orderid' => $payment->getId(),
-            'amount' => $invoices->getInvoiceTotal(),
-            'currency' => 'EUR',
-            //'country' => 'LT',
-
-            'paytext' => $this->getPaymentTitle($invoices),
-            'accepturl' => $this->buildUrl($this->getAcceptUrl($payment)),
-            'cancelurl' => $this->buildUrl($this->getCancelUrl($payment)),
-            'callbackurl' => $this->buildUrl($this->getCallbackUrl($payment)),
-            //'p_email' => $invoices->getUser()->email,//kad nuėjus į paysera - neprašytų vėl el.pašto
-
-            //'method' => 'test',
-        ];
-        $query = http_build_query($data, '', '&');
-        $base64 = base64_encode($query);
-        $payment->raw_request_data = $data;
-        $payment->request_data = [
-            'data' => $base64,
-            'sign' => $this->generateSign($data['orderid'])
-        ];
-        $this->managerRegistry->getManager()->persist($payment);
-        $this->managerRegistry->getManager()->flush();
-
-        //$payment->request_data = WebToPay::buildRequest($data);
-        //$payment->redirect_url = WebToPay::PAYSERA_PAY_URL;
+        $payment = $paymentType->pay($invoices);
 
         return $this->render('payments/pay.twig', [
             'payment' => $payment,
@@ -85,7 +59,8 @@ class PaymentsController extends BaseController
         $data = $this->request->request->getString('data');
         $sign = $this->request->request->getString('sign');
         parse_str(base64_decode($data), $result);
-        if ($sign === $this->generateSign($result['orderid'])) {
+        $testPayment = new Payments\TestPayment();
+        if ($sign === $testPayment->generateSign($result['orderid'])) {
             return $this->render('payments/pay.test.twig', [
                 'payment_data' => $result,
                 'callback_data' => [
@@ -93,7 +68,7 @@ class PaymentsController extends BaseController
                     'amount' => $result['amount'],
                     'currency' => $result['currency'],
                     'payment' => $result['payment'] ?? null,
-                    'sign' => $this->generateSign($result['orderid'], $_ENV['TEST_SIGN_PASSWORD'])
+                    'sign' => $testPayment->generateSign($result['orderid'], $_ENV['TEST_SIGN_PASSWORD'])
                 ],
             ]);
         } else {
@@ -171,63 +146,6 @@ class PaymentsController extends BaseController
     public function getPaymentFromOrderid(array $params): ?Payments
     {
         return $this->managerRegistry->getManager()->getRepository(Payments::class)->findOneBy(['id' => $params['orderid']]);
-    }
-
-    public function getReturnUrl(Payments $payment){
-        $control = $this->generateDataControl($payment->invoices->id, static::ACCEPT_URL_SALT);
-        return $this->generateUrl('payments/return') . '?control=' . $control . "&id=" . $payment->id . '&h=' . $payment->hash;
-    }
-
-    public function getAcceptUrl(Payments $payment){
-        $control = $this->generateDataControl($payment->invoices->id, static::ACCEPT_URL_SALT);
-        return $this->generateUrl('payments/accept') . '?control=' . $control . "&id=" . $payment->id . '&h=' . $payment->hash;;
-    }
-
-    public function getCancelUrl(Payments $payment){
-        $control = $this->generateDataControl($payment->invoices->id, static::CANCEL_URL_SALT);
-        return $this->generateUrl('payments/cancel') . '?control=' . $control . "&id=" . $payment->id . '&h=' . $payment->hash;;
-    }
-
-    public function getCallbackUrl(Payments $payment){
-        $control = $this->generateDataControl($payment->invoices->id, static::CALLBACK_URL_SALT);
-        return $this->generateUrl('payments/callback') . '?control=' . $control . "&id=" . $payment->id . '&h=' . $payment->hash;;
-    }
-    public function getPaymentTitle(Invoices $invoices){
-        return sprintf("Apmokėjimas už sąskaitą %s", $invoices->getFormattedSeries());
-    }
-
-    /**
-     * Sugeneruoja duomenu kontroles reiksme
-     *
-     * @param $data
-     * @param string $salt
-     *
-     * @return string
-     */
-    public function generateDataControl($data, string $salt):string{
-        return md5($data . $salt);
-    }
-
-    protected function buildUrl(string $path)
-    {
-        return $_ENV['HTTP_SCHEME'] . '://'. $_ENV['HTTP_HOST'] . $path;
-    }
-
-    /**
-     * @param $data
-     * @return string
-     */
-    public function generateSign($data)
-    {
-        return md5($data . $this->signPassword());
-    }
-
-    /**
-     * @return string
-     */
-    protected function signPassword():string
-    {
-        return $_ENV['TEST_SIGN_PASSWORD'] ?? '';
     }
 
     protected function getPaymentFromRequest($salt = null, bool $validateUser = true):?Payments

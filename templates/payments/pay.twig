@@ -1,16 +1,15 @@
-    <form id="payment-form" method="POST" action="{{ payment.redirect_url }}">
-        {{ dump(payment.request_data) }}
-        {% for key, value in payment.request_data %}
-            <input type="hidden" name="{{ key }}" value="{{ value }}" />
-        {% endfor %}
-        <div class="text-center my-3">
-            <button type="submit" class="btn btn-primary">Pay</button>
-        </div>
+<form id="payment-form" method="POST" action="{{ payment.redirect_url }}">
+    {% for key, value in payment.request_data %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}" />
+    {% endfor %}
+    <div class="text-center my-3">
+        <button type="submit" class="btn btn-primary">Pay</button>
+    </div>
 
-    </form>
+</form>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function(event) {
-           document.getElementById('payment-form').submit();
-        });
-    </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+       document.getElementById('payment-form').submit();
+    });
+</script>

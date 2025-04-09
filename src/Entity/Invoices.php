@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Registry;
 use App\Repository\InvoicesRepository;
 use App\Traits\IdTrait;
 use App\Traits\TimestampableTrait;
@@ -11,7 +10,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertDoctrine;
-use Symfony\Component\Validator\Constraints as AssertValidator;
 
 #[ORM\Table('invoices')]
 #[ORM\Entity(repositoryClass: InvoicesRepository::class)]

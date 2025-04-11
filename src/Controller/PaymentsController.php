@@ -125,7 +125,7 @@ class PaymentsController extends BaseController
         $this->managerRegistry->getManager()->persist($payment);
         $this->managerRegistry->getManager()->flush();
 
-        return $this->json($payment->return_data);
+        return (new Response('OK'))->send();
     }
 
     #[IsGranted('ROLE_USER')]

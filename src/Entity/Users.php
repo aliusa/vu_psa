@@ -141,4 +141,9 @@ class Users extends BaseEntity implements UserInterface, PasswordAuthenticatedUs
     public function getQuestionsList():array{
         return $this->questions->toArray();
     }
+
+    public function getPayerCode(): int
+    {
+        return $this->getId() + 10_000;
+    }
 }

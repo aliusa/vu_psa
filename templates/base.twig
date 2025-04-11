@@ -64,11 +64,12 @@
                                 </ul>
                             </div>
                             <div>
-                                <span class="mx-2">
-                                    {{ app.user.userIdentifier }}
-                                </span>
-                                <a href="{{ path('app_logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Atsijungti</a>
+                                <div class="d-flex flex-column mx-2">
+                                    <span class="fw-bold">{{ app.user.userIdentifier }}</span>
+                                    <span class="">Mokėtojo kodas: <span class="fw-bold">{{ app.user.getPayerCode() }}</span></span>
+                                </div>
                             </div>
+                            <a href="{{ path('app_logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Atsijungti</a>
                         </div>
                     {% endif %}
                 </div>

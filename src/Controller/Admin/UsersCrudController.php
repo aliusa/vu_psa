@@ -49,6 +49,8 @@ class UsersCrudController extends BaseCrudController
             //sąrašas
 
             $fields[] = IdField::new('id');
+            /** @see Users::getPayerCode() */
+            $fields[] = Field::new('getPayerCode', 'Mokėtojo kodas');
             $fields[] = Field::new('first_name', 'first_name');
             $fields[] = Field::new('last_name', 'last_name');
             $fields[] = EmailField::new('email', 'email');
@@ -86,6 +88,8 @@ class UsersCrudController extends BaseCrudController
 
             $fields[] = FormField::addColumn(4);
             $fields[] = IdField::new('id');
+            /** @see Users::getPayerCode() */
+            $fields[] = Field::new('getPayerCode', 'Mokėtojo kodas');
             $fields[] = AssociationField::new('admin', 'admin');
             $fields[] = DateTimeField::new('created_at', 'created_at');
             $fields[] = DateTimeField::new('updated_at', 'updated_at');

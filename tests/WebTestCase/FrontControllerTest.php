@@ -12,7 +12,7 @@ class FrontControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorExists('a[href^="/services/"]');
+        $this->assertSelectorExists('a[href^="services/"]');
     }
 
     public function testLoginPage(): void

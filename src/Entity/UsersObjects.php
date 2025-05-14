@@ -59,6 +59,13 @@ class UsersObjects extends BaseEntity
     #[ORM\Column(type: Types::STRING, length: 5, nullable: true)]
     public ?string $zip;
 
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
+    public ?string $latitude;
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
+    public ?string $longitude;
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
+    public ?string $coordinates;
+
     /**
      * One User have Many UsersObjects.
      * @see UsersObjectsServicesBundles::$users_object

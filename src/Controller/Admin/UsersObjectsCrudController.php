@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Controller\Admin\Field\LeafletField;
 use App\Entity\UsersObjects;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -12,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 
 class UsersObjectsCrudController extends BaseCrudController
@@ -53,6 +55,9 @@ class UsersObjectsCrudController extends BaseCrudController
             $fields[] = Field::new('house', 'house')->setColumns('col-3 col-md-2');
             $fields[] = Field::new('flat', 'flat')->setColumns('col-3 col-md-2');
             $fields[] = Field::new('zip', 'zip')->setColumns('col-3 col-md-2')->setFormTypeOption('attr', ['placeholder' => 12345]);
+            $fields[] = HiddenField::new('latitude', 'latitude');
+            $fields[] = HiddenField::new('longitude', 'longitude');
+            $fields[] = LeafletField::new('coordinates', 'coordinates');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {
             //Peržiūra
@@ -65,6 +70,7 @@ class UsersObjectsCrudController extends BaseCrudController
             $fields[] = Field::new('house', 'house');
             $fields[] = Field::new('flat', 'flat');
             $fields[] = Field::new('zip', 'zip');
+            $fields[] = LeafletField::new('coordinates', 'coordinates');
 
             $fields[] = FormField::addColumn(4);
             $fields[] = IdField::new('id');

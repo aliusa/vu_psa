@@ -1,0 +1,6 @@
+
+{% if field.value %}
+    <div id="" class="leaflet-map-preview mt-3" style="width: 800px;height: 400px;cursor: pointer;" data-coordinates="{{ field.value|e }}"></div>
+{% else %}
+    <span class="text-muted">No coordinates set</span>
+{% endif %}

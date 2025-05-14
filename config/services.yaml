@@ -67,3 +67,7 @@ services:
     #  autowire: true
     #Symfony\Component\Cache\Adapter\AdapterInterface:
     #  autowire: true
+    App\Core\Form\Type\LeafletType:
+      arguments:
+        $configuration: '@App\Service\LeafletConfiguration' # or a parameter like '%app.map_config%'
+      tags: ['form.type']

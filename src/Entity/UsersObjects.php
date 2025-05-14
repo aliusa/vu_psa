@@ -60,10 +60,6 @@ class UsersObjects extends BaseEntity
     public ?string $zip;
 
     #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
-    public ?string $latitude;
-    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
-    public ?string $longitude;
-    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
     public ?string $coordinates;
 
     /**

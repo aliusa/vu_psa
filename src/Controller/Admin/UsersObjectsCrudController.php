@@ -55,8 +55,6 @@ class UsersObjectsCrudController extends BaseCrudController
             $fields[] = Field::new('house', 'house')->setColumns('col-3 col-md-2');
             $fields[] = Field::new('flat', 'flat')->setColumns('col-3 col-md-2');
             $fields[] = Field::new('zip', 'zip')->setColumns('col-3 col-md-2')->setFormTypeOption('attr', ['placeholder' => 12345]);
-            $fields[] = HiddenField::new('latitude', 'latitude');
-            $fields[] = HiddenField::new('longitude', 'longitude');
             $fields[] = LeafletField::new('coordinates', 'coordinates');
 
         } elseif ($pageName === Crud::PAGE_DETAIL) {

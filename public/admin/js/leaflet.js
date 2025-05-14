@@ -10,7 +10,7 @@ $(document).ready(function () {
                     if (!init) {
                         init = true;
                         var coordinates = $('.leaflet-value').val();
-                        if (coordinates !== undefined) {
+                        if (coordinates !== '') {
                             coordinates = coordinates.split(',');
 
                             if (coordinates.length === 3) {

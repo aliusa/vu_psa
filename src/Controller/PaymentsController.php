@@ -28,7 +28,7 @@ class PaymentsController extends BaseController
     ): Response
     {
         if ($invoices->is_paid) {
-            return $this->redirect($this->generateUrl('app_index'));
+            return $this->redirect($this->generateUrl('app_home'));
         }
 
         $params = $this->request->request->all();
@@ -41,7 +41,7 @@ class PaymentsController extends BaseController
             default => null,
         };
         if (!$paymentType) {
-            return $this->redirect($this->generateUrl('app_index'));
+            return $this->redirect($this->generateUrl('app_home'));
         }
 
         $payment = $paymentType->pay($invoices);
@@ -76,7 +76,7 @@ class PaymentsController extends BaseController
             //
         }
 
-        return $this->redirect($this->generateUrl('app_index'));
+        return $this->redirect($this->generateUrl('app_home'));
     }
 
     #[IsGranted('ROLE_USER')]
@@ -85,7 +85,7 @@ class PaymentsController extends BaseController
     {
         $payment = $this->getPaymentFromRequest(static::CANCEL_URL_SALT);
         if (!$payment) {
-            return $this->redirect('app_index');
+            return $this->redirect('app_home');
         }
 
         //$payment->response_data = $data;

@@ -7,6 +7,9 @@ Easyadmin Admin bundle 4
 * PHP 8.2  
 * MariaDB 10.10 - 11.8
 
+### Problemos
+Pirma prisijungiama per frontend'ą ir tik tada į TVS. Atvirkščiai bug'ovai.
+
 ## Scripts
 ### Fix permissions
 ```shell

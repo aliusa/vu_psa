@@ -116,6 +116,5 @@ class InvoicesGenerateCommand extends BaseCommand
             $this->manager->getManager()->persist($invoice);
             $this->manager->getManager()->flush();
         }
-        //dv($period);
     }
 }

@@ -52,7 +52,7 @@ class Invoices extends BaseEntity
     public $no;
 
     /**
-     * One User have Many UsersObjects.
+     * One Invoice have Many payments.
      * @see Payments::$invoices
      * @var PersistentCollection|Payments
      */

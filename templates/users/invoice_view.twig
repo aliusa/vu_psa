@@ -6,13 +6,44 @@
     <div class="mt-4">
         <h2 class="">Sąskaita <span class="text-muted">{{ invoice.getFormattedSeries() }}</span></h2>
     </div>
-    <table class="table table-condensed table-bordered">
+
+    <div>
+        <ul class="steps">
+            <li class="step step-success">
+                <div class="step-content">
+                    <span class="step-circle">1</span>
+                    <span class="step-text">
+                        Išrašyta
+                        <br/>
+                        {{ invoice.created_at|date('Y-m-d') }}
+                    </span>
+                </div>
+            </li>
+            <li class="step {% if invoice.is_paid %}step-success{% else %}step-danger{% endif %}">
+                <div class="step-content">
+                    <span class="step-circle">2</span>
+                    <span class="step-text">
+                        {% if invoice.is_paid %}
+                            Apmokėta
+                            <br/>
+                            {{ invoice.is_paid|date('Y-m-d H:i') }}
+                        {% else %}
+                            Neapmokėta
+                            <br/>
+                        {% endif %}
+                    </span>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <table class="table table-condensed table-bordered mt-3">
         <thead>
             <tr>
                 <th>Periodas</th>
                 <td>{{ invoice.getPeriod() }}</td>
             </tr>
-            <tr>
+            {#<tr>
                 <th>Išrašyta</th>
                 <td>{{ invoice.created_at|date('Y-m-d') }}</td>
             </tr>
@@ -20,7 +51,7 @@
                 <th>{{ "total"|trans }}</th>
                 <td>{{ (invoice.getInvoiceTotal()/100)|format_currency('EUR') }}</td>
             </tr>
-            <tr>
+            <tr>#}
                 <th>{{ "due_date"|trans }}</th>
                 <td>
                     {{ invoice.due_date|date('Y-m-d') }}

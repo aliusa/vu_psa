@@ -16,6 +16,7 @@ import './styles/app.scss';
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
 import $ from 'jquery';
 window.$ = $;
+import Disabilities from "./disabilities.js";
 
 $('tr[data-href]').each(function (index, object) {
     //console.log(this, index, object);

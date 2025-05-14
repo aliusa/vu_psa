@@ -1,8 +1,10 @@
-@import 'mixin';
+@import './mixin';
+@import './components/disabilities';
+@import './components/steps';
 
 :root {
-    --bs-primary: #00aeef;
-    --bs-primary-rgb: 0, 174, 239;
+    --bs-primary: #5e8ddf;
+    --bs-primary-rgb: 94, 141, 223;
 }
 body {
     overflow-x: hidden;

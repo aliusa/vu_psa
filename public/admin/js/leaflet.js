@@ -1,91 +1,130 @@
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function () {
     function initLeaflet() {
-        $('.leaflet-map').each(function (index, object1) {
-
-            var init = false;
-            initMap();
+        document.querySelectorAll('.leaflet-map').forEach(function (mapEl) {
+            let init = false;
 
             function initMap() {
                 setTimeout(function () {
                     if (!init) {
                         init = true;
-                        var coordinates = $('.leaflet-value').val();
+                        let inputEl = document.querySelector('.leaflet-value');
+                        let coordinates = inputEl ? inputEl.value : '';
+
+                        let options;
                         if (coordinates !== '') {
-                            coordinates = coordinates.split(',');
+                            let parts = coordinates.split(',');
 
-                            if (coordinates.length === 3) {
-                                //long/lat/zoom
-                                var options = {
-                                    center: [coordinates[0], coordinates[1]],
-                                    zoom: coordinates[2],
-                                }
-
-                                var map = L.map(object1, options);
-                            } else if (coordinates.length === 2) {
-                                var options = {
-                                    center: [coordinates[0], coordinates[1]],
+                            if (parts.length === 3) {
+                                options = {
+                                    center: [parts[0], parts[1]],
+                                    zoom: parseInt(parts[2], 10),
+                                };
+                            } else if (parts.length === 2) {
+                                options = {
+                                    center: [parts[0], parts[1]],
                                     zoom: 12,
-                                }
-
-                                var map = L.map(object1, options);
+                                };
                             }
-                        } else {
-                            var options = {
+                        }
+
+                        if (!options) {
+                            options = {
                                 center: [55.329905, 23.905512],
                                 zoom: 7,
-                            }
-                            var map = L.map(object1, options);
+                            };
                         }
+
+                        const map = L.map(mapEl, options);
                         L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png").addTo(map);
-                        var customMarker = L.icon({
+
+                        const customMarker = L.icon({
                             iconUrl: '/public/vendor/leaflet/dist/images/marker-icon.png',
                             iconSize: [25, 41],
                             iconAnchor: [12, 41],
                         });
-                        eventMarker = L.marker(options.center, {icon: customMarker}).addTo(map);
+
+                        const eventMarker = L.marker(options.center, { icon: customMarker }).addTo(map);
 
                         map.on('click', function (e) {
-                            var coord = e.latlng.toString().split(',');
-                            var lat = coord[0].split('(');
-                            var lng = coord[1].split(')');
-                            var zoom = map.getZoom();
-                            var newLatLng = new L.LatLng(lat[1], lng[0]);
-                            eventMarker.setLatLng(newLatLng);
-                            $('.leaflet-value').val(lat[1] + ',' + lng[0] + ',' + zoom);
+                            const lat = e.latlng.lat.toFixed(6);
+                            const lng = e.latlng.lng.toFixed(6);
+                            const zoom = map.getZoom();
+                            eventMarker.setLatLng([lat, lng]);
+
+                            if (inputEl) {
+                                inputEl.value = `${lat},${lng},${zoom}`;
+                            }
                         });
                     }
 
+
+
+
+
+
+
+
                 }, 1000);
             }
+
+            initMap();
         });
 
+        // Preview map
+        const previewEl = document.querySelector('.leaflet-map-preview');
+        if (previewEl) {
+            let coords = previewEl.getAttribute('data-coordinates');
+            if (coords) {
+                let parts = coords.split(',');
+                if (parts.length === 3) {
+                    let options = {
+                        center: [parts[0], parts[1]],
+                        zoom: parseInt(parts[2], 10),
+                    };
 
-        //preview
-        if ($('.leaflet-map-preview').length) {
-            var object = $('.leaflet-map-preview')[0];
-            var coordinates = $('.leaflet-map-preview').attr('data-coordinates');
+                    const map = L.map(previewEl, options);
+                    L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png").addTo(map);
 
-            coordinates = coordinates.split(',');
+                    const customMarker = L.icon({
+                        iconUrl: '/public/vendor/leaflet/dist/images/marker-icon.png',
+                        iconSize: [25, 41],
+                        iconAnchor: [12, 41],
+                    });
 
-            if (coordinates.length === 3) {
-                //long/lat/zoom
-                var options = {
-                    center: [coordinates[0], coordinates[1]],
-                    zoom: coordinates[2],
+                    L.marker(options.center, { icon: customMarker }).addTo(map);
                 }
+            }
+        }
 
-                var map = L.map(object, options);
+        const allCoords = document.querySelector('.leaflet-map-all');
+        if (allCoords) {
+            let coordsAll = allCoords.getAttribute('data-coordinates');
+            let coords = coordsAll.split(';');
+
+            let options = {
+                center: [55.329905, 23.905512],
+                zoom: 7,
+            };
+
+            const map = L.map(allCoords, options);
+            L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png").addTo(map);
 
 
-                L.tileLayer("https://{s}.tile.osm.org/{z}/{x}/{y}.png").addTo(map);
-                var customMarker = L.icon({
+            coords.forEach(function (element, index, array) {
+                console.log(element);
+                //array.length = index + 1;// Behaves like `break`
+
+                const customMarker = L.icon({
                     iconUrl: '/public/vendor/leaflet/dist/images/marker-icon.png',
                     iconSize: [25, 41],
                     iconAnchor: [12, 41],
                 });
-                eventMarker = L.marker(options.center, {icon: customMarker}).addTo(map);
-            }
+                let parts = element.split(',');
+
+                L.marker([parts[0], parts[1]], { icon: customMarker }).addTo(map);
+            });
         }
+
     }
 
     initLeaflet();

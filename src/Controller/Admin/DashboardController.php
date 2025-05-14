@@ -16,6 +16,7 @@ use App\Entity\UsersObjects;
 use App\Entity\UsersObjectsServices;
 use App\Entity\UsersObjectsServicesBundles;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -28,6 +29,15 @@ class DashboardController extends AbstractDashboardController
         private EntityManagerInterface $entityManager,
     )
     {
+    }
+
+    public function configureAssets(): Assets
+    {
+        return parent::configureAssets()
+            ->addJsFile('public/vendor/leaflet/dist/leaflet.js')
+            ->addCssFile('public/vendor/leaflet/dist/leaflet.css')
+            ->addJsFile('public/admin/js/leaflet.js')
+            ;
     }
 
     #[Route('/admin', name: 'admin')]
@@ -49,6 +59,11 @@ class DashboardController extends AbstractDashboardController
                 ->andWhere('invoices.is_paid IS NULL')
                 ->getQuery()
                 ->getSingleScalarResult(),
+            'coordinates' => $this->entityManager->getRepository(UsersObjects::class)
+                ->createQueryBuilder('item')
+                ->select('item.coordinates')
+                ->andWhere('item.coordinates IS NOT NULL')
+                ->getQuery()->getSingleColumnResult(),
         ]);
         return $this->render('@EasyAdmin/welcome.html.twig', [
             'dashboard_controller_filepath' => (new \ReflectionClass(static::class))->getFileName(),

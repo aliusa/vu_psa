@@ -1,8 +1,8 @@
 {% extends '@EasyAdmin/layout.html.twig' %}
 
 {% block main %}
-    <div class="row row-cols-2 row-cols-md-4 g-4">
-        <div class="col">
+    <div class="row g-4">
+        <div class="col-6 col-md-4">
             <div class="card h-100 shadow border-0">
                 <a href="/admin?crudAction=index&crudControllerFqcn=App\Controller\Admin\UsersCrudController" class="">
                     <div class="card-body">
@@ -11,14 +11,14 @@
                 </a>
             </div>
         </div>
-        <div class="col">
+        <div class="col-6 col-md-4">
             <div class="card h-100 shadow border-0">
                 <div class="card-body">
                     Aktyvūs paslaugų paketai <h1>{{ activeUsersServicesBundlesCount }}</h1>
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-6 col-md-4">
             <div class="card h-100 shadow border-0">
                 <a href="/admin?crudAction=index&crudControllerFqcn=App\Controller\Admin\InvoicesCrudController&filters[is_paid]=0" class="">
                     <div class="card-body">
@@ -27,11 +27,9 @@
                 </a>
             </div>
         </div>
-        <div class="col">
+        <div class="col-12 col-md-6">
             <div class="card h-100 shadow border-0">
-                <div class="card-body">
-                    ...
-                </div>
+                <div class="leaflet-map-all" data-coordinates="{{ coordinates|join(';') }}" style="width: 800px;height: 400px;cursor: pointer;"></div>
             </div>
         </div>
     </div>

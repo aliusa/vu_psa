@@ -80,6 +80,17 @@ class QuestionsController extends BaseController
 
                 $this->addFlash("success", 'Klausimas užduotas');
 
+
+                if ($_ENV['ADMIN_EMAIL']) {
+                    $this->mailerManager->sendMail('ADMIN_EMAIL', [
+                        'subject' => 'Naujas klausimas',
+                        'text' => <<<EOF
+<p>Naujas klausimas:</p>
+{$question->question}
+EOF,
+                    ]);
+                }
+
                 return $this->redirectToRoute('my_questions');
             } else {
                 return $this->redirectToRoute('home_index');

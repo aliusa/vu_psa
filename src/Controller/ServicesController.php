@@ -24,8 +24,7 @@ final class ServicesController extends BaseController
     #[Route('/services/{id}', name: 'services_view', methods: ['GET'], requirements: ['id' => Requirement::DIGITS])]
     public function view(
         EntityManagerInterface $entityManager,
-        #[MapEntity(id: 'id')]
-        Services $service,
+        #[MapEntity(id: 'id')] Services $service,
     ): Response
     {
         return $this->render('services/view.twig', [

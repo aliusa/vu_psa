@@ -23,8 +23,7 @@ class PaymentsController extends BaseController
     #[Route('/payments/pay/{id}', name: 'payments/pay', requirements: ['id' => Requirement::DIGITS])]
     public function pay(
         EntityManagerInterface $entityManager,
-        #[MapEntity(id: 'id')]
-        Invoices $invoices,
+        #[MapEntity(id: 'id')] Invoices $invoices,
     ): Response
     {
         if ($invoices->is_paid) {

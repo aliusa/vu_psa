@@ -8,6 +8,7 @@ use App\Entity\QuestionsAnswers;
 use App\Entity\UsersObjects;
 use App\Entity\UsersObjectsServices;
 use App\Entity\UsersObjectsServicesBundles;
+use App\Registry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Response;
@@ -118,19 +119,52 @@ class UsersController extends BaseController
     #[Route('/users/my_questions', 'my_questions', methods: ['GET'])]
     public function my_questions(EntityManagerInterface $entityManager): Response
     {
-        /** @var QuestionsAnswers[] $questionsAnswers */
-        $questionsAnswers = $entityManager->getRepository(QuestionsAnswers::class)
-            ->createQueryBuilder('questions_answers')
-            ->innerJoin('questions_answers.questions', 'questions')/** @see QuestionsAnswers::$questions */
+        /** @var Questions[] $questions */
+        $questions = $entityManager->getRepository(Questions::class)
+            ->createQueryBuilder('questions')
+            //->innerJoin('questions.questions', 'questions')/** @see QuestionsAnswers::$questions */
             ->andWhere('questions.users = :users')/** @see Questions::$users */
             ->setParameter('users', $this->getUser())
-            ->addOrderBy('questions_answers.id', 'DESC')/** @see QuestionsAnswers::$id */
+            ->addOrderBy('questions.id', 'DESC')/** @see QuestionsAnswers::$id */
             ->getQuery()
             ->getResult()
         ;
 
         return $this->render('users/my_questions.twig', [
-            'questions_answers' => $questionsAnswers,
+            'questions' => $questions,
         ]);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/users/my_questions/delete/{id}', 'my_questions_delete', methods: ['DELETE'], requirements: ['id' => Requirement::DIGITS])]
+    public function my_questions_delete(
+        EntityManagerInterface $entityManager,
+        #[MapEntity(id: 'id')] ?Questions $questions
+    ): Response
+    {
+        if (
+            $questions
+            && $questions->users
+            && $questions->users->getId()
+            && $questions->users->getId() === $this->getUser()->getId()
+        ) {
+            Registry::getDoctrineManager()->remove($questions);
+            Registry::getDoctrineManager()->flush();
+            //$questions = $entityManager->getRepository(Questions::class)
+            //    ->createQueryBuilder('questions')
+            //    ->andWhere('questions.users = :users')/** @see Questions::$users */
+            //    ->setParameter('users', $this->getUser())
+            //    ->andWhere('questions.id = :users')/** @see Questions::$users */
+            //    ->setParameter('users', $this->getUser())
+            //    ->delete()
+            //;
+            //dvd($questions);
+            $this->addFlash("success", 'Klausimas ištrintas');
+        }
+
+        $data = [
+            'redirect' => $this->generateUrl('my_questions'),
+        ];
+        return $this->json($data);
     }
 }

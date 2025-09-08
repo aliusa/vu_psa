@@ -80,7 +80,7 @@ class QuestionsController extends BaseController
 
                 $this->addFlash("success", 'Klausimas užduotas');
 
-                return $this->redirectToRoute('home_index');
+                return $this->redirectToRoute('my_questions');
             } else {
                 return $this->redirectToRoute('home_index');
             }

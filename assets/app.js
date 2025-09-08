@@ -44,3 +44,33 @@ var popoverList = popoverTriggerList.map(function (index, object) {
         html: true,
     });
 })
+
+$('.delete-action').on('click', function (e) {
+    console.log(e);
+    var that = $(this);
+
+    event.preventDefault();
+
+    var choice = confirm(this.getAttribute('data-confirm'));
+
+    if (choice) {
+        $.post({
+            url: that.attr('data-confirm-url'),
+            method: 'DELETE',
+            //datatype: 'json',//xml, json, script, text, html
+            //async: false
+            //data: {},
+            //beforeSend: function (jqXHR, settings) {},
+            success: function (json, textStatus, jqXHR) {
+                if (json.redirect) {
+                    window.location.href = json.redirect;
+                }
+            },
+            //error: function (jqXHR, textStatus, errorThrown) {
+            //    console.error(jqXHR, textStatus, errorThrown);
+            //},
+            //complete: function (jqXHR, textStatus) {}
+        });
+    }
+
+});

@@ -3,34 +3,40 @@
 {% block title %}Mano klausimai{% endblock %}
 
 {% block body %}
-    {% if questions %}
-        <div class="list-group">
-            {% for question in questions %}
-                <a href="#" class="list-group-item list-group-item-action">
+    <div class="questions">
+        {% if questions %}
+            <div class="list-group">
+                {% for question in questions %}
+                    <a href="#" class="list-group-item list-group-item-action">
 
-                    {% set answer = question.getQuestionsAnswers().first() %}
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ question.question }}</h5>
-                        <div>
-                            <small>{{ question.created_at|date('Y-m-d H:i') }}</small>
-                            <button type="button" class="btn btn-primary btn-sm"><i class="fa-solid fa-pen fa-fw fa-sm"></i></button>
-                            {% if not answer %}
-                                <button type="button" class="btn btn-danger btn-sm delete-action" data-confirm="Are you sure to delete this item?" data-confirm-url="{{ path('my_questions_delete', {id: question.id}) }}"><i class="fa-solid fa-trash fa-fw fa-sm"></i></button>
-                            {% endif %}
+                        {% set answer = question.getQuestionsAnswers().first() %}
+                        <div class="d-flex w-100 justify-content-between">
+                            <div>
+                                <h5 class="mb-1">{{ question.question }}</h5>
+                                <input type="text" class="d-none" value="{{ question.question }}" />
+                            </div>
+                            <div>
+                                <small>{{ question.created_at|date('Y-m-d H:i') }}</small>
+                                {% if not answer %}
+                                    <button type="button" class="btn btn-primary btn-sm edit-action"><i class="fa-solid fa-pen fa-fw fa-sm"></i></button>
+                                    <button type="button" class="btn btn-primary btn-sm save-action d-none" data-save-url="{{ path('my_questions_save', {id: question.id}) }}"><i class="fa-solid fa-floppy-disk fa-fw fa-sm"></i></button>
+                                    <button type="button" class="btn btn-danger btn-sm delete-action" data-confirm="Ar tikrai norite ištrinti?" data-confirm-url="{{ path('my_questions_delete', {id: question.id}) }}"><i class="fa-solid fa-trash fa-fw fa-sm"></i></button>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
 
-                    {% if answer %}
-                        <p class="mb-1">{{ answer.answer }}</p>
-                    {% else %}
-                        <em class="mb-1 text-muted small">Dar neatsakyta</em>
-                    {% endif %}
-                </a>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="alert alert-warning" role="alert">
-            Neturite užduotų klausimų
-        </div>
-    {% endif %}
+                        {% if answer %}
+                            <p class="mb-1">{{ answer.answer }}</p>
+                        {% else %}
+                            <em class="mb-1 text-muted small">Dar neatsakyta</em>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                Neturite užduotų klausimų
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

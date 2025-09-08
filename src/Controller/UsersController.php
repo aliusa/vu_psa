@@ -136,7 +136,7 @@ class UsersController extends BaseController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/users/my_questions/delete/{id}', 'my_questions_delete', methods: ['DELETE'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route('/users/my_questions/{id}', 'my_questions_delete', methods: ['DELETE'], requirements: ['id' => Requirement::DIGITS])]
     public function my_questions_delete(
         EntityManagerInterface $entityManager,
         #[MapEntity(id: 'id')] ?Questions $questions
@@ -164,6 +164,31 @@ class UsersController extends BaseController
 
         $data = [
             'redirect' => $this->generateUrl('my_questions'),
+        ];
+        return $this->json($data);
+    }
+
+    #[IsGranted('ROLE_USER')]
+    #[Route('/users/my_questions/{id}', 'my_questions_save', methods: ['PUT'], requirements: ['id' => Requirement::DIGITS])]
+    public function my_questions_save(
+        EntityManagerInterface $entityManager,
+        #[MapEntity(id: 'id')] Questions $questions,
+    ): Response
+    {
+        if (
+            $questions
+            && $questions->users
+            && $questions->users->getId()
+            && $questions->users->getId() === $this->getUser()->getId()
+        ) {
+            $questions->question = $this->request->get('question');
+            Registry::getDoctrineManager()->persist($questions);
+            Registry::getDoctrineManager()->flush();
+            //$this->addFlash("success", 'Klausimas atnaujintas');
+        }
+
+        $data = [
+            'success' => 'ok',
         ];
         return $this->json($data);
     }

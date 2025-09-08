@@ -45,21 +45,72 @@ var popoverList = popoverTriggerList.map(function (index, object) {
     });
 })
 
-$('.delete-action').on('click', function (e) {
-    console.log(e);
-    var that = $(this);
+if ($('.questions .delete-action').length) {
+    $('.questions .delete-action').on('click', function (e) {
+        console.log(e);
+        var that = $(this);
 
-    event.preventDefault();
+        event.preventDefault();
 
-    var choice = confirm(this.getAttribute('data-confirm'));
+        var choice = confirm(this.getAttribute('data-confirm'));
 
-    if (choice) {
+        if (choice) {
+            $.post({
+                url: that.attr('data-confirm-url'),
+                method: 'DELETE',
+                //datatype: 'json',//xml, json, script, text, html
+                //async: false
+                //data: {},
+                //beforeSend: function (jqXHR, settings) {},
+                success: function (json, textStatus, jqXHR) {
+                    if (json.redirect) {
+                        window.location.href = json.redirect;
+                    }
+                },
+                //error: function (jqXHR, textStatus, errorThrown) {
+                //    console.error(jqXHR, textStatus, errorThrown);
+                //},
+                //complete: function (jqXHR, textStatus) {}
+            });
+        }
+
+    });
+    $(document).on('click', '.edit-action', function (e) {
+        console.log(e);
+        var that = $(this);
+
+        var h5 = that.parents('.list-group-item').find('h5')
+        h5.toggleClass('d-none');
+        var input = that.parents('.list-group-item').find('input')
+        input.toggleClass('d-none');
+        var editBtn = that.parents('.list-group-item').find('.edit-action')
+        editBtn.toggleClass('d-none');
+        var saveBtn = that.parents('.list-group-item').find('.save-action')
+        saveBtn.toggleClass('d-none');
+    });
+    $(document).on('click', '.save-action', function (e) {
+        console.log(e);
+        var that = $(this);
+
+        var h5 = that.parents('.list-group-item').find('h5')
+        h5.toggleClass('d-none');
+        var input = that.parents('.list-group-item').find('input')
+        input.toggleClass('d-none');
+        var editBtn = that.parents('.list-group-item').find('.edit-action')
+        editBtn.toggleClass('d-none');
+        var saveBtn = that.parents('.list-group-item').find('.save-action')
+        saveBtn.toggleClass('d-none');
+        h5.text(input.val())
+
+        var dataPost = {
+            question: input.val(),
+        }
         $.post({
-            url: that.attr('data-confirm-url'),
-            method: 'DELETE',
+            url: that.attr('data-save-url'),
+            method: 'PUT',
             //datatype: 'json',//xml, json, script, text, html
             //async: false
-            //data: {},
+            data: dataPost,
             //beforeSend: function (jqXHR, settings) {},
             success: function (json, textStatus, jqXHR) {
                 if (json.redirect) {
@@ -71,6 +122,5 @@ $('.delete-action').on('click', function (e) {
             //},
             //complete: function (jqXHR, textStatus) {}
         });
-    }
-
-});
+    });
+}

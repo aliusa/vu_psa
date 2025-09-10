@@ -9,7 +9,7 @@
                 {% for question in questions %}
                     <a href="#" class="list-group-item list-group-item-action">
 
-                        {% set answer = question.getQuestionsAnswers().first() %}
+                        {% set answer = question.getQuestionsAnswers() %}
                         <div class="d-flex w-100 justify-content-between">
                             <div>
                                 <h5 class="mb-1">{{ question.question }}</h5>
@@ -23,6 +23,9 @@
                                     <button type="button" class="btn btn-danger btn-sm delete-action" data-confirm="Ar tikrai norite ištrinti?" data-confirm-url="{{ path('my_questions_delete', {id: question.id}) }}"><i class="fa-solid fa-trash fa-fw fa-sm"></i></button>
                                 {% endif %}
                             </div>
+                        </div>
+                        <div>
+                            <span class="badge text-bg-light">{{ question.questions_categories.title }}</span>
                         </div>
 
                         {% if answer %}

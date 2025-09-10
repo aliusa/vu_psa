@@ -7,6 +7,7 @@ use App\Entity\Config;
 use App\Entity\Countries;
 use App\Entity\Invoices;
 use App\Entity\Questions;
+use App\Entity\QuestionsCategories;
 use App\Entity\Services;
 use App\Entity\ServicesCategories;
 use App\Entity\ServicesPromotions;
@@ -143,6 +144,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Akcijos', 'fa-solid fa-percent', ServicesPromotions::class),
             MenuItem::section('Klausimai'),
             MenuItem::linkToCrud('Klausimai', 'fa-regular fa-circle-question', Questions::class),
+            MenuItem::linkToCrud('Klausimų kategorijos', 'fa-solid fa-layer-group', QuestionsCategories::class),
             MenuItem::section('Administratoriai'),
             MenuItem::linkToCrud('Administratoriai', 'fas fa-user-shield', Administrators::class),
             MenuItem::linkToCrud('Šalys', 'fa-solid fa-globe', Countries::class),

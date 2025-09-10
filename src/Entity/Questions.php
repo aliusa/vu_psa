@@ -45,6 +45,15 @@ class Questions extends BaseEntity
      */
     #[ORM\OneToMany(targetEntity: QuestionsAnswers::class, mappedBy: 'questions', cascade: ['persist', 'remove'])]
     public $questions_answers;
+    
+    /**
+     * This is the owning side.
+     * @see QuestionsCategories::$questions
+     * @var \Proxies\__CG__\App\Entity\QuestionsCategories|QuestionsCategories
+     */
+    #[ORM\ManyToOne(targetEntity: QuestionsCategories::class, cascade: [], inversedBy: 'questions')]
+    #[ORM\JoinColumn(name: 'questions_categories_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
+    public $questions_categories;
 
     public function __construct()
     {

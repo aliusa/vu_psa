@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Questions;
+use App\Entity\QuestionsCategories;
 use App\Entity\Users;
 use App\Service\ConfigService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -45,6 +48,22 @@ class QuestionsController extends BaseController
                 ],
             ]);
         }
+        $formBuilder->add('questions_categories', EntityType::class, [
+            'constraints' => [new NotBlank()],
+            'label' => 'Kategorija',
+            'label_attr' => [
+                //'class' => 'form-label',
+            ],
+            'row_attr' => [
+                'class' => 'mb-3',
+            ],
+            'class' => QuestionsCategories::class,
+            'choice_label' => function (QuestionsCategories $category): string {
+                return $category->title;
+            }
+            //'choice_lazy' => true,
+           //'choice' => ChoiceList::fieldName($this, 'questions_categories'),
+        ]);
         $formBuilder->add('question', TextareaType::class, [
             'constraints' => [new NotBlank()],
             'label' => 'Užduoti klausimą',
@@ -75,13 +94,14 @@ class QuestionsController extends BaseController
                 $question->question = $form->get('question')->getData();
                 $question->email = $this->getUser() ? $user->email : $form->get('email')->getData();
                 $question->users = $this->getUser();
+                $question->questions_categories = $form->get('questions_categories')->getData();
                 $this->managerRegistry->getManager()->persist($question);
                 $this->managerRegistry->getManager()->flush();
 
                 $this->addFlash("success", 'Klausimas užduotas');
 
 
-                if ($_ENV['ADMIN_EMAIL']) {
+                if (!empty($_ENV['ADMIN_EMAIL'])) {
                     $this->mailerManager->sendMail('ADMIN_EMAIL', [
                         'subject' => 'Naujas klausimas',
                         'text' => <<<EOF

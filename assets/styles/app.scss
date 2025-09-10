@@ -37,3 +37,14 @@ tr[data-href] {
     }
 }
 //endregion ask question modal
+
+
+//region inputs
+form {
+    label.required {
+        &:after {
+            content: '*';
+        }
+    }
+}
+//endregion inputs

@@ -40,6 +40,7 @@ class QuestionsCrudController extends BaseCrudController
             $fields[] = IdField::new('id');
             $fields[] = AssociationField::new('users', 'Klientas');
             $fields[] = Field::new('email', 'email');
+            $fields[] = Field::new('phone', 'phone');
             $fields[] = Field::new('question', 'Klausimas');
             $fields[] = AssociationField::new('questions_categories', 'Kategorija');
             $fields[] = DateTimeField::new('created_at', 'created_at');
@@ -53,6 +54,7 @@ class QuestionsCrudController extends BaseCrudController
 
             $fields[] = FormField::addColumn(8);
             $fields[] = AssociationField::new('users', 'Klientas');
+            $fields[] = Field::new('phone', 'phone');
             $fields[] = Field::new('email', 'email');
             $fields[] = Field::new('question', 'Klausimas');
             $fields[] = AssociationField::new('questions_categories', 'Kategorija');
@@ -117,6 +119,8 @@ class QuestionsCrudController extends BaseCrudController
             ->add('id')
             ->add('question')
             ->add('users')
+            ->add('email')
+            ->add('phone')
             ->add('questions_categories')
             ->add('created_at')
         ;

@@ -1,0 +1,21 @@
+{% extends 'base.twig' %}
+
+{% block title %}Profilis{% endblock %}
+
+{% block body %}
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h3>Profilis</h3>
+                </div>
+                <div class="p-3">
+                    {{ form_start(profile_form) }}
+                        {{ form_widget(profile_form) }}
+                        <button type="submit" class="btn btn-primary">Išsaugoti</button>
+                    {{ form_end(profile_form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

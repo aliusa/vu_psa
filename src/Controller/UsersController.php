@@ -5,16 +5,21 @@ namespace App\Controller;
 use App\Entity\Invoices;
 use App\Entity\Questions;
 use App\Entity\QuestionsAnswers;
+use App\Entity\QuestionsCategories;
+use App\Entity\Users;
 use App\Entity\UsersObjects;
 use App\Entity\UsersObjectsServices;
 use App\Entity\UsersObjectsServicesBundles;
 use App\Registry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UsersController extends BaseController
 {
@@ -115,6 +120,8 @@ class UsersController extends BaseController
         ]);
     }
 
+
+    //region questions
     #[IsGranted('ROLE_USER')]
     #[Route('/users/my_questions', 'my_questions', methods: ['GET'])]
     public function my_questions(EntityManagerInterface $entityManager): Response
@@ -192,4 +199,99 @@ class UsersController extends BaseController
         ];
         return $this->json($data);
     }
+    //endregion questions
+
+
+    //region profile
+    #[IsGranted('ROLE_USER')]
+    #[Route('/users/profile', 'users_profile', methods: ['GET', 'PUT'])]
+    public function profile(
+        EntityManagerInterface $entityManager,
+    ): Response
+    {
+        $formBuilder = $this->createFormBuilder($this->getUser(), [
+            'action' => '/users/profile',
+            'method' => 'PUT',
+        ]);
+        $formBuilder->add('first_name', TextType::class, [
+            'constraints' => [new NotBlank()],
+            'label_attr' => [
+                //'class' => 'form-label',
+            ],
+            'row_attr' => [
+                'class' => 'mb-3',
+            ],
+            'attr' => [
+                'placeholder' => 'Vardas',
+            ],
+            'required' => true,
+        ]);
+        $formBuilder->add('last_name', TextType::class, [
+            'constraints' => [new NotBlank()],
+            'label_attr' => [
+                //'class' => 'form-label',
+            ],
+            'row_attr' => [
+                'class' => 'mb-3',
+            ],
+            'attr' => [
+                'placeholder' => 'Pavardė',
+            ],
+            'required' => true,
+        ]);
+        $formBuilder->add('email', EmailType::class, [
+            'constraints' => [new NotBlank()],
+            'label_attr' => [
+                //'class' => 'form-label',
+            ],
+            'row_attr' => [
+                'class' => 'mb-3',
+            ],
+            'attr' => [
+                'placeholder' => 'El. paštas',
+            ],
+            'required' => true,
+        ]);
+        $formBuilder->add('phone', TextType::class, [
+            'constraints' => [new NotBlank()],
+            'label_attr' => [
+                //'class' => 'form-label',
+            ],
+            'row_attr' => [
+                'class' => 'mb-3',
+            ],
+            'attr' => [
+                'placeholder' => 'Telefonas',
+            ],
+            'required' => true,
+        ]);
+        $form = $formBuilder->getForm();
+
+        $form->handleRequest($this->request);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                /** @var Users|null $user */
+                $user = $this->getUser();
+
+                $user->email = $form->get('email')->getData();
+                $user->phone = $form->get('phone')->getData();
+                $this->managerRegistry->getManager()->persist($user);
+                $this->managerRegistry->getManager()->flush();
+
+                $this->addFlash("success", 'Išsaugota');
+
+                return $this->redirectToRoute('users_profile');
+            } else {
+                return $this->redirectToRoute('users_profile');
+            }
+        }
+
+        return $this->render('users/profile.twig', [
+            'user' => $user = $this->getUser(),
+            'profile_form' => $form->createView(),
+        ]);
+    }
+    //endregion profile
 }

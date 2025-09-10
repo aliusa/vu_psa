@@ -93,6 +93,7 @@ class QuestionsController extends BaseController
                 $question = new Questions();
                 $question->question = $form->get('question')->getData();
                 $question->email = $this->getUser() ? $user->email : $form->get('email')->getData();
+                $question->phone = $this->getUser() ? $user->phone : $form->get('phone')->getData();
                 $question->users = $this->getUser();
                 $question->questions_categories = $form->get('questions_categories')->getData();
                 $this->managerRegistry->getManager()->persist($question);

@@ -29,6 +29,10 @@ class Questions extends BaseEntity
     #[ORM\Column(type: Types::STRING, length: 250, nullable: true)]
     public ?string $email = null;
 
+    #[AssertValidator\Length(max: 25)]
+    #[ORM\Column(type: Types::STRING, length: 25, nullable: true)]
+    public ?string $phone = null;
+
     /**
      * This is the owning side.
      * @see Users::$questions

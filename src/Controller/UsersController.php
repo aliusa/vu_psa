@@ -5,21 +5,18 @@ namespace App\Controller;
 use App\Entity\Invoices;
 use App\Entity\Questions;
 use App\Entity\QuestionsAnswers;
-use App\Entity\QuestionsCategories;
 use App\Entity\Users;
 use App\Entity\UsersObjects;
 use App\Entity\UsersObjectsServices;
 use App\Entity\UsersObjectsServicesBundles;
+use App\Forms\UserProfileForm;
 use App\Registry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UsersController extends BaseController
 {
@@ -209,63 +206,10 @@ class UsersController extends BaseController
         EntityManagerInterface $entityManager,
     ): Response
     {
-        $formBuilder = $this->createFormBuilder($this->getUser(), [
+        $form = $this->createForm(UserProfileForm::class, $this->getUser(), [
             'action' => '/users/profile',
             'method' => 'PUT',
         ]);
-        $formBuilder->add('first_name', TextType::class, [
-            'constraints' => [new NotBlank()],
-            'label_attr' => [
-                //'class' => 'form-label',
-            ],
-            'row_attr' => [
-                'class' => 'mb-3',
-            ],
-            'attr' => [
-                'placeholder' => 'Vardas',
-            ],
-            'required' => true,
-        ]);
-        $formBuilder->add('last_name', TextType::class, [
-            'constraints' => [new NotBlank()],
-            'label_attr' => [
-                //'class' => 'form-label',
-            ],
-            'row_attr' => [
-                'class' => 'mb-3',
-            ],
-            'attr' => [
-                'placeholder' => 'Pavardė',
-            ],
-            'required' => true,
-        ]);
-        $formBuilder->add('email', EmailType::class, [
-            'constraints' => [new NotBlank()],
-            'label_attr' => [
-                //'class' => 'form-label',
-            ],
-            'row_attr' => [
-                'class' => 'mb-3',
-            ],
-            'attr' => [
-                'placeholder' => 'El. paštas',
-            ],
-            'required' => true,
-        ]);
-        $formBuilder->add('phone', TextType::class, [
-            'constraints' => [new NotBlank()],
-            'label_attr' => [
-                //'class' => 'form-label',
-            ],
-            'row_attr' => [
-                'class' => 'mb-3',
-            ],
-            'attr' => [
-                'placeholder' => 'Telefonas',
-            ],
-            'required' => true,
-        ]);
-        $form = $formBuilder->getForm();
 
         $form->handleRequest($this->request);
         if ($form->isSubmitted()) {

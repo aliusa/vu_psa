@@ -10,6 +10,9 @@ class LeafletField implements FieldInterface
 {
     use FieldTrait;
 
+    /**
+     * @return FieldInterface
+     */
     public static function new(string $propertyName, ?string $label = null)
     {
         return (new self())

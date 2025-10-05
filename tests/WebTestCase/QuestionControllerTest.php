@@ -5,6 +5,9 @@ namespace App\Tests\WebTestCase;
 use App\Entity\Questions;
 use App\Forms\QuestionsForm;
 use Doctrine\ORM\EntityManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -12,7 +15,7 @@ use Symfony\Component\Validator\Validation;
 
 class QuestionControllerTest extends TypeTestCase
 {
-    private EntityManager $entityManager;
+    private MockObject&EntityManager $entityManager;
 
     protected function setUp(): void
     {
@@ -27,13 +30,18 @@ class QuestionControllerTest extends TypeTestCase
         // create a type instance with the mocked dependencies
         $type = new QuestionsForm($this->entityManager);
 
+        //$entityType = new EntityType($this->createMock(\Doctrine\Persistence\ManagerRegistry::class));
+
         $validator = Validation::createValidatorBuilder()
             ->enableAttributeMapping()
             ->getValidator();
 
         return [
             // register the type instances with the PreloadedExtension
-            new PreloadedExtension([$type], []),
+            new PreloadedExtension([
+                $type,
+                //EntityType::class => new ChoiceType(),
+            ], []),
             new ValidatorExtension($validator),
         ];
     }
@@ -42,7 +50,11 @@ class QuestionControllerTest extends TypeTestCase
     {
         $questions = new Questions();
         // $model will retrieve data from the form submission; pass it as the second argument
-        $form = $this->factory->create(QuestionsForm::class, null);
+        $form = $this->factory->create(QuestionsForm::class, $questions, [
+            'data' => [
+                'user' => null,
+            ],
+        ]);
 
         $formData = [
             'email' => 'test@example.com',

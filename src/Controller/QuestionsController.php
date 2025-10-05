@@ -21,7 +21,8 @@ class QuestionsController extends BaseController
         if (!$configService->getConfigValue(ConfigService::C_QUESTIONS_CAN_ASK)) {
             return new Response('');
         }
-        $form = $this->createForm(QuestionsForm::class, null, [
+        $questions = new Questions();
+        $form = $this->createForm(QuestionsForm::class, $questions, [
             'action' => '/questions/new',
             'method' => 'POST',
             'data' => [

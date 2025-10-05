@@ -1,5 +1,16 @@
 # Inerneto tiekėjo informacinė sistema ITIS
 
+Projektas VU "Programų sistemų architektūra" dalykui.
+
+Sistema skirta vadybininkams valdyti klientus, jų paslaugas, peržiūrėti mokėjimus. Klientai gali matyti savo objektus, paslaugas tuose objektuose, sąskaitas, apmokėti už sąskaitas testiniu būdu arba per Paysera.  
+Taip pat per web'ą galima užduot klausimus, vadybininkai gali atsakyti (jei registruotas - matys savo klausimus, atsakymus. Bet nėra, kad siūstų el.laiškų).  
+Taip pat yra nuolaidos (pvz. pirmiems 3 mėnesiai X % nuolaida), jų skaičiavimas sąskaitose.
+Taip pat jeigu paslauga veikia ne nuo pirmos mėnesio dienos, o pvz nuo 15-os - sąskaitoje paskaičiuoja atitinkamai mažiau.  
+
+Integracijos:
+* Leaflet žemėlapiui
+* Paysera
+
 Symfony 7.2  
 Easyadmin Admin bundle 4
 

@@ -43,4 +43,12 @@ class FrontControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
     }
+
+    public function testServices2(): void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/services2');
+
+        $this->assertResponseStatusCodeSame(302);
+    }
 }

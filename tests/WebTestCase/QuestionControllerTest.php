@@ -75,7 +75,6 @@ class QuestionControllerTest extends WebTestCase
 
         $client->request('POST', '/questions/new', $formData);
 
-        $this->assertResponseIsSuccessful();
         // After successful submission, the controller redirects to 'my_questions'
         $this->assertResponseRedirects('/users/my_questions');
 

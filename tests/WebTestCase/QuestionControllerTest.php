@@ -3,70 +3,150 @@
 namespace App\Tests\WebTestCase;
 
 use App\Entity\Questions;
-use App\Forms\QuestionsForm;
-use Doctrine\ORM\EntityManager;
-use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
-use Symfony\Component\Form\PreloadedExtension;
-use Symfony\Component\Form\Test\TypeTestCase;
-use Symfony\Component\Validator\Validation;
+use App\Entity\QuestionsCategories;
+use App\Repository\QuestionsRepository;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class QuestionControllerTest extends TypeTestCase
+class QuestionControllerTest extends WebTestCase
 {
-    private MockObject&EntityManager $entityManager;
-
-    protected function setUp(): void
+    public function testNewQuestionSubmissionNotPost(): void
     {
-        // mock any dependencies
-        $this->entityManager = $this->createMock(EntityManager::class);
+        $client = static::createClient();
+        $entityManager = $client->getContainer()->get('doctrine')->getManager();
 
-        parent::setUp();
-    }
+        // Create a category to be used in the form
+        $category = new QuestionsCategories();
+        $category->title = 'Test Category for Functional Test';
+        $entityManager->persist($category);
+        $entityManager->flush();
 
-    protected function getExtensions(): array
-    {
-        // create a type instance with the mocked dependencies
-        $type = new QuestionsForm($this->entityManager);
-
-        //$entityType = new EntityType($this->createMock(\Doctrine\Persistence\ManagerRegistry::class));
-
-        $validator = Validation::createValidatorBuilder()
-            ->enableAttributeMapping()
-            ->getValidator();
-
-        return [
-            // register the type instances with the PreloadedExtension
-            new PreloadedExtension([
-                $type,
-                //EntityType::class => new ChoiceType(),
-            ], []),
-            new ValidatorExtension($validator),
-        ];
-    }
-
-    public function testQuestionForm()
-    {
-        $this->assertTrue(true);
-        return;
-        $questions = new Questions();
+        // The name of the form is derived from the form type class name,
+        // by default it's the snake_cased version of the class name without the "Type" suffix.
+        // So, QuestionsForm becomes "questions_form"
         $formData = [
-            'email' => 'test@example.com',
-            'question' => 'Some question',
-            // also include `questions_categories` if required
-        ];
-        // $model will retrieve data from the form submission; pass it as the second argument
-        $form = $this->factory->create(QuestionsForm::class, $questions, [
-            'data' => [
-                'user' => null,
+            'questions_form' => [
+                'email' => 'functional.test@example.com',
+                'question' => 'This is a functional test question.',
+                'questions_categories' => $category->getId(),
             ],
-        ]);
+        ];
 
-        $form->submit($formData);
 
-        $this->assertTrue($form->isSynchronized());
-        $this->assertTrue($form->isValid());
+        $crawler = $client->request('GET', '/questions/new', $formData);
+
+        // After successful submission, the controller redirects to 'my_questions'
+        $this->assertResponseStatusCodeSame(405);
+        //dump($crawler);
+    }
+
+    public function testNewQuestionSubmission(): void
+    {
+        $client = static::createClient();
+        $entityManager = $client->getContainer()->get('doctrine')->getManager();
+
+        // Create a category to be used in the form
+        $category = new QuestionsCategories();
+        $category->title = 'Test Category for Functional Test';
+        $entityManager->persist($category);
+        $entityManager->flush();
+
+        // The name of the form is derived from the form type class name,
+        // by default it's the snake_cased version of the class name without the "Type" suffix.
+        // So, QuestionsForm becomes "questions_form"
+        $formData = [
+            'questions_form' => [
+                'email' => 'functional.test@example.com',
+                'question' => 'This is a functional test question.',
+                'questions_categories' => $category->getId(),
+            ],
+        ];
+
+
+        //$crawler = $client->request('GET', '/');
+        //$form = $crawler->selectButton('Pateikti')->form();
+//
+        //$form['questions_form[email]'] = 'functional.test@example.com';
+        //$form['questions_form[phone]'] = '112';
+        //$form['questions_form[question]'] = 'This is a functional test question.';
+        //$form['questions_form[questions_categories]'] = $category->getId();
+
+        //$crawler = $client->submit($form);
+
+
+        $client->request('POST', '/questions/new', $formData);
+
+        $this->assertResponseIsSuccessful();
+        // After successful submission, the controller redirects to 'my_questions'
+        $this->assertResponseRedirects('/users/my_questions');
+
+        // Follow the redirect
+        //$crawler = $client->followRedirect();
+
+        // Check if the flash message is present
+        //$this->assertSelectorTextContains('div.alert-success', 'Klausimas užduotas');
+
+        // Check if the question was actually saved to the database
+        /** @var QuestionsRepository $questionRepository */
+        $questionRepository = static::getContainer()->get(QuestionsRepository::class);
+        /** @var Questions|null $question */
+        $question = $questionRepository->findOneBy(['email' => 'functional.test@example.com'], ['id' => 'DESC']);
+
+        $this->assertNotNull($question);
+        $this->assertSame('This is a functional test question.', $question->question);
+        $this->assertSame($category->getId(), $question->questions_categories->getId());
+    }
+
+    public function testNewQuestionSubmissionInvalid(): void
+    {
+        $client = static::createClient();
+        $entityManager = $client->getContainer()->get('doctrine')->getManager();
+
+        // Create a category to be used in the form
+        $category = new QuestionsCategories();
+        $category->title = 'Test Category for Functional Test';
+        $entityManager->persist($category);
+        $entityManager->flush();
+
+        // The name of the form is derived from the form type class name,
+        // by default it's the snake_cased version of the class name without the "Type" suffix.
+        // So, QuestionsForm becomes "questions_form"
+        $formData = [
+            'questions_form' => [
+                //'email' => 'functional.test.invalid@example.com',
+                'question' => 'This is a functional test question.',
+                'questions_categories' => $category->getId(),
+            ],
+        ];
+
+
+        //$crawler = $client->request('GET', '/');
+        //$form = $crawler->selectButton('Pateikti')->form();
+//
+        //$form['questions_form[email]'] = 'functional.test@example.com';
+        //$form['questions_form[phone]'] = '112';
+        //$form['questions_form[question]'] = 'This is a functional test question.';
+        //$form['questions_form[questions_categories]'] = $category->getId();
+
+        //$crawler = $client->submit($form);
+
+
+        $client->request('POST', '/questions/new', $formData);
+
+        // After successful submission, the controller redirects to 'my_questions'
+        $this->assertResponseRedirects('/');
+
+        // Follow the redirect
+        //$crawler = $client->followRedirect();
+
+        // Check if the flash message is present
+        //$this->assertSelectorTextContains('div.alert-success', 'Klausimas užduotas');
+
+        // Check if the question was actually saved to the database
+        /** @var QuestionsRepository $questionRepository */
+        $questionRepository = static::getContainer()->get(QuestionsRepository::class);
+        /** @var Questions|null $question */
+        $question = $questionRepository->findOneBy(['email' => 'functional.test.invalid@example.com'], ['id' => 'DESC']);
+
+        $this->assertNull($question);
     }
 }

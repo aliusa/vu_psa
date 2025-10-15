@@ -180,7 +180,7 @@ class UsersObjectsServicesCrudController extends BaseCrudController
 
         return $crud;
     }
-    public function createEntity(string $entityFqcn)
+    public function createEntity(string $entityFqcn): UsersObjectsServices
     {
         $usersObjectService = new UsersObjectsServices();
 

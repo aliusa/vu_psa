@@ -9,7 +9,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class QuestionsForm extends AbstractType
@@ -34,6 +36,18 @@ class QuestionsForm extends AbstractType
                 ],
                 'attr' => [
                     'placeholder' => 'El. paštas',
+                ],
+            ]);
+            $builder->add('phone', TextType::class, [
+                //'constraints' => [new NotBlank()],
+                'label_attr' => [
+                    //'class' => 'form-label',
+                ],
+                'row_attr' => [
+                    'class' => 'mb-3',
+                ],
+                'attr' => [
+                    'placeholder' => 'Tel.Nr.',
                 ],
             ]);
         }
@@ -65,6 +79,13 @@ class QuestionsForm extends AbstractType
             'attr' => [
                 'placeholder' => 'Užduoti klausimą',
             ],
+        ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'csrf_protection' => false, // Disable CSRF for testing
         ]);
     }
 }

@@ -131,7 +131,7 @@ class QuestionsAnswersCrudController extends BaseCrudController
         return $crud;
     }
 
-    public function createEntity(string $entityFqcn)
+    public function createEntity(string $entityFqcn): QuestionsAnswers
     {
         /** @var QuestionsAnswers $questionsAnswers */
         $questionsAnswers = parent::createEntity($entityFqcn);

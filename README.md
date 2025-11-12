@@ -1,6 +1,8 @@
 # Interneto tiekėjo informacinė sistema ITIS
 
-Projektas VU "Programų sistemų architektūra" dalykui.
+Projektas VU dalykams:
+* Programų sistemų architektūra (išlyginamosios studijos 2sem)
+* Programų sistemų architektūra ir projektavimas (magistras, 1sem)
 
 Sistema skirta vadybininkams valdyti klientus, jų paslaugas, peržiūrėti mokėjimus. Klientai gali matyti savo objektus, paslaugas tuose objektuose, sąskaitas, apmokėti už sąskaitas testiniu būdu arba per Paysera.  
 Per web'ą galima užduot klausimus, vadybininkai gali atsakyti (jei registruotas - matys savo klausimus, atsakymus. Bet nėra, kad siūstų el.laiškų).  

@@ -1,11 +1,11 @@
-# 2. A
+# lab 2.A
 Points: 0.25
 ## Reikalavimai _(angl. Requirements)_
 * Think of a business case and of a large enough IT system which will help solve business case
 * Define stakeholders of IT system
 * Create architectural description with context view of the system
 
-# 2. B
+# lab 2.B
 Points: 1.5  
 Bonus Points : Document all 7 views 0.25
 ## Reikalavimai _(angl. Requirements)_
@@ -13,7 +13,7 @@ Bonus Points : Document all 7 views 0.25
 * Choose views from view catalog
 * Use viewpoints to document views
 
-# 2. C
+# lab 2.C
 Points: 1  
 Bonus Points: Use all 4 perspectives 0.25
 ## Reikalavimai _(angl. Requirements)_
@@ -22,7 +22,8 @@ Bonus Points: Use all 4 perspectives 0.25
 
 
 ---
-Architektūrinis aprašymas _(angl. Architectural description)_
+<h1 style="text-align:center;">Architektūrinis aprašymas <i>(angl. Architectural description)</i></h1>
+
 
 # 1. Dokumento kontrolė ir įvadas _(angl. Document control (versioning))_
 **Versija:** 1.0  
@@ -33,18 +34,18 @@ Architektūrinis aprašymas _(angl. Architectural description)_
 Interneto tiekėjo informacinė sistema (ITIS) skirta automatizuoti klientų duomenų, jiems priskirtų paslaugų, sąskaitų išrašymo ir apmokėjimo procesus. Ši sistema padeda interneto paslaugų tiekėjui centralizuotai valdyti klientus ir paslaugas, mažina administracinę naštą bei užtikrina duomenų saugumą.
 
 **Pagrindiniai ITIS tikslai _(angl. Objectives of AD)_:**
-* Automatizuoti sąskaitų išrašymo ir apmokėjimo procesą.
-* Suteikti klientams prieigą prie jų duomenų per patogią naudotojo sąsają.
-* Užtikrinti aukštą sistemos prieinamumą ir saugumą.
-* Centralizuoti klientų ir paslaugų valdymą.
-* Užtikrinti duomenų saugumą ir prieinamumą.
-* Užtikrinti patogų klientų ir paslaugų valdymą administratoriams.
+- Automatizuoti sąskaitų išrašymo ir apmokėjimo procesą.
+- Suteikti klientams prieigą prie jų duomenų per patogią naudotojo sąsają.
+- Užtikrinti aukštą sistemos prieinamumą ir duomenų saugumą.
+- Centralizuoti klientų ir paslaugų valdymą.
+- Užtikrinti patogų klientų ir paslaugų valdymą administratoriams.
 
 **Nauda:**
-* Greitesnis atsiskaitymas ir mažiau rankinio darbo.
-* Sumažintos klaidų rizikos.
-* Geresnė klientų patirtis.
-* Lengvai plečiama architektūra.
+- Greitesnis atsiskaitymas ir mažiau rankinio darbo.
+- Sumažintos klaidų rizikos.
+- Geresnė klientų patirtis.
+- Lengvai plečiama architektūra.
+- Analitika.
 
 
 ## 1.2. Architektūros principai ir sprendimai _(angl. General architectural principles)_
@@ -55,12 +56,12 @@ Interneto tiekėjo informacinė sistema (ITIS) skirta automatizuoti klientų duo
 | **2** | **Model–View–Controller (MVC) šablonas**                   | Symfony karkasas natūraliai palaiko MVC struktūrą, leidžiančią atskirti duomenis, logiką ir sąsają.                                                                         | Geresnis kodo tvarkingumas; aiškus sluoksnių padalijimas; palengvina naujų programuotojų įtraukimą.   |
 | **3** | **Atvirojo kodo technologijos**                            | Naudojant Symfony, MariaDB ir EasyAdmin sumažinamos licencinės išlaidos, o bendruomenės palaikymas užtikrina stabilumą.                                                     | Mažesni kaštai; greitesnis vystymas; priklausomybė nuo bendruomenės atnaujinimų.                      |
 | **4** | **Saugumo prioritetas**                                    | Sistema tvarko klientų ir mokėjimų duomenis, todėl būtina užtikrinti aukštą saugumo lygį (prisijungimas, CSRF, IP filtrai).                                                 | Papildomas kodo ir infrastruktūros sudėtingumas; reikia nuolatinio testavimo ir auditų.               |
-| **5** | **Automatizavimas _(angl.Automation First)_**              | Sąskaitų generavimas, atsarginių kopijų kūrimas, testavimas – turi vykti automatiškai.                                                                                      | Mažiau žmogiškų klaidų; reikia patikimų „cron“ procesų ir logavimo.                                   |
+| **5** | **Automatizavimas _(angl.Automation First)_**              | Sąskaitų generavimas, atsarginių kopijų kūrimas, testavimas – turi vykti automatiškai.                                                                                      | Mažiau žmogiškų klaidų; reikia patikimų „cron“ procesų ir log'inimo.                                  |
 | **6** | **Palaikymas ir plėtra _(angl. Evolvability)_**            | Sistema turi būti pritaikoma naujoms paslaugoms ar akcijų sistemai ateityje.                                                                                                | Kodas turi būti rašomas moduliškai; reikia dokumentacijos ir testų.                                   |
 | **7** | **Dviejų aplinkų principas (Test + Production)**           | Skirtingos aplinkos užtikrina, kad pakeitimai būtų testuojami prieš diegimą.                                                                                                | Reikia atskiros infrastruktūros; papildomi ištekliai, bet mažesnė klaidų rizika.                      |
-| **8** | **Kokybės stebėsena ir logavimas**                         | Visi įvykiai (prisijungimai, sąskaitų generavimas) turi būti registruojami Monolog įrankiu.                                                                                 | Sukuriamas audito pėdsakas; padidėja saugojimo poreikis.                                              |
+| **8** | **Kokybės stebėsena ir log'inimas**                        | Visi įvykiai (prisijungimai, sąskaitų generavimas) turi būti registruojami Monolog įrankiu.                                                                                 | Sukuriamas audito pėdsakas; padidėja saugojimo poreikis.                                              |
 
-## 1.3 Architektūrinius principus įtvirtinantys spendimai _(angl. Architectural design decision)_
+## 1.3. Architektūrinius principus įtvirtinantys spendimai _(angl. Architectural design decision)_
 
 | Nr.   | Sprendimas                                                          | Pagrindimas _(angl. Rationale)_                                                                              | Alternatyvos                                 | Kodėl atmestos                                                                      | Pasekmės _(angl. Implications)_                                                               |
 |-------|---------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|----------------------------------------------|-------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
@@ -75,34 +76,33 @@ Interneto tiekėjo informacinė sistema (ITIS) skirta automatizuoti klientų duo
 
 
 # 2. Suinteresuotosios šalys ir rūpesčiai _(angl. Stakeholders and concerns)_
-## 2.1 Suinteresuotos šalys _(angl. Stakeholders)_
+## 2.1. Suinteresuotos šalys _(angl. Stakeholders)_
 
-| Suinteresuota šalis                              | Aprašymas                                                                | Interesas / poreikis                                     |
-|:-------------------------------------------------|:-------------------------------------------------------------------------|:---------------------------------------------------------|
-| **Klientas (naudotojas)**                        | Naudojasi interneto tiekėjo paslaugomis.                                 | Nori matyti paslaugas, sąskaitas ir atlikti apmokėjimus. |
-| **Vadybininkas / administratorius**              | Atsakingas už duomenų, paslaugų ir klientų administravimą TVS sistemoje. | Nori efektyviai valdyti duomenis ir generuoti sąskaitas. |
-| **Sistemos savininkas (tiekėjas)**               | Projekto vykdytojas.                                                     | Siekia turėti patikimą, saugią ir prižiūrimą sistemą.    |
-| **Techninis administratorius (IT specialistas)** | Atsakingas už sistemos palaikymą ir serverius.                           | Nori užtikrinti sistemos prieinamumą ir našumą.          |
-| **Apmokėjimų sistema (Paysera)**                 | Trečiosios šalies integracija.                                           | Teikia saugius mokėjimus klientams.                      |
-
+| Suinteresuota šalis _(angl. [Stakeholder](https://www.viewpoints-and-perspectives.info/home/stakeholders/))_ | Aprašymas                                                              | Interesas / poreikis                                         |
+|:-------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------|:-------------------------------------------------------------|
+| **Klientas (naudotojas)**                                                                                    | Naudojasi interneto tiekėjo paslaugomis                                | Nori matyti paslaugas, sąskaitas ir atlikti apmokėjimus      |
+| **Vadybininkai**                                                                                             | Atsakingi už duomenų, paslaugų ir klientų administravimą TVS sistemoje | Nori efektyviai valdyti klientų, paslaugų duomenis           |
+| **Rinkodaros specialistai**                                                                                  | Atsakingi už paslaugų siūlymą esamiems klientams, naujų įvedimą        | Nori pritraukti daugiau pinigų į įmonę                       |
+| **Sistemos savininkas (tiekėjas)**                                                                           | Projekto vykdytojas                                                    | Siekia turėti patikimą, saugią ir prižiūrimą sistemą         |
+| **Programuotojai**                                                                                           | Programuoja sistemą                                                    | Siekia sukurti kitoms suinteresuotoms šalims tinkamą sistemą |
+| **Apmokėjimų sistema (Paysera)**                                                                             | Trečiosios šalies integracija                                          | Teikia saugius mokėjimus klientams                           |
 
 # 3. Viepoints
-Pagal ISO/IEC 42010 standartą, pasirinkti šie architektūriniai požiūriai _(angl. viewpoints)_, kurie padėjo sukurti ir struktūruoti ITIS architektūros vaizdus.  
-Kiekvienas viewpoint apibrėžia savo tikslą, suinteresuotuosius asmenis, rūpesčius ir naudojamus modelius.
+Pagal ISO/IEC 42010:2022 standartą, pasirinkti visi šie architektūriniai požiūriai _(angl. viewpoints)_, kurie padėjo sukurti ir struktūruoti ITIS architektūros vaizdus.  
+Kiekvienas viewpoint apibrėžia savo aprašymą, tikslą, sprendžiamus rūpesčius, suinteresuotuosius asmenis ir naudojamus modelius.
 
-| Viewpoint                 | Aprašymas                                                                                                 | Suinteresuotosios šalys                                                           | Sprendžiami rūpesčiai                                                                                                                                                                                | Naudojami modeliai / diagramos                                                                                                          |
-|---------------------------|-----------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
-| **Context Viewpoint**     | Apibrėžia sistemos ribas, jos sąveiką su išorinėmis sistemomis ir naudotojais.                            | Klientai, administratoriai, sistemos savininkas (tiekėjas), Paysera API tiekėjas. | - Kaip sistema integruojama su išorinėmis paslaugomis (mokėjimais, el. paštu).<br/>- Kaip klientai ir administratoriai sąveikauja su sistema.<br/>- Kokie duomenys perduodami tarp išorinių sistemų. | - UML konteksto diagrama                                                                                                                |
-| **Functional Viewpoint**  | Parodo pagrindinius funkcinius modulius, jų atsakomybę ir sąveiką.                                        | Administratoriai, projektuotojai, tiekėjas                                        | - Kokias funkcijas vykdo sistema.<br/>- Kaip šios funkcijos tarpusavyje susijusios.<br/>- Kaip skirtingi naudotojai (rolės) jas naudoja.                                                             | - UML panaudos atvejų diagramos<br/>- UML veiklos diagramos<br/>- Verslo procesų aprašai                                                |
-| **Information Viewpoint** | Aprašo pagrindines duomenų esybes ir ryšius tarp jų.                                                      | Duomenų bazės administratorius, programuotojai                                    | - Kaip saugoma ir valdoma informacija.<br/>- Kokie yra esybių ryšiai (klientai, paslaugos, sąskaitos, akcijos).<br/>- Kaip užtikrinamas duomenų vientisumas ir saugumas.                             | - UML klasių diagrama<br/>- UML duomenų esybių (ERD) diagrama                                                                           |
-| **Concurrency Viewpoint** | Nustatyti, kaip sistema elgiasi, kai keli naudotojai ar procesai veikia vienu metu.                       | Architektas, programuotojai, sistemų administratoriai.                            | - Kaip tvarkomos vienalaikės užklausos į duomenų bazę.<br/>- Kaip valdomi sesijų konfliktai.<br/>- Kaip užtikrinamas stabilus veikimas esant dideliam srautui.                                       | - Sekos diagramos (Concurrency scenarijai)<br/>- Apkrovos testų modeliai (Apache JMeter)<br/>- Užraktų (locks) ir sesijų valdymo logika |
-| **Development Viewpoint** | Apibrėžti sistemos loginę struktūrą kūrimo požiūriu – kaip organizuojamas kodas, komponentai ir moduliai. | Kūrėjai, architektas, kokybės užtikrinimo (QA) komanda.                           | - Kaip kodas organizuotas (MVC struktūra, modulių išdėstymas).<br/>- Kaip naudojamos priklausomybės ir bibliotekos.<br/>- Kaip valdomos versijos ir testai.                                          | - Kodo struktūros schema (Symfony projektas)<br/>- Priklausomybių (Dependency Injection) modelis<br/>- Unit testų planas                |
-| **Deployment Viewpoint**  | Aprašyti, kaip programinė įranga diegiama į infrastruktūrą.                                               | Sistemų administratoriai, tiekėjas, diegimo komanda.                              | - Kaip programinė įranga įdiegta (serveriai, DB, aplinkos).<br/>- Kaip užtikrinamas pasiekiamumas, atsarginės kopijos ir saugumas.<br/>- Koks ryšys tarp testinės ir produkcinės aplinkos.           | - UML Deployment diagrama                                                                                                               |
-| **Operational Viewpoint** | Aprašyti, kaip sistema veikia, stebima ir palaikoma eksploatacijos metu.                                  | Sistemos savininkas, administratoriai, techninė priežiūra.                        | - Kaip sistema prižiūrima ir stebima realiu laiku.<br/>- Kaip tvarkomi žurnalai (logai) ir klaidų ataskaitos.<br/>- Kaip atliekamos atsarginės kopijos ir atnaujinimai.                              | - Procesų priežiūros diagrama<br/>- Logų srautų modelis _(Symfony Monolog)_<br/>- Backup & restore politika                             |
+| Požiūris _(angl. [Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/))_                  | Tikslas _(angl. Purpose)_                                                                                | Sprendžiami rūpesčiai _(angl. Concerns)_                                                                                                                                                             | Suinteresuotosios šalys _(angl. Stakeholders)_                                                   | Naudojami modeliai / diagramos                                                                                                                             |
+|----------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **[Context Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/context/)**                 | Apibrėžia sistemos ribas, jos sąveiką su išorinėmis sistemomis ir naudotojais                            | - Kaip sistema integruojama su išorinėmis paslaugomis (mokėjimais, el. paštu).<br/>- Kaip klientai ir administratoriai sąveikauja su sistema.<br/>- Kokie duomenys perduodami tarp išorinių sistemų. | Visos suinteresuotos šalys, bet labiausiai klientai (naudotojai), sistemos savininkas (tiekėjas) | - UML konteksto diagrama                                                                                                                                   |
+| **[Functional Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/functional-viewpoint/)** | Apibrėžia pagrindinius funkcinius modulius, jų atsakomybę ir sąveiką                                     | - Ką sistema daro (funkcijos).<br/>- Kaip šios funkcijos tarpusavyje susijusios.<br/>- Kaip skirtingi naudotojai (rolės) jas naudoja.                                                                | Visos suinteresuotos šalys                                                                       | - UML panaudos atvejų diagramos<br/>- UML veiklos diagramos<br/>- Verslo procesų aprašai                                                                   |
+| **[Information Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/information/)**         | Apibrėžia pagrindines duomenų esybes ir ryšius tarp jų                                                   | - Kaip saugoma ir valdoma informacija.<br/>- Kokie yra esybių ryšiai (klientai, paslaugos, sąskaitos, akcijos).<br/>- Kaip užtikrinamas duomenų vientisumas ir saugumas.                             | - Programuotojai<br/>- Sistemos savininkas (tiekėjas)                                            | - UML klasių diagrama<br/>- UML duomenų esybių (ERD) diagrama                                                                                              |
+| **[Concurrency Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/concurrency/)**         | Apibrėžia, kaip sistema elgiasi, kai keli naudotojai ar procesai veikia vienu metu                       | - Kaip tvarkomos vienalaikės užklausos į duomenų bazę.<br/>- Kaip valdomi sesijų konfliktai.<br/>- Kaip užtikrinamas stabilus veikimas esant dideliam srautui.                                       | Programuotojai                                                                                   | - Sekos diagramos (Concurrency scenarijai)<br/>- Užraktų _(angl. locks)_ ir sesijų valdymo logika                                                          |
+| **[Development Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/development/)**         | Apibrėžia sistemos loginę struktūrą kūrimo požiūriu – kaip organizuojamas kodas, komponentai ir moduliai | - Kaip kodas organizuotas (MVC struktūra, modulių išdėstymas).<br/>- Kaip naudojamos priklausomybės ir bibliotekos.<br/>- Kaip valdomos versijos ir testai.                                          | Sistemos savininkas (tiekėjas)                                                                   | - Kodo struktūros schema<br/>- Priklausomybių _(angl. Dependency Injection)_ modelis                                                                       |
+| **[Deployment Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/deployment/)**           | Apibrėžia, kaip sistema diegiama į kliento infrastruktūrą                                                | - Kaip programinė įranga įdiegta (serveriai, DB, aplinkos).<br/>- Kaip užtikrinamas pasiekiamumas, atsarginės kopijos ir saugumas.<br/>- Koks ryšys tarp testinės ir produkcinės aplinkos.           | - Programuotojai<br/>- Sistemos savininkas (tiekėjas)                                            | - Serverių topologijos schema                                                                                                                              |
+| **[Operational Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/operational/)**         | Apibrėžia, kaip sistema veikia, stebima ir palaikoma eksploatacijos metu                                 | - Kaip sistema prižiūrima ir stebima realiu laiku.<br/>- Kaip tvarkomi žurnalai (logai) ir klaidų ataskaitos.<br/>- Kaip atliekamos atsarginės kopijos ir atnaujinimai.                              | - Programuotojai<br/>- Sistemos savininkas (tiekėjas)                                            | - Procesų priežiūros diagrama<br/>- Logų srautų modelis _(Symfony Monolog)_<br/>- UML veiklos _(angl. activity)_ diagrama _(angl. Backup restore diagram)_ |
 
-Šie septyni viewpoint’ai užtikrina, kad ITIS architektūra apžvelgiama iš visų esminių kampų –  
-nuo verslo konteksto iki techninio diegimo ir eksploatacijos.  
-Kiekvienas požiūris turi savo paskirtį ir suinteresuotąją auditoriją, todėl kartu jie sudaro visapusišką architektūros aprašymą pagal ISO/IEC 42010 standartą.
+Šie septyni viewpoint’ai užtikrina, kad ITIS architektūra apžvelgiama iš visų esminių kampų – nuo verslo konteksto iki techninio diegimo ir eksploatacijos.  
+Kiekvienas požiūris turi savo paskirtį ir suinteresuotąją auditoriją, todėl kartu jie sudaro visapusišką architektūros aprašymą pagal ISO/IEC 42010:2022 standartą.
 
 
 # 4. Views
@@ -110,38 +110,17 @@ Kiekvienas požiūris turi savo paskirtį ir suinteresuotąją auditoriją, tod�
 Kiekvienas vaizdas pateikia tam tikrą sistemos architektūros aspektą, atspindintį atitinkamų suinteresuotųjų šalių rūpesčius.
 
 ## 4.1. Context View
-**Tikslas:**  
-Parodyti ITIS sistemos ribas, išorines sąsajas ir naudotojus, kurie su ja sąveikauja.
-
-**Aprašymas:**  
+**Aprašymas:**
 Sistema susideda iš dviejų pagrindinių sričių:
-- **Frontend (naudotojo sąsaja):** skirta klientams prisijungti, peržiūrėti sąskaitas, apmokėti per Paysera.
-- **TVS (Turinio valdymo sistema):** skirta administratoriams valdyti klientus, paslaugas ir sąskaitas.
-
-**Išorinės sąsajos:**
-- **Paysera API** – mokėjimų integracija.
-- **El. pašto paslauga (SMTP)** – pranešimų siuntimas klientams.
-- **MariaDB** – duomenų saugojimas.
-
-**Suinteresuotosios šalys _(angl. Stakeholders)_:** klientai, administratoriai, tiekėjas.
-
-**Modelis:**
-- UML konteksto diagrama
-
-**Rūpesčiai _(angl. Concerns)_:**
-- Kaip sistema sąveikauja su išoriniais veikėjais.
-- Kur baigiasi sistemos atsakomybė.
+- **Frontend (naudotojo sąsaja):** skirta klientams prisijungti, peržiūrėti sąskaitas, apmokėti per e-mokėjimų sistemą Paysera.
+- **TVS (Turinio valdymo sistema):** skirta administratoriams, rinkodaroms specialistams valdyti klientus, paslaugas ir sąskaitas.
 
 ![context_view.png](context_view.png)
 
+
 ## 4.2. Functional View
-
-**Tikslas:**  
-Pavaizduoti sistemos funkcionalumą, modulinius komponentus ir jų tarpusavio sąveiką.
-
 **Aprašymas:**  
 Sistema padalinta į funkcinius modulius, atspindinčius verslo procesus:
-
 - **Klientų modulis** – kuria ir tvarko klientų įrašus.
 - **Paslaugų modulis** – tvarko paslaugų sąrašą ir jų paketus.
 - **Sąskaitų modulis** – generuoja ir saugo sąskaitas.
@@ -149,41 +128,18 @@ Sistema padalinta į funkcinius modulius, atspindinčius verslo procesus:
 - **Akcijų modulis** – taiko nuolaidas paslaugoms.
 - **Nustatymų modulis** – apima sistemos konfigūraciją (PVM, rodymo nustatymai).
 
-**Suinteresuotosios šalys _(angl. Stakeholders)_:** administratoriai, architektas, projektuotojas.
-
-**Modeliai:** UML panaudos atvejų diagramos ir veiklos diagramos.
-
-**Rūpesčiai _(angl. Concerns)_:**
-- Ką sistema daro (funkcijos).
-- Kaip šios funkcijos paskirstytos tarp modulių.
-
 ![functional_view.png](functional_view.png)
 
-## 4.3. Information View
-**Tikslas:**  
-Pavaizduoti duomenų modelį, pagrindines esybes ir jų ryšius.
 
+## 4.3. Information View
 **Aprašymas:**  
 Duomenų modelis paremtas **Entity–Relationship (ER)** struktūra. Pagrindinės esybės:
-
 - **Klientas** – turi kelis **Objektus**.
 - **Objektas** – turi kelis **Paslaugų paketus**.
 - **Paslaugos paketas** – apima vieną ar kelias **Paslaugas**.
 - **Sąskaita** – generuojama pagal paslaugas, turi **Sąskaitos eilutes**.
 - **Akcija** – taikoma paslaugoms ar paketams.
 - **Nustatymai** – saugo sistemos konfigūraciją.
-
-**Suinteresuotosios šalys _(angl. Stakeholders)_:**
-- Programuotojai
-- DB administratoriai.
-
-**Modeliai:**
-- UML duomenų esybių diagrama (ERD)
-- UML klasių diagrama.
-
-**Rūpesčiai _(angl. Concerns)_:**
-- Kaip organizuoti duomenų struktūrą.
-- Kaip užtikrinti duomenų vientisumą ir ryšius.
 
 UML klasių diagrama  
 ![intormation_view.png](intormation_view_classdiagram.png)
@@ -192,11 +148,7 @@ UML Esybių ryšių diagrama (Baronas (Chen) notation)
 ![intormation_view.png](intormation_view_erdiagram.png)
 
 
-
 ## 4.4. Concurrency  View
-**Tikslas:**  
-Aprašyti, kaip sistema tvarko vienalaikes užklausas ir procesų sinchronizaciją.
-
 **Aprašymas:**  
 ITIS sistema palaiko vienalaikį kelių naudotojų prisijungimą:
 - Naudojamas **Symfony sesijų valdymas** – atskira sesija kiekvienam naudotojui.
@@ -204,44 +156,28 @@ ITIS sistema palaiko vienalaikį kelių naudotojų prisijungimą:
 - **crontab** procesas generuoja sąskaitas fone (asinchroninis vykdymas).
 - Testuota su **Apache JMeter**, iki 1000 užklausų per 3 s.
 
-**Suinteresuotosios šalys _(angl. Stakeholders)_:**
-- TODO
-
-**Modeliai:**
-- Sekos diagramos (duomenų užrakinimas).
-- Apkrovos testų rezultatai.
-
-**Rūpesčiai _(angl. Concerns)_:**
-- TODO
+**TODO diagram**
 
 
 ## 4.5. Development View
-**Tikslas:**  
-Pateikti sistemos loginę struktūrą iš kūrimo perspektyvos – kodą, modulius ir priklausomybes.
-
 **Aprašymas:**  
 Kodas organizuotas pagal **MVC (Model–View–Controller)** šabloną:
-- **Model:** Doctrine ORM entitetai.
-- **Controller:** Symfony kontroleriai, valdantys logiką.
+- **Model:** Doctrine ORM modeliai.
+- **Controller:** Symfony kontrolerio klasės, valdantys logiką.
 - **View:** Twig šablonai.
 
 Papildomai:
-- Naudojamas **EasyAdmin 3** TVS moduliui.
-- Priklausomybės valdomos per **Composer**.
+- Naudojamas **EasyAdmin 3** TVS daliai.
+- PHP bibliotekų priklausomybės valdomos per **Composer**.
 - Kodo kokybė tikrinama per **PHPUnit** testus.
-
-**Modeliai / diagramos:**
-- Kodo struktūros schema.
-- Priklausomybių diagrama.
 
 **Rezultatas:**  
 Development View užtikrina, kad programinė architektūra būtų tvarkinga, modulinė ir lengvai plečiama.
 
+**TODO diagram**
+
 
 ## 4.6. Deployment View
-**Tikslas:**  
-Parodyti, kaip sistema yra diegiama į techninę infrastruktūrą.
-
 **Aprašymas:**
 Sistemos komponentai diegiami į dvi aplinkas:
 - **Testinę** (staging) – naujų funkcijų bandymams.
@@ -253,46 +189,26 @@ Sistemos komponentai diegiami į dvi aplinkas:
 - DBVS: MariaDB 11
 - PHP 8.2, JavaScript
 - Automatizuoti darbai: crontab (sąskaitų generavimas)
-- Logavimas: Symfony Monolog
+- Log'inimas: Symfony Monolog
 
-**Suinteresuotosios šalys _(angl. Stakeholders)_:**
-- Sistemų administratorius
-- tiekėjas
-
-**Modeliai:** Deployment diagrama
-
-**Rūpesčiai _(angl. Concerns)_:**
-- Kaip sistema pasiekiama ir prižiūrima.
-- Kaip užtikrinamas pasiekiamumas, atsarginės kopijos ir našumas.
+**TODO diagram**
 
 
 ## 4.7. Operational View
-
-**Tikslas:**  
-Pavaizduoti, kaip sistema veikia, stebima ir palaikoma eksploatacijos metu.
-
 **Aprašymas:**
 - **Monolog** fiksuoja veiksmus ir klaidas („.log“ failai saugomi 90 dienų).
 - **Automatinės atsarginės kopijos** vykdomos periodiškai.
 - **Serverio stebėsena** atliekama per OS įrankius (pvz., `top`, `journalctl`).
-- **Klaidos** siunčiamos administratoriui el. paštu.
+- **Klaidos** siunčiamos administratoriui el. paštu, Sentry įrankiu.
 - **Atnaujinimai** vykdomi per „composer update“ ir cache valymą.
-
-**Modeliai / diagramos:**
-- Log'ų srautų schema (Symfony Monolog)
-- Backup procesų diagrama
-
-**Suinteresuotosios šalys _(angl. Stakeholders)_:**
-- Sistemų administratorius
-- Programuotojai
-- Testuotojai
-- Support
 
 **Rezultatas:**  
 Operational View parodo, kaip sistema veikia realiame gyvenimo cikle — kaip ji stebima, palaikoma ir atstatoma gedimo atveju.
 
+**TODO diagram**
 
-## 4.8 Santrauka
+
+## 4.8. Santrauka
 Šie vaizdai bendrai aprašo **ITIS architektūrą iš kelių perspektyvų**, kad kiekviena suinteresuotųjų šalis galėtų suprasti jai svarbius aspektus:
 - naudotojai – kontekstą ir funkcijas;
 - kūrėjai – loginę ir duomenų struktūrą;
@@ -301,21 +217,65 @@ Operational View parodo, kaip sistema veikia realiame gyvenimo cikle — kaip ji
 Kartu jie sudaro išsamų, subalansuotą architektūros aprašymą, atitinkantį ISO/IEC 42010 reikalavimus.
 
 
-# 5. Perspectives
-## 5.1. Security
-TODO
+# 5. Perspektyvos _(angl. [Perspectives](https://www.viewpoints-and-perspectives.info/home/perspectives/))_
+## 5.1. Prieinamumas neįgaliems _(angl. [Accessibility](https://www.viewpoints-and-perspectives.info/home/perspectives/accessibility/))_
+Nereikia.
 
-## 5.2. Performance and scalability
-TODO
+## 5.2. Prieinamumas ir Atsparumas _(angl. [Availability and Resilience](https://www.viewpoints-and-perspectives.info/home/perspectives/availability-and-resilience/))_
 
-## 5.3. Availability and resilience
-TODO
+| Aspektas                                     | Taikymas                                                                                                                                                                                                                 |
+|----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Taikymas _(angl. Applicability)_**         |                                                                                                                                                                                                                          |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Laikas iki atstatymo (time to repair) po gedimo.<br/>- Nelaimės atstatymo (disaster recovery) strategijos.<br/>- Vienos klaidos taško (single point of failure) identifikavimas.                                                                                                      |
+| **Veiksmai _(angl. Activities)_**            |                                                                                                                                                                                                                          |
+| **Taktikos _(angl. Tactics)_**               | - Sistemos „kūrimo gedimams“ _(angl. „design for failure“)_ principas — manyti, kad komponentas gali sugesti, ir numatyti mechanizmus atstatymui.<br/>- Automatizuotos atsarginių kopijų procesai, atstatymo procedūros. |
+| **Spąstai _(angl. Pitfalls)_**               |                                                                                                                                                                                                                          |
 
-## 5.4. Evolution perspectives
-TODO
+## 5.3. Plėtros ištekliai _(angl. [Development Resource](https://www.viewpoints-and-perspectives.info/home/perspectives/development-resource-perspective/))_
+Nereikia.
 
-## 5.5. Consistency and correspondences
-TODO
+## 5.4. Evoliucija _(angl. [Evolution](https://www.viewpoints-and-perspectives.info/home/perspectives/evolution/))_
+
+| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Taikymas _(angl. Applicability)_**         | Ši perspektyva taikoma tam, kad ITIS sistema galėtų ilgainiui būti tobulinama ir pritaikoma naujiems verslo bei technologiniams poreikiams. Ji užtikrina, kad architektūra būtų pakankamai lanksti diegiant naujas paslaugas (pvz., papildomi mokėjimų tiekėjai, akcijų moduliai ar mobilioji sąsaja).                                                                                                                                                                                            |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kaip sistema gali būti plečiama naujais moduliais ir funkcijomis be didelių perrašymų.<br>- Kaip užtikrinti, kad atnaujinimai (framework, DB) būtų suderinami su esamais komponentais.<br>- Kaip išlaikyti duomenų suderinamumą keičiant modelius ar struktūras.<br>- Kaip planuoti versijų atnaujinimus (Symfony, PHP).                                                                                                                                                                        |
+| **Veiksmai _(angl. Activities)_**            | - Modulinės architektūros palaikymas (kiekvienas modulis gali būti vystomas nepriklausomai).<br>- Reguliarus priklausomybių atnaujinimas per Composer.<br>- Migracijų valdymas naudojant Doctrine Migration įrankį.<br>- Kodo refaktoringas pagal testų rezultatus.<br>- Naudotojų poreikių analizė naujų funkcijų planavimui.<br>- Dokumentacijos palaikymas ir atnaujinimas.                                                                                                                    |
+| **Taktikos _(angl. Tactics)_**               | - Naudoti **MVC** ir **Service-oriented** architektūros principus, kad modulius būtų galima keisti nepriklausomai.<br>- Naudoti **versijų valdymo sistemą (Git)** su aiškiu „branching“ modeliu (pvz., *GitFlow*).<br>- Naudoti **automatinį testavimą (PHPUnit)** prieš kiekvieną atnaujinimą.<br>- Naudoti **Continuous Integration (CI)** ir **Continuous Deployment (CD)** procesus.<br>- Numatyti **API sąsajas** išoriniams moduliniams plėtiniams (pvz., papildomiems mokėjimų tiekėjams). |
+| **Spąstai _(angl. Pitfalls)_**               | - Architektūra tampa pernelyg monolitinė, todėl kiekvienas pakeitimas paveikia visą sistemą.<br>- Nepakankamas testų rinkinys – didelė rizika sugadinti esamas funkcijas.<br>- Priklausomybės nuo konkrečios Symfony ar PHP versijos gali apsunkinti atnaujinimus.<br>- Nepakankamas dokumentacijos atnaujinimas lemia žinių praradimą.<br>- Nenumatyta duomenų migracijos strategija sukelia klaidas atnaujinimų metu.                                                                           |
+
+## 5.5. Internacionalizacija _(angl. [Internationalization](https://www.viewpoints-and-perspectives.info/home/perspectives/internationalization/))_
+Nereikia.
+
+## 5.6. Vieta _(angl. [Location](https://www.viewpoints-and-perspectives.info/home/perspectives/location/))_
+Nereikia.
+
+## 5.7. Našumas ir mastelio keitimas _(angl. [Performance and Scalability](https://www.viewpoints-and-perspectives.info/home/perspectives/performance-and-scalability/))_
+
+| Aspektas                                     | Taikymas |
+|----------------------------------------------|----------|
+| **Taikymas _(angl. Applicability)_**         |          |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** |          |
+| **Veiksmai _(angl. Activities)_**            |          |
+| **Taktikos _(angl. Tactics)_**               |          |
+| **Spąstai _(angl. Pitfalls)_**               |          |
+
+## 5.8. Teisinis reguliavimas _(angl. [Regulation](https://www.viewpoints-and-perspectives.info/home/perspectives/regulation-perspective/))_
+Nereikia.
+
+## 5.9. Saugumas _(angl. [Security](https://www.viewpoints-and-perspectives.info/home/perspectives/security/))_
+
+| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+|----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Taikymas _(angl. Applicability)_**         | Ši perspektyva taikoma visiems ITIS sistemos komponentams, siekiant apsaugoti klientų duomenis, mokėjimų informaciją ir užtikrinti, kad tik įgalioti naudotojai galėtų pasiekti savo duomenis. Saugumas yra kertinis sistemos aspektas, nes ji tvarko asmeninius ir finansinius duomenis.                                                                                                                                                                                                                                                                                                                                                                            |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kaip autentifikuojami naudotojai (klientai ir administratoriai).<br>- Kaip užtikrinamas duomenų vientisumas ir konfidencialumas.<br>- Kaip valdomos prieigos teisės (rolės ir leidimai).<br>- Kaip apsisaugoma nuo įsilaužimų, CSRF, XSS, SQL Injection atakų.<br>- Kaip saugomos ir perduodamos jautrios reikšmės (pvz., slaptažodžiai).<br>- Kaip fiksuojami ir stebimi saugumo incidentai.                                                                                                                                                                                                                                                                      |
+| **Veiksmai _(angl. Activities)_**            | - Įdiegti **Symfony Security** modulį autentifikacijai ir rolėms valdyti.<br>- Naudoti **CSRF token'us** formoms ir POST užklausoms.<br>- Naudoti **HTTPS (SSL)** visam duomenų srautui tarp naudotojo ir serverio.<br>- Slaptažodžių saugojimui naudoti saugius **bcrypt / Argon2** algoritmus.<br>- Diegti **log'inimą su Monolog**, fiksuojant prisijungimus, nesėkmingus bandymus.<br/>- Diegti klaidų gaudymo įrankį **Sentry**, kuris iškart informuoja administratorius.<br>- Reguliariai testuoti sistemą naudojant **OWASP ZAP / Burp Suite**.<br/>- Pasitelkti išorinius testuotojus.<br>- Stebėti serverių saugumą, OS atnaujinimus, PHP klaidų taisymus. |
+| **Taktikos _(angl. Tactics)_**               | - Įgyvendinti **mažiausių privilegijų principą (Least Privilege Principle)** – kiekvienas naudotojas turi tik jam būtinas teises.<br>- **Defence in Depth** – keli apsaugos sluoksniai (serveris, DB, aplikacija, tinklas).<br>- **Input validation** – duomenų įvesties validacija prieš apdorojant.<br>- **Error handling & logging** – saugūs klaidų pranešimai be jautrios informacijos.<br>- **Session management** – ribotas sesijų galiojimo laikas ir automatinis atsijungimas.<br>- **Security by default** – išjungtos nereikalingos paslaugos, aiškūs konfigūracijos failai.                                                                              |
+| **Spąstai _(angl. Pitfalls)_**               | - Prasta rolių valdymo sistema leidžia neautorizuotą prieigą prie administracinės dalies.<br>- Neužšifruotas srautas (HTTP vietoje HTTPS) gali leisti duomenų perėmimą.<br>- Netinkamai valdomos sesijos (neuždarius prisijungimų).<br>- Perteklinė klaidų informacija gali atskleisti sistemos struktūrą.<br>- Nepakankamas log'ų stebėjimas lemia saugumo incidentų praleidimą.<br>- Trūksta periodinių saugumo auditų ir testavimo procesų.                                                                                                                                                                                                                       |
+
+## 5.10. Naudojimo patogumas _(angl. [Usability](https://www.viewpoints-and-perspectives.info/home/perspectives/usability-perspective/))_
+Nereikia.
+
 
 # Appendix A. Architecture decisions and rationale
 TODO

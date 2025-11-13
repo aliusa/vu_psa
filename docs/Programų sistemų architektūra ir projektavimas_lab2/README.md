@@ -85,7 +85,7 @@ Interneto tiekėjo informacinė sistema (ITIS) skirta automatizuoti klientų duo
 | **Rinkodaros specialistai**                                                                                  | Atsakingi už paslaugų siūlymą esamiems klientams, naujų įvedimą        | Nori pritraukti daugiau pinigų į įmonę                       |
 | **Sistemos savininkas (tiekėjas)**                                                                           | Projekto vykdytojas                                                    | Siekia turėti patikimą, saugią ir prižiūrimą sistemą         |
 | **Programuotojai**                                                                                           | Programuoja sistemą                                                    | Siekia sukurti kitoms suinteresuotoms šalims tinkamą sistemą |
-| **Apmokėjimų sistema (Paysera)**                                                                             | Trečiosios šalies integracija                                          | Teikia saugius mokėjimus klientams                           |
+| **E-mokėjimų sistema (Paysera)**                                                                             | Trečiosios šalies integracija                                          | Teikia saugius mokėjimus klientams                           |
 
 # 3. Viepoints
 Pagal ISO/IEC 42010:2022 standartą, pasirinkti visi šie architektūriniai požiūriai _(angl. viewpoints)_, kurie padėjo sukurti ir struktūruoti ITIS architektūros vaizdus.  

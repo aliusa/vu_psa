@@ -47,6 +47,21 @@ Interneto tiekėjo informacinė sistema (ITIS) skirta automatizuoti klientų duo
 - Lengvai plečiama architektūra.
 - Analitika.
 
+**Sistemos apimtis _(angl. Scope)_:**
+- Sistema turi:
+  - Klientas gali peržiūrėti savo paslaugas, mokėjimus
+  - Vadybininkai gali koreguoti visus klientų, paslaugų duomenis.
+- Sistema neturi, negali:
+  - Klientų ir paslaugų valdymas:
+    - Klientas pats negali užsiregistruoti į sistemą - jį gali priregistruoti tik vadybininkas
+    - Klientas pats negali užsakyti paslaugų - tik per vadybininką
+    - Klientas pats negali keisti sutarties
+  - Finansai ir apmokėjimai:
+    - Sistema nepriima mokėjimų tiesiogiai – visi apmokėjimai vykdomi tik per integruotą e-mokėjimų sistemą (Paysera API)
+    - Sistema neapdoroja grąžinimų (refunds) automatiškai – tai daro finansų skyrius
+    - Sistema nesaugo pilnų mokėjimo kortelių duomenų (tik tokenizuotus ID iš e-mokėjimo sistemos, jei reikia)
+  - Finansai
+    - Sistema neprognozuoja pajamų ar paslaugų vartojimo tendencijų – analitika ribota iki bendros ataskaitų peržiūra.
 
 ## 1.2. Architektūros principai ir sprendimai _(angl. General architectural principles)_
 ### Bendrieji architektūriniai principai
@@ -74,19 +89,55 @@ Interneto tiekėjo informacinė sistema (ITIS) skirta automatizuoti klientų duo
 | **7** | **Naudoti EasyAdmin 3 TVS moduliui**                                | Pritaikytas Symfony, greitai kuriami CRUD valdikliai.                                                        | WordPress, custom admin panel                | WordPress per sunkus integruoti; custom – brangu kurti nuo nulio.                   | Greitas administracinės dalies kūrimas, nuosekli sąsaja, priklausomybė nuo EasyAdmin versijų. |
 | **8** | **Dviejų aplinkų diegimas (testinė ir produkcinė)**                 | Užtikrina saugų kodo išbandymą prieš diegimą.                                                                | Viena aplinka                                | Didelė rizika klaidų produkcijoje.                                                  | Saugus testavimas, aiškus diegimo procesas, papildomi infrastruktūros kaštai.                 |
 
+## 1.4. Sistemos reikalavimai _(angl. System requirements)_
+### 1.4.1. Funkciniai reikalavimai _(angl. Functional requirements)_
+
+| Nr.     | Reikalavimas                           | Aprašymas                                                                                                                |
+|---------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| **F1**  | **Kliento prisijungimas**              | Sistema turi leisti klientui prisijungti prie savitarnos naudodama el. paštą ir slaptažodį.                              |
+| **F2**  | **Kliento duomenų peržiūra**           | Klientas turi galėti peržiūrėti savo sutartis, paslaugas, sąskaitas ir mokėjimų istoriją.                                |
+| **F3**  | **Sąskaitų generavimas**               | Sistema turi automatiškai generuoti sąskaitas klientams pagal aktyvias paslaugas (naudojant „crontab“).                  |
+| **F4**  | **Mokėjimų integracija su Paysera**    | Sistema turi palaikyti e-mokėjimus per Paysera API, registruoti apmokėjimo būseną ir pranešti apie nesėkmingus bandymus. |
+| **F5**  | **Vadybininko prisijungimas prie TVS** | Vadybininkas turi galėti prisijungti prie TVS administracinės dalies per EasyAdmin valdymo panelę.                       |
+| **F6**  | **Klientų administravimas**            | Vadybininkas gali kurti, redaguoti ir ištrinti klientų įrašus.                                                           |
+| **F7**  | **Paslaugų administravimas**           | Vadybininkas gali kurti, redaguoti ir ištrinti paslaugas bei jų paketus.                                                 |
+| **F8**  | **Akcijų ir nuolaidų valdymas**        | Rinkodaros specialistas gali pridėti akcijas, kurios taikomos konkrečioms paslaugoms.                                    |
+| **F9**  | **Pranešimų siuntimas**                | Sistema turi siųsti el. laiškus klientams apie sąskaitas, mokėjimus ar sistemos pakeitimus.                              |
+| **F10** | **Logų ir įvykių registravimas**       | Sistema turi fiksuoti visus svarbius įvykius (prisijungimai, sąskaitų generavimas, klaidos) Monolog įrankiu.             |
+| **F11** | **Atsarginės kopijos**                 | Sistema turi generuoti duomenų bazės atsargines kopijas nustatytu periodiškumu.                                          |
+| **F12** | **Rolės ir leidimai**                  | Sistema turi palaikyti skirtingas roles (klientas, vadybininkas, rinkodaros specialistas, administratorius).             |
+| **F13** | **Veiklos ataskaitos**                 | Sistema turi pateikti bendrą klientų, paslaugų ir apyvartos statistiką vadybininkui ar savininkui.                       |
+
+### 1.4.2. Nefunkciniai reikalavimai _(angl. Non-functional requirements)_
+
+| Nr.      | Reikalavimas                            | Aprašymas                                                                                                                             |
+|----------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| **NF1**  | **Našumas (Performance)**               | Sistema turi apdoroti bent 1000 užklausų per 3 sekundes esant apkrovai.                                                               |
+| **NF2**  | **Prieinamumas (Availability)**         | Sistema turi būti pasiekiama bent 99,99 % laiko per mėnesį.                                                                           |
+| **NF3**  | **Atsparumas (Resilience)**             | Gedimo atveju sistema turi būti atstatoma ne vėliau kaip per 2 valandas (MTTR ≤ 2 h).                                                 |
+| **NF4**  | **Saugumas (Security)**                 | Visi duomenys perduodami HTTPS protokolu; slaptažodžiai saugomi su bcrypt / Argon2; naudojami CSRF token'ai.                          |
+| **NF5**  | **Duomenų apsauga (Privacy)**           | Sistema turi atitikti BDAR _(angl. GDPR)_ reikalavimus — klientas turi teisę peržiūrėti, ištaisyti ir prašyti ištrinti savo duomenis. |
+| **NF6**  | **Pritaikomumas (Usability)**           | Kliento savitarna turi būti aiški ir pasiekiama per 3 paspaudimus iki pagrindinės informacijos (sąskaitos ar paslaugos).              |
+| **NF7**  | **Patikimumas (Reliability)**           | Sistema turi išlaikyti stabilų veikimą be klaidų esant keliems šimtams aktyvių vartotojų.                                             |
+| **NF8**  | **Palaikymas (Maintainability)**        | Architektūra turi būti modulinė (MVC), kad kiekvienas modulis galėtų būti atnaujinamas nepriklausomai.                                |
+| **NF9**  | **Išplečiamumas (Scalability)**         | Sistema turi būti parengta pridėti papildomus modulinius komponentus (pvz., naujus mokėjimo tiekėjus).                                |
+| **NF10** | **Perkeliamumas (Portability)**         | Sistema turi būti paleidžiama tiek Linux, tiek Windows serveriuose be kodo keitimo.                                                   |
+| **NF11** | **Testuojamumas (Testability)**         | Visi verslo moduliai turi būti padengti bent 70 % vienetinių testų (unit tests).                                                      |
+| **NF12** | **Naudojamumo stebėjimas (Monitoring)** | Sistema turi fiksuoti klaidas, įvykius ir siųsti pranešimus el. paštu (Monolog + Sentry).                                             |
 
 # 2. Suinteresuotosios šalys ir rūpesčiai _(angl. Stakeholders and concerns)_
 ## 2.1. Suinteresuotos šalys _(angl. Stakeholders)_
 
-| Suinteresuota šalis _(angl. [Stakeholder](https://www.viewpoints-and-perspectives.info/home/stakeholders/))_ | Aprašymas                                                              | Interesas / poreikis                                         |
-|:-------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------|:-------------------------------------------------------------|
-| **Klientas (naudotojas)**                                                                                    | Naudojasi interneto tiekėjo paslaugomis                                | Nori matyti paslaugas, sąskaitas ir atlikti apmokėjimus      |
-| **Vadybininkai**                                                                                             | Atsakingi už duomenų, paslaugų ir klientų administravimą TVS sistemoje | Nori efektyviai valdyti klientų, paslaugų duomenis           |
-| **Rinkodaros specialistai**                                                                                  | Atsakingi už paslaugų siūlymą esamiems klientams, naujų įvedimą        | Nori pritraukti daugiau pinigų į įmonę                       |
-| **Sistemos savininkas (tiekėjas)**                                                                           | Projekto vykdytojas                                                    | Siekia turėti patikimą, saugią ir prižiūrimą sistemą         |
-| **Programuotojai**                                                                                           | Programuoja sistemą                                                    | Siekia sukurti kitoms suinteresuotoms šalims tinkamą sistemą |
-| **Testuotojai**                                                                                              | Testuoja sistemą                                                       | Siekia užtikrinti sistemos veiklą be trūkių                  |
-| **E-mokėjimų sistema (Paysera)**                                                                             | Trečiosios šalies integracija                                          | Teikia saugius mokėjimus klientams                           |
+| Suinteresuota šalis _(angl. [Stakeholder](https://www.viewpoints-and-perspectives.info/home/stakeholders/))_  | Aprašymas                                                              | Interesas / poreikis                                            |
+|:--------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------|:----------------------------------------------------------------|
+| **Klientas (naudotojas)**                                                                                     | Naudojasi interneto tiekėjo paslaugomis                                | Nori matyti paslaugas, sąskaitas ir atlikti apmokėjimus         |
+| **Vadybininkai**                                                                                              | Atsakingi už duomenų, paslaugų ir klientų administravimą TVS sistemoje | Nori efektyviai valdyti klientų, paslaugų duomenis              |
+| **Rinkodaros specialistai**                                                                                   | Atsakingi už paslaugų siūlymą esamiems klientams, naujų įvedimą        | Nori pritraukti daugiau pinigų į įmonę                          |
+| **Sistemos savininkas (tiekėjas)**                                                                            | Projekto vykdytojas                                                    | Siekia turėti patikimą, saugią ir prižiūrimą sistemą            |
+| **Programuotojai**                                                                                            | Programuoja sistemą                                                    | Siekia sukurti kitoms suinteresuotoms šalims tinkamą sistemą    |
+| **Testuotojai**                                                                                               | Testuoja sistemą                                                       | Siekia užtikrinti sistemos veiklą be trūkių                     |
+| **E-mokėjimų sistema (Paysera)**                                                                              | Trečiosios šalies integracija                                          | Teikia saugius mokėjimus klientams                              |
+| **Žemėlapio integracija (Leaflet)**                                                                           | Trečiosios šalies integracija                                          | Teikia žemėlapį vadybininkams ir rinkodaros specialistams TVS'e |
 
 # 3. Viepoints
 Pagal ISO/IEC 42010:2022 standartą, pasirinkti visi šie architektūriniai požiūriai _(angl. viewpoints)_, kurie padėjo sukurti ir struktūruoti ITIS architektūros vaizdus.  
@@ -106,20 +157,22 @@ Kiekvienas viewpoint apibrėžia savo aprašymą, tikslą, sprendžiamus rūpes�
 Kiekvienas požiūris turi savo paskirtį ir suinteresuotąją auditoriją, todėl kartu jie sudaro visapusišką architektūros aprašymą pagal ISO/IEC 42010:2022 standartą.
 
 
-# 4. Views
+# 4. Architektūros vaizdai _(angl. Views)_
 Šiame skyriuje pateikiami konkretūs ITIS architektūros vaizdai _(angl. views)_, sukurti pagal ankstesniame skyriuje aprašytus **7 Viewpoints**.  
 Kiekvienas vaizdas pateikia tam tikrą sistemos architektūros aspektą, atspindintį atitinkamų suinteresuotųjų šalių rūpesčius.
 
-## 4.1. Context View
+## 4.1. Konteksto vaizdas _(angl. Context View)_
 **Aprašymas:**
 Sistema susideda iš dviejų pagrindinių sričių:
 - **Frontend (naudotojo sąsaja):** skirta klientams prisijungti, peržiūrėti sąskaitas, apmokėti per e-mokėjimų sistemą Paysera.
 - **TVS (Turinio valdymo sistema):** skirta administratoriams, rinkodaroms specialistams valdyti klientus, paslaugas ir sąskaitas.
 
+TODO: scenarijai
+
 ![context_view.png](context_view.png)
 
 
-## 4.2. Functional View
+## 4.2. Funkcinis vaizdas _(angl. Functional View)_
 **Aprašymas:**  
 Sistema padalinta į funkcinius modulius, atspindinčius verslo procesus:
 - **Klientų modulis** – kuria ir tvarko klientų įrašus.
@@ -134,7 +187,7 @@ Sistema padalinta į funkcinius modulius, atspindinčius verslo procesus:
 ![functional_view.png](functional_view.png)
 
 
-## 4.3. Information View
+## 4.3. Informacinis vaizdas _(angl. Information View)_
 **Aprašymas:**  
 Duomenų modelis paremtas **Entity–Relationship (ER)** struktūra. Pagrindinės esybės:
 - **Klientas** – turi kelis **Objektus**.
@@ -151,7 +204,7 @@ UML Esybių ryšių diagrama (Baronas (Chen) notation)
 ![intormation_view.png](intormation_view_erdiagram.png)
 
 
-## 4.4. Concurrency  View
+## 4.4. Lygiagretumo vaizdas _(angl. Concurrency  View)_
 **Aprašymas:**  
 ITIS sistema palaiko vienalaikį kelių naudotojų prisijungimą:
 - Naudojamas **Symfony sesijų valdymas** – atskira sesija kiekvienam naudotojui.
@@ -162,7 +215,7 @@ ITIS sistema palaiko vienalaikį kelių naudotojų prisijungimą:
 **TODO diagram**
 
 
-## 4.5. Development View
+## 4.5. Vystymo vaizdas _(angl. Development View)_
 **Aprašymas:**  
 Kodas organizuotas pagal **MVC (Model–View–Controller)** šabloną:
 - **Model:** Doctrine ORM modeliai.
@@ -180,7 +233,7 @@ Development View užtikrina, kad programinė architektūra būtų tvarkinga, mod
 **TODO diagram**
 
 
-## 4.6. Deployment View
+## 4.6. Diegimo vaizdas _(angl. Deployment View)_
 **Aprašymas:**
 Sistemos komponentai diegiami į dvi aplinkas:
 - **Testinę** (staging) – naujų funkcijų bandymams.
@@ -197,7 +250,7 @@ Sistemos komponentai diegiami į dvi aplinkas:
 **TODO diagram**
 
 
-## 4.7. Operational View
+## 4.7. Operacinis vaizdas _(angl. Operational View)_
 **Aprašymas:**
 - **Monolog** fiksuoja veiksmus ir klaidas („.log“ failai saugomi 90 dienų).
 - **Automatinės atsarginės kopijos** vykdomos periodiškai.

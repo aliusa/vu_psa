@@ -5,6 +5,14 @@ Points: 0.25
 * Define stakeholders of IT system
 * Create architectural description with context view of the system
 
+#### Į ką atkreipia dėmesį
+- Funkciniai, nefunkciniai reikalavimai
+- Suinteresuotos šalys
+- Sistemos apimtis (Scope)
+- Context view diagrama
+- Context view scenarijai
+- Neturi būti konkrečios technologijos - reikia rašyti iš verslo pusės
+
 # lab 2.B
 Points: 1.5  
 Bonus Points : Document all 7 views 0.25
@@ -47,10 +55,18 @@ Interneto tiekėjo informacinė sistema (ITIS) skirta automatizuoti klientų duo
 - Lengvai plečiama architektūra.
 - Analitika.
 
-**Sistemos apimtis _(angl. Scope)_:**
-- Sistema turi:
-  - Klientas gali peržiūrėti savo paslaugas, mokėjimus
-  - Vadybininkai gali koreguoti visus klientų, paslaugų duomenis.
+**Sistemos tikslas _(angl. Purpose)_:**
+- Sistema gali:
+  - Klientų savitarna:
+    - Gali peržiūrėti savo paslaugas, sąskaitas, mokėjimus, objektus
+    - Užduoti klausimą administracijai (per klausimų modulį)
+  - Vadibininkų funkcijos:
+    - Gali kurti klientus
+    - Gali koreguoti visus klientų, paslaugų duomenis, akcijas
+  - Informaciniai ir veikimo mechanizmai:
+    - Log'inti visas klaidas ir sistemos veiksmus
+    - Kaupti veiklos žurnalus 90 dienų
+    - Veikti dvejose aplinkose — testavimo (staging) ir production'o.
 - Sistema neturi, negali:
   - Klientų ir paslaugų valdymas:
     - Klientas pats negali užsiregistruoti į sistemą - jį gali priregistruoti tik vadybininkas
@@ -112,7 +128,7 @@ Interneto tiekėjo informacinė sistema (ITIS) skirta automatizuoti klientų duo
 
 | Nr.      | Reikalavimas                            | Aprašymas                                                                                                                             |
 |----------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| **NF1**  | **Našumas (Performance)**               | Sistema turi apdoroti bent 1000 užklausų per 3 sekundes esant apkrovai.                                                               |
+| **NF1**  | **Našumas (Performance)**               | Sistema turi apdoroti bent 10000 užklausų per 1 sekundę esant apkrovai.                                                               |
 | **NF2**  | **Prieinamumas (Availability)**         | Sistema turi būti pasiekiama bent 99,99 % laiko per mėnesį.                                                                           |
 | **NF3**  | **Atsparumas (Resilience)**             | Gedimo atveju sistema turi būti atstatoma ne vėliau kaip per 2 valandas (MTTR ≤ 2 h).                                                 |
 | **NF4**  | **Saugumas (Security)**                 | Visi duomenys perduodami HTTPS protokolu; slaptažodžiai saugomi su bcrypt / Argon2; naudojami CSRF token'ai.                          |
@@ -147,7 +163,7 @@ Kiekvienas viewpoint apibrėžia savo aprašymą, tikslą, sprendžiamus rūpes�
 |----------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **[Context Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/context/)**                 | Apibrėžia sistemos ribas, jos sąveiką su išorinėmis sistemomis ir naudotojais                            | - Kaip sistema integruojama su išorinėmis paslaugomis (mokėjimais, el. paštu).<br/>- Kaip klientai ir administratoriai sąveikauja su sistema.<br/>- Kokie duomenys perduodami tarp išorinių sistemų. | Visos suinteresuotos šalys, bet labiausiai:<br/>- klientai (naudotojai)<br/>- Sistemos savininkas (tiekėjas) | - UML konteksto diagrama                                                                                                                                   |
 | **[Functional Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/functional-viewpoint/)** | Apibrėžia pagrindinius funkcinius modulius, jų atsakomybę ir sąveiką                                     | - Ką sistema daro (funkcijos).<br/>- Kaip šios funkcijos tarpusavyje susijusios.<br/>- Kaip skirtingi naudotojai (rolės) jas naudoja.                                                                | Visos suinteresuotos šalys                                                                                   | - UML panaudos atvejų diagramos<br/>- UML veiklos diagramos<br/>- Verslo procesų aprašai                                                                   |
-| **[Information Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/information/)**         | Apibrėžia pagrindines duomenų esybes ir ryšius tarp jų                                                   | - Kaip saugoma ir valdoma informacija.<br/>- Kokie yra esybių ryšiai (klientai, paslaugos, sąskaitos, akcijos).<br/>- Kaip užtikrinamas duomenų vientisumas ir saugumas.                             | - Programuotojai<br/>- Sistemos savininkas (tiekėjas)                                                        | - UML klasių diagrama<br/>- UML duomenų esybių (ERD) diagrama                                                                                              |
+| **[Information Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/information/)**         | Apibrėžia pagrindines duomenų esybes ir ryšius tarp jų                                                   | - Kaip saugoma ir valdoma informacija.<br/>- Kokie yra esybių ryšiai (klientai, paslaugos, sąskaitos, akcijos).<br/>- Kaip užtikrinamas duomenų vientisumas ir saugumas.                             | - Programuotojai<br/>- Sistemos savininkas (tiekėjas)                                                        | - UML klasių _(angl. class)_ diagrama<br/>- UML esybių ryšių (ER) diagrama<br/>- UML esybių ryšių (ER) žvaigždinė _(angl. star)_ diagrama                  |
 | **[Concurrency Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/concurrency/)**         | Apibrėžia, kaip sistema elgiasi, kai keli naudotojai ar procesai veikia vienu metu                       | - Kaip tvarkomos vienalaikės užklausos į duomenų bazę.<br/>- Kaip valdomi sesijų konfliktai.<br/>- Kaip užtikrinamas stabilus veikimas esant dideliam srautui.                                       | - Programuotojai<br/>- Testuotojai                                                                                             | - Sekos diagramos (Concurrency scenarijai)<br/>- Užraktų _(angl. locks)_ ir sesijų valdymo logika                                                          |
 | **[Development Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/development/)**         | Apibrėžia sistemos loginę struktūrą kūrimo požiūriu – kaip organizuojamas kodas, komponentai ir moduliai | - Kaip kodas organizuotas (MVC struktūra, modulių išdėstymas).<br/>- Kaip naudojamos priklausomybės ir bibliotekos.<br/>- Kaip valdomos versijos ir testai.                                          | - Testuotojai<br/>- Sistemos savininkas (tiekėjas)                                                                | - Kodo struktūros schema<br/>- Priklausomybių _(angl. Dependency Injection)_ modelis                                                                       |
 | **[Deployment Viewpoint](https://www.viewpoints-and-perspectives.info/home/viewpoints/deployment/)**           | Apibrėžia, kaip sistema diegiama į kliento infrastruktūrą                                                | - Kaip programinė įranga įdiegta (serveriai, DB, aplinkos).<br/>- Kaip užtikrinamas pasiekiamumas, atsarginės kopijos ir saugumas.<br/>- Koks ryšys tarp testinės ir produkcinės aplinkos.           | - Programuotojai<br/>- Sistemos savininkas (tiekėjas)                                                        | - Serverių topologijos schema                                                                                                                              |
@@ -155,7 +171,6 @@ Kiekvienas viewpoint apibrėžia savo aprašymą, tikslą, sprendžiamus rūpes�
 
 Šie septyni viewpoint’ai užtikrina, kad ITIS architektūra apžvelgiama iš visų esminių kampų – nuo verslo konteksto iki techninio diegimo ir eksploatacijos.  
 Kiekvienas požiūris turi savo paskirtį ir suinteresuotąją auditoriją, todėl kartu jie sudaro visapusišką architektūros aprašymą pagal ISO/IEC 42010:2022 standartą.
-
 
 # 4. Architektūros vaizdai _(angl. Views)_
 Šiame skyriuje pateikiami konkretūs ITIS architektūros vaizdai _(angl. views)_, sukurti pagal ankstesniame skyriuje aprašytus **7 Viewpoints**.  
@@ -167,9 +182,43 @@ Sistema susideda iš dviejų pagrindinių sričių:
 - **Frontend (naudotojo sąsaja):** skirta klientams prisijungti, peržiūrėti sąskaitas, apmokėti per e-mokėjimų sistemą Paysera.
 - **TVS (Turinio valdymo sistema):** skirta administratoriams, rinkodaroms specialistams valdyti klientus, paslaugas ir sąskaitas.
 
-TODO: scenarijai
-
 ![context_view.png](context_view.png)
+
+### Konteksto scenarijai
+
+**Scenarijus 1 — Klientas prisijungia ir peržiūri paslaugas**
+1. Klientas atidaro sistemos savitarnos puslapį.
+2. Įveda el. paštą ir slaptažodį.
+3. Sistema autentifikuoja klientą.
+4. Klientas mato savo paslaugų sąrašą, objektus.
+5. Sistema duomenis gauna iš duomenų bazės.
+
+**Scenarijus 2 — Klientas apmoka sąskaitą per el.mokėjimų sistemą (Paysera)**
+1. Klientas pasirenka neapmokėtą sąskaitą ir paspaudžia „Apmokėti“.
+2. ITIS perduoda mokėjimo informaciją į Paysera API.
+3. Paysera nukreipia klientą į mokėjimo langą.
+4. Po sėkmingo mokėjimo Paysera grąžina „callback“ į ITIS.
+5. ITIS atnaujina sąskaitos statusą į „Apmokėta“.
+
+**Scenarijus 3 — Vadybininkas administruoja klientų duomenis**
+1. Vadybininkas prisijungia prie TVS.
+2. Pasirenka klientų modulį.
+3. Redaguoja kliento kontaktinius duomenis, sutartį ar prideda naują paslaugų paketą.
+4. Sistema atnaujina duomenis duomenų bazėje.
+
+**Scenarijus 4 — Sistema automatiškai sugeneruoja sąskaitas**
+1. Kasdien 02:00 val. nakties crontab paleidžia sąskaitų generavimo procesą.
+2. Sistema tikrina visus aktyvius klientų paslaugų paketus.
+3. Sugeneruojamos naujos sąskaitos už mėnesio paslaugas.
+4. Kiekvienas generavimas registruojamas log'uose.
+5. Klientams jų savitarnoje atsiranda nauja sąskaita.
+
+**Scenarijus 5 — Sistemos gedimas ir automatinis atstatymas**
+1. Duomenų bazė trumpam tampa nepasiekiama dėl resursų perkrovos.
+2. ITIS rodo vartotojui draugišką klaidos pranešimą.
+3. Monitoring modulyje užregistruojamas įvykis.
+4. Sistema automatiškai atsistato, kai DB vėl pradeda veikti.
+5. Administratorius gauna pranešimą el. paštu arba Sentry.
 
 
 ## 4.2. Funkcinis vaizdas _(angl. Functional View)_
@@ -186,6 +235,112 @@ Sistema padalinta į funkcinius modulius, atspindinčius verslo procesus:
 
 ![functional_view.png](functional_view.png)
 
+### 4.2.1. Rūpesčiai _(angl. Concerns)_
+Šis funkcinis požiūris apibrėžia sistemos funkcines galimybes — **ką sistema privalo daryti ir ko sistema nedaro**, atsižvelgiant į verslo poreikius ir proceso ribas.
+
+#### Ką sistema privalo daryti _(angl. In scope)_
+Sistemai keliami šie funkciniai reikalavimai:
+1. **Klientų savitarna**
+   - Leisti klientui prisijungti.
+   - Leisti peržiūrėti paslaugas, objektus, sąskaitas ir mokėjimus.
+   - Leisti pateikti klausimą administracijai.
+2. **Klientų ir paslaugų administravimas**
+   - Leisti vadybininkui kurti ir redaguoti klientus.
+   - Leisti valdyti kliento objektus (adresus).
+   - Leisti pridėti ir koreguoti paslaugas bei jų paketus klientams.
+   - Leisti kurti ir taikyti akcijas paslaugoms.
+3. **Sąskaitų valdymas**
+   - Automatiškai generuoti sąskaitas.
+   - Saugoti sąskaitų istoriją.
+   - Leisti peržiūrėti sąskaitų būsenas.
+4. **Klausimų-atsakymų valdymas**
+   - Leisti vadybininkui kurti ir redaguoti klausimų kategorijas.
+4. **Mokėjimai**
+   - Inicijuoti mokėjimą per integruotą e-mokėjimų sistemą (Paysera).
+   - Priimti mokėjimų būsenos „callback“ signalus.
+   - Atnaujinti sąskaitos statusą.
+5. **Operacinės funkcijos**
+   - Log'inti įvykius ir klaidas.
+   - Siųsti pranešimus el. paštu.
+   - Daryti atsargines DB kopijas.
+   - Laikyti dvi atskiras aplinkas (staging & production).
+
+#### Ko sistema nedaro _(angl. Out of Scope)_
+Šios funkcijos nėra sistemos galimybės ir nepatenka į apimtį _(angl. Scope)_:
+1. Saviregistracija
+   - Klientas negali pats susikurti paskyros.
+2. Savarankiškas paslaugų užsakymas
+   - Klientas negali pats keisti ar užsisakyti paslaugų.
+3. Finansinės funkcijos
+   - Sistema nepriima mokėjimų tiesiogiai (tik per e-mokėjimų sistemą).
+   - Sistema neapdoroja grąžinimų (refunds).
+   - Sistema nesaugo mokėjimo kortelių duomenų.
+   - Sistema nevykdo automatinių nuskaitytų iš mokėjimo kortelės.
+4. Išplėstinė analitika
+   - Sistema neprognozuoja pajamų.
+   - Sistema neatlieka paslaugų vartojimo analizės.
+5. Automatinis sutarties valdymas
+   - Sistema nekeičia klientų sutarčių be vadybininko įsikišimo.
+
+UML panaudos atvejų _(angl. Use Case)_ diagrama.  
+Išeities kodas pateiktas priede 1.  
+![function_view_use_case_diagram.png](function_view_use_case_diagram.png)
+
+### 4.2.2. Išorinės sąsajos _(angl. External Interfaces)_
+Šiame skyriuje aprašomos visos ITIS sistemos funkcinės sąveikos su išoriniais aktoriais ir trečiųjų šalių sistemomis. Tai leidžia identifikuoti, kokie duomenys, įvykiai ir valdymo srautai būtini sistemai atlikti funkcijas, aprašytas Funkciniame vaizde.
+
+| Išorinis aktorius / sistema             | Sąveikos tipas                                      | Funkcinė paskirtis                                                    |
+|-----------------------------------------|-----------------------------------------------------|-----------------------------------------------------------------------|
+| **Klientas**                            | UI sąveika, duomenų užklausos, inicijuojami įvykiai | Peržiūri paslaugas, sąskaitas, inicijuoja mokėjimą, teikia klausimus. |
+| **Vadybininkas / administratorius**     | Valdymo veiksmai, duomenų keitimas                  | Kuria klientus, keičia objektus, paslaugas, sąskaitas.                |
+| **E-mokėjimų sistema (Paysera)**        | Duomenų mainai, įvykiai (callback)                  | Apdoroja mokėjimus ir grąžina jų būsenas.                             |
+| **El. pašto sistema (SMTP)**            | Įvykiai, pranešimų siuntimas                        | Siunčia sąskaitas, pranešimus, slaptažodžio atkūrimo laiškus.         |
+| **Žemėlapis (Leaflet / OpenStreetMap)** | Duomenų užklausos (tiles)                           | Atvaizduoja klientų objektus žemėlapyje administracinė dalyje.        |
+
+### 4.2.3. Duomenų mainų srautai _(angl. Data Flows)_
+**ITIS → Paysera**
+Siunčiama:
+- mokėjimo inicijavimo užklausa:  
+`invoice_id`, `customer_id`, `amount`, `currency`, `redirect_url`, `callback_url`
+
+Gaunama:
+- mokėjimo būsena (`paid`, `canceled`, `failed`)
+- Paysera parašas (`sign`) duomenų patikrai
+
+**ITIS → El. pašto sistema**
+- sąskaitos PDF failas
+- kliento el. pašto adresas
+- laiško tema ir turinys
+- slaptažodžio keitimo nuoroda
+
+**ITIS → Leaflet/OpenStreetMap**
+- HTTP GET užklausos žemėlapio sluoksniams
+- Kliento objektų koordinatės
+
+**ITIS ↔ Klientas**
+- Peržiūros funkcijos (sąskaitos, paslaugos)
+- Mokėjimo inicijavimas
+- Klausimų pateikimas
+
+**ITIS ↔ Administratorius**
+- Klientų, paslaugų, objektų, sąskaitų keitimas
+- Sistemos nustatymų valdymas
+- Prieigos valdymo operacijos
+
+### 4.2.4. Įvykių srautai _(angl. Events)_
+**Išorinių sistemų inicijuojami įvykiai**
+
+| Įvykis               | Pasekmė sistemoje                                              |
+|----------------------|----------------------------------------------------------------|
+| **Paysera callback** | Atnaujinama sąskaitos būsena, siunčiamas patvirtinimo laiškas. |
+
+**Sistemos inicijuojami įvykiai**
+
+| Įvykis                             | Paskirtis                                              |
+|------------------------------------|--------------------------------------------------------|
+| **Cron job: sąskaitų generavimas** | Sukuriamos naujos sąskaitos pagal paslaugas ir planus. |
+| **Sesijos inicijavimas**           | Klientui ar administratoriui suteikiama prieiga.       |
+| **Klaidų log'inimas**              | Užfiksuoti sistemines klaidas.                         |
 
 ## 4.3. Informacinis vaizdas _(angl. Information View)_
 **Aprašymas:**  
@@ -200,6 +355,9 @@ Duomenų modelis paremtas **Entity–Relationship (ER)** struktūra. Pagrindinė
 UML klasių diagrama  
 ![intormation_view.png](intormation_view_classdiagram.png)
 
+UML Klasių diagrama (žvaigždės schema)  
+![intormation_view.png](intormation_view_erdiagram_star.png)
+
 UML Esybių ryšių diagrama (Baronas (Chen) notation)  
 ![intormation_view.png](intormation_view_erdiagram.png)
 
@@ -210,7 +368,7 @@ ITIS sistema palaiko vienalaikį kelių naudotojų prisijungimą:
 - Naudojamas **Symfony sesijų valdymas** – atskira sesija kiekvienam naudotojui.
 - **Doctrine ORM** užtikrina duomenų vientisumą užrakinant įrašus (transactional locks).
 - **crontab** procesas generuoja sąskaitas fone (asinchroninis vykdymas).
-- Testuota su **Apache JMeter**, iki 1000 užklausų per 3 s.
+- Testuota su **Apache JMeter**, iki 10000 užklausų per 1 s.
 
 **TODO diagram**
 
@@ -275,7 +433,6 @@ Operational View parodo, kaip sistema veikia realiame gyvenimo cikle — kaip ji
 
 Kartu jie sudaro išsamų, subalansuotą architektūros aprašymą, atitinkantį ISO/IEC 42010 reikalavimus.
 
-
 # 5. Perspektyvos _(angl. [Perspectives](https://www.viewpoints-and-perspectives.info/home/perspectives/))_
 ## 5.1. Prieinamumas neįgaliems _(angl. [Accessibility](https://www.viewpoints-and-perspectives.info/home/perspectives/accessibility/))_
 Nereikia.
@@ -335,6 +492,70 @@ Nereikia.
 ## 5.10. Naudojimo patogumas _(angl. [Usability](https://www.viewpoints-and-perspectives.info/home/perspectives/usability-perspective/))_
 Nereikia.
 
+# Priedai
+## Priedas 1. Funkcinio vaizdo Use Case diagramos kodas
+```plantuml
+@startuml
+left to right direction
 
-# Appendix A. Architecture decisions and rationale
-TODO
+actor Klientas as Client
+actor "Vadybininkas" as Vadybininkas
+actor "E-mokėjimų sistema" as PaymentProvider
+actor "El. pašto sistema" as Email
+
+rectangle "ITIS sistema" {
+
+  (Peržiūrėti paslaugas) as UC_101
+  (Peržiūrėti sąskaitas) as UC_102
+  ' (Atsisiųsti sąskaitą) as UC_103
+  (Apmokėti sąskaitą) as UC_104
+  (Pateikti klausimą) as UC_105
+
+  (Kurti klientą) as UC_201
+  (Redaguoti klientą) as UC_202
+  (Tvarkyti objektus) as UC_203
+  (Valdyti paslaugas) as UC_204
+  (Valdyti paslaugų paketus) as UC_205
+  (Koreguoti akcijas) as UC_206
+  (Atsakyti į klausimus) as UC_207
+  (Tvarkyti klausimų kategorijas) as UC_208
+
+  (Generuoti sąskaitas automatiškai) as UC_301
+  (Atnaujinti mokėjimo būseną) as UC_302
+  (Išsiųsti pranešimą el. paštu) as UC_303
+  (Klaidų log'inimas) as UC_304
+}
+
+' Kliento ryšiai
+Client --> UC_101
+Client --> UC_102
+'Client --> UC_103
+Client --> UC_104
+Client --> UC_105
+
+' Vadybininko ryšiai
+Vadybininkas --> UC_201
+Vadybininkas --> UC_202
+Vadybininkas --> UC_203
+Vadybininkas --> UC_204
+Vadybininkas --> UC_205
+Vadybininkas --> UC_206
+Vadybininkas --> UC_207
+Vadybininkas --> UC_208
+
+' Sistemos ryšiai
+'Vadybininkas --> UC_304
+
+' Sistemos procesai
+UC_104 --> PaymentProvider : "Inicijuoti mokėjimą"
+PaymentProvider --> UC_302 : "Callback: mokėjimo būsena"
+
+' El. pašto sistema
+UC_303 <-- Email
+
+' Automatiniai procesai
+UC_301 --> UC_303 : "Siųsti sąskaitas"
+UC_301 --> UC_102 : "Kurti sąskaitų įrašus"
+
+@enduml
+```

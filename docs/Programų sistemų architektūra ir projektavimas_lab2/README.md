@@ -233,13 +233,14 @@ Sistema padalinta į funkcinius modulius, atspindinčius verslo procesus:
 - **Struktūros modulis** – atvaizduoja tekstinius puslapius.
 - **Administratorių modulis** – valdo sistemos administratorius - vadybininkus, rinkodaros specialistus.
 
-![functional_view.png](functional_view.png)
+![functional_view.png](functional_view.png)  
+_<center>UML funkcinio vaizdo diagrama</center>_
 
 ### 4.2.1. Rūpesčiai _(angl. Concerns)_
 Šis funkcinis požiūris apibrėžia sistemos funkcines galimybes — **ką sistema privalo daryti ir ko sistema nedaro**, atsižvelgiant į verslo poreikius ir proceso ribas.
 
 #### Ką sistema privalo daryti _(angl. In scope)_
-Sistemai keliami šie funkciniai reikalavimai:
+Sistemai keliami šie funkciniai reikalavimai:  
 1. **Klientų savitarna**
    - Leisti klientui prisijungti.
    - Leisti peržiūrėti paslaugas, objektus, sąskaitas ir mokėjimus.
@@ -253,7 +254,7 @@ Sistemai keliami šie funkciniai reikalavimai:
    - Automatiškai generuoti sąskaitas.
    - Saugoti sąskaitų istoriją.
    - Leisti peržiūrėti sąskaitų būsenas.
-4. **Klausimų-atsakymų valdymas**
+   - Klausimų-atsakymų valdymas**
    - Leisti vadybininkui kurti ir redaguoti klausimų kategorijas.
 4. **Mokėjimai**
    - Inicijuoti mokėjimą per integruotą e-mokėjimų sistemą (Paysera).
@@ -282,9 +283,8 @@ Sistemai keliami šie funkciniai reikalavimai:
 5. Automatinis sutarties valdymas
    - Sistema nekeičia klientų sutarčių be vadybininko įsikišimo.
 
-UML panaudos atvejų _(angl. Use Case)_ diagrama.  
-Išeities kodas pateiktas priede 1.  
-![function_view_use_case_diagram.png](function_view_use_case_diagram.png)
+![function_view_use_case_diagram.png](function_view_use_case_diagram.png)  
+_<center>UML panaudos atvejų (angl. Use Case) diagrama<br/>Išeities kodas pateiktas priede 1</center>_
 
 ### 4.2.2. Išorinės sąsajos _(angl. External Interfaces)_
 Šiame skyriuje aprašomos visos ITIS sistemos funkcinės sąveikos su išoriniais aktoriais ir trečiųjų šalių sistemomis. Tai leidžia identifikuoti, kokie duomenys, įvykiai ir valdymo srautai būtini sistemai atlikti funkcijas, aprašytas Funkciniame vaizde.
@@ -301,9 +301,9 @@ Išeities kodas pateiktas priede 1.
 **ITIS → Paysera**
 Siunčiama:
 - mokėjimo inicijavimo užklausa:  
-`invoice_id`, `customer_id`, `amount`, `currency`, `redirect_url`, `callback_url`
+`invoice_id`, `customer_id`, `amount`, `currency`, `redirect_url`, `callback_url`, `cancel_url`, `accept_url`
 
-Gaunama:
+**Gaunama:**
 - mokėjimo būsena (`paid`, `canceled`, `failed`)
 - Paysera parašas (`sign`) duomenų patikrai
 
@@ -342,7 +342,10 @@ Gaunama:
 | **Sesijos inicijavimas**           | Klientui ar administratoriui suteikiama prieiga.       |
 | **Klaidų log'inimas**              | Užfiksuoti sistemines klaidas.                         |
 
+
 ## 4.3. Informacinis vaizdas _(angl. Information View)_
+**Informacinis vaizdas** apibrėžia, kaip ITIS sistema **saugo, tvarko, valdo ir perduoda informaciją**.  
+
 **Aprašymas:**  
 Duomenų modelis paremtas **Entity–Relationship (ER)** struktūra. Pagrindinės esybės:
 - **Klientas** – turi kelis **Objektus**.
@@ -351,16 +354,111 @@ Duomenų modelis paremtas **Entity–Relationship (ER)** struktūra. Pagrindinė
 - **Sąskaita** – generuojama pagal paslaugas, turi **Sąskaitos eilutes**.
 - **Akcija** – taikoma paslaugoms ar paketams.
 - **Nustatymai** – saugo sistemos konfigūraciją.
+- **Klausimai** – frontend'e užduoti klausimai.
 
-UML klasių diagrama  
-![intormation_view.png](intormation_view_classdiagram.png)
+![information_view.png](information_view_classdiagram.png)
+_<center>UML klasių diagrama</center>_
 
-UML Klasių diagrama (žvaigždės schema)  
-![intormation_view.png](intormation_view_erdiagram_star.png)
+![information_view.png](information_view_erdiagram_star.png)  
+_<center>UML Klasių diagrama (žvaigždės schema)</center>_
 
-UML Esybių ryšių diagrama (Baronas (Chen) notation)  
-![intormation_view.png](intormation_view_erdiagram.png)
+![information_view.png](information_view_erdiagram.png)  
+_<center>UML Esybių ryšių diagrama (Baronas (Chen) notation)</center>_
 
+### 4.3.1. Informacijos tikslas ir naudojimas _(angl. Information Purpose & Usage)_
+Pagal informacinio požiūrio praktiką sistemoje yra dvi skirtingos informacijos naudojimo kategorijos:  
+1. **OLTP informacija (pagrindinė operacijų DB)**
+   - Klientų duomenys
+   - Paslaugų ir paketų informacija
+   - Sąskaitos ir mokėjimai
+   - Vadybininkų administraciniai veiksmai
+   - Klausimai ir atsakymai
+   - Charakteristikos:
+   - Dažnas atnaujinimas
+   - Atributų tikslumo kritiškumas
+   - Transakcijų vientisumas (ACID)
+2. **Analitinė / ataskaitų informacija**
+   - Kadangi ITIS neturi OLAP ar Data Warehouse, analitika vykdoma:
+   - iš agreguotų duomenų
+   - iš sugeneruotų sąskaitų
+   - iš mokėjimų būsenų
+
+### 4.3.2. Informacijos nuosavybė _(angl. Information Ownership)_
+ISO/IEC 42010:2022 informacinio požiūrio gairės teigia, kad būtina aiškiai nurodyti, kas yra kiekvieno duomenų elemento savininkas ir kas atsakingas už jų atnaujinimą.
+
+| Duomenų tipas        | Informacijos savininkas | Leidžiami keitėjai                    | Pastabos                                               |
+|----------------------|-------------------------|---------------------------------------|--------------------------------------------------------|
+| **Klientas**         | ITIS                    | Vadybininkas, Klientas                | Klientas gali redaguoti tik savo pagrindinius duomenis |
+| **Objektas**         | ITIS                    | Vadybininkas                          |                                                        |
+| **Paslaugų paketas** | ITIS                    | Vadybininkas                          |                                                        |
+| **Paslaugos**        | ITIS                    | Vadybininkas                          |                                                        |
+| **Sąskaita**         | ITIS                    | sistema                               | Vadybininkai nekeičia sugeneruotų sąskaitų             |
+| **Mokėjimo būsena**  | El.mokėjimų sistema     | El.mokėjimų sistema → ITIS callback   | ITIS negali nuspręsti „apmokėta“ be mokėjimų sistemos  |
+| **Akcija**           | ITIS                    | Vadybininkas                          |                                                        |
+| **Nustatymai**       | ITIS                    | Vadybininkas                          |                                                        |
+| **Klausimai**        | ITIS                    | Vadybininkas, Rinkodaros specialistas |                                                        |
+| **Šalys**            | ITIS                    | Vadybininkas                          |                                                        |
+| **Struktūra**        | ITIS                    | Vadybininkas                          |                                                        |
+| **Administratoriai** | ITIS                    | Vadybininkas                          |                                                        |
+
+**Konfliktų prevencijos taktika**
+- El.mokėjimų sistema turi absoliučią prioritetą dėl mokėjimo būsenos
+- Duomenys tvarkomi viename šaltinyje – **monolitinė DB**, todėl konfliktų rizika minimali
+- Vadybininko ir kliento atnaujinimai kerta vienas kitam (klientas gali keisti tik savo esminius duomenis)
+
+### 4.3.3. Identifikatoriai ir žemėlapiai (Identifiers & Key Mapping)
+**Pirminiai raktai**
+- Visi ITIS objektai turi **vidinį ID _(angl. auto-increment)_**.
+- El.mokėjimams naudojami `external_id` iš el.mokėjimų sistemos.
+- Kliento objektų koordinatės turi būti saugomos kaip geografiniai taškai (GIS palaikymas pasirenkamas vėliau).
+
+### 4.3.4. Informacijos srautai _(angl. Information Flows)_
+1. Kliento savitarna → ITIS
+   - prisijungimo duomenys
+   - mokėjimo inicijavimas
+2. ITIS → el.mokėjimų sistemos
+   - užklausos su parametrais
+   - būsenų atnaujinimai
+3. ITIS → el. pašto sistema (SMTP)
+   - el.laiškai
+
+### 4.3.5. Informacijos gyvavimo ciklas (Information Lifecycle)
+**Sąskaitos gyvavimo ciklas**
+1. Sukurta – generuoja cron procesas
+1. Siunčiama el.paštu
+3. Laukiama mokėjimo
+4. Apmokėta – el.mokėjimo sistemos callback
+
+![information_view_state_diagram_saskaita.png](information_view_state_diagram_saskaita.png)  
+_<center>UML Sąskaitos gyyvavimo ciklo _(angl. Invoice state)_ diagrama.<br/>Išeities kodas pateiktas priede 2</center>_
+
+**Kliento klausimo gyvavimo ciklas**
+1. Sukurtas
+2. Vadybininkas atsako
+3. Klientas peržiūri atsakymą
+
+![information_view_state_diagram_klausimas.png](information_view_state_diagram_klausimas.png)  
+_<center>UML Kliento klausimo gyyvavimo ciklo diagrama.<br/>Išeities kodas pateiktas priede 3</center>_
+
+### 4.3.6. Informacijos kokybės modelis _(angl. Information Quality)_
+
+| Principas                                     | Taikymas                                                   |
+|-----------------------------------------------|------------------------------------------------------------|
+| **Priimti _(angl. Accept)_**                  | Neesminiai duomenys, pvz kliento telefono numerio formatas |
+| **Automatinis taisymas _(angl. Auto-fix)_**   | El. pašto normalizavimas į mažasias raides                 |
+| **Atmesti _(angl. Discard)_**                 | Sugedę el.mokėjimų sistemos callback                       |
+| **Rankinis taisymas _(angl. Manual repair)_** | Klaidingi kliento duomenys, pvz adresas. Taiso vadyininkas |
+
+### 4.3.7. Informacijos saugojimas ir archyvavimas _(angl. Retention & Archiving)_
+Pagal informacijos vaizdo gaires, archyvavimas turi būti natūralus informacijos gyvavimo ciklo etapas, ne pridėtinė funkcija.
+
+**ITIS archyvavimo taisyklės:**
+- Klientai: **neribotai**.
+- Sąskaitos: **neribotai**.
+- Log'ai: **90 dienų**.
+- Klausimai/atsakymai: **neribotai**.
+- Paslaugų pakeitimų auditas: **neribotai** (kol klientas aktyvus)
+- Backup kopijos: **kasdien**, saugomos **30 dienų**.
 
 ## 4.4. Lygiagretumo vaizdas _(angl. Concurrency  View)_
 **Aprašymas:**  
@@ -557,5 +655,51 @@ UC_303 <-- Email
 UC_301 --> UC_303 : "Siųsti sąskaitas"
 UC_301 --> UC_102 : "Kurti sąskaitų įrašus"
 
+@enduml
+```
+
+## Priedas 2. Informacinio vaizdo sąskaitos gyvavimo ciklo diagramos kodas
+```plantuml
+@startuml
+title Sąskaitos gyvavimo ciklas (Invoice State Diagram)
+
+/' Pradinė būsena '/
+[*] --> Sukurta
+
+state Sukurta {
+    [*] --> LaukiaSiuntimo
+    
+    LaukiaSiuntimo --> Išsiųsta : siunčiama klientui\n(el. paštas)
+}
+
+Sukurta --> Išsiųsta : Cron generuoja sąskaitą\nir inicijuoja išsiuntimą
+Išsiųsta --> LaukiamaMokėjimo : Klientas peržiūri sąskaitą
+
+LaukiamaMokėjimo --> ApmokėjimasVyksta : „Apmokėti“ Paysera
+ApmokėjimasVyksta --> Apmokėta : Paysera callback\nstatus = paid
+ApmokėjimasVyksta --> Nepavyko : Paysera callback\nstatus = failed
+ApmokėjimasVyksta --> Nepavyko : Paysera callback\nstatus = canceled
+Nepavyko --> LaukiamaMokėjimo : Klientas bando dar kartą
+
+/' Galutinė būsena '/
+Apmokėta --> [*]
+@enduml
+```
+
+## Priedas 3. Informacinio vaizdo kliento klausimo gyvavimo ciklo diagramos kodas
+```plantuml
+@startuml
+title Kliento klausimo gyvavimo ciklas
+
+[*] --> Sukurtas
+
+state Sukurtas {
+    [*] --> Neatsakytas
+}
+
+Neatsakytas --> Atsakytas : Atsako vadybininkas
+Atsakytas --> Peržiūrėtas : Peržiūri klientas
+
+Peržiūrėtas --> [*]
 @enduml
 ```

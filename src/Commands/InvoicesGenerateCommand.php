@@ -66,6 +66,8 @@ class InvoicesGenerateCommand extends BaseCommand
         ) {
             foreach ($usersObjectsServicesBundles as $usersObjectsServicesBundle) {
                 $this->generateInvoice($usersObjectsServicesBundle);
+
+                //TODO: sent email to user
             }
             $offset += $limit;
 

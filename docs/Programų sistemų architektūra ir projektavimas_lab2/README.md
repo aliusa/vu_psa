@@ -727,7 +727,15 @@ TODO
 
 # 5. Perspektyvos _(angl. [Perspectives](https://www.viewpoints-and-perspectives.info/home/perspectives/))_
 ## 5.1. Prieinamumas neįgaliems _(angl. [Accessibility](https://www.viewpoints-and-perspectives.info/home/perspectives/accessibility/))_
-Nereikia.
+
+| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                          |
+|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Taikymas _(angl. Applicability)_**         | Ši perspektyva taikoma ITIS sistemos savitarnai, nes ja naudojasi įvairių gebėjimų vartotojai.                                                                                                                                                                                                                                                    |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Ar sistema pasiekiama vartotojams su regos, motorikos ar kognityviniais sutrikimais.<br/>- Ar informacija tinkamai struktūruota ekrano skaitytuvams.<br/>- Ar spalvų kontrastai ir šrifto dydžiai atitinka WCAG rekomendacijas.<br/>- Ar formos ir mygtukai prieinami valdyti klaviatūra.<br/>- Ar klaidų žinutės aiškios ir suprantamos.       |
+| **Veiksmai _(angl. Activities)_**            | - Taikyti WCAG 2.1 AA gairių pagrindus (kontrastas, responsyvumas, semantika).<br/>- Užtikrinti alternatyvius tekstus paveikslėliams (alt).<br/>- Testuoti naršymą klaviatūra ir ekrano skaitytuvu.<br/>- Užtikrinti, kad formų klaidų žinutės būtų aiškiai matomos ir suprantamos.<br/>- Sutvarkyti semantinį HTML (aria-label, role atributai). |
+| **Taktikos _(angl. Tactics)_**               | - Aiškūs kontrastai (min 4.5:1).<br/>- Pakankamas šrifto dydis (≥16px).<br/>- Aiškus fokusavimo indikatorius klaviatūrai.<br/>- Spalva negali būti vienintelė informacijos perteikimo priemonė.<br/>- Paprastos, nuoseklios formos su aiškiais label'iais.<br/>- Automatiniai HTML validacijos įrankiai (axe, Lighthouse).                        |
+| **Spąstai _(angl. Pitfalls)_**               | - Per maži elementai mobiliuose ekranuose.<br/>- Spalvų schemos, neatitinkančios kontrasto reikalavimų.<br/>- Ekrano skaitytuvams netinkami elementai (be label'ių).<br/>- Mygtukai, kuriuos neįmanoma pasiekti klaviatūra.<br/>- Per daug techninės informacijos klaidų žinutėse.                                                                |
+
 
 ## 5.2. Prieinamumas ir atsparumas _(angl. [Availability and Resilience](https://www.viewpoints-and-perspectives.info/home/perspectives/availability-and-resilience/))_
 
@@ -740,7 +748,15 @@ Nereikia.
 | **Spąstai _(angl. Pitfalls)_**               | - Per didelis pasikliovimas viena DB instancija (SPOF).<br/>- Trūksta atsarginių kopijų atstatymo testų.<br/>- Tinklas tarp ITIS ↔ Paysera laikomas patikimu, nors jis toks nėra.<br/>- Foniniai cron procesai nėra prižiūrimi — gali tyliai sugesti.<br/>- Monitoringas įdiegtas, bet alertai nenustatyti.                                      |
 
 ## 5.3. Plėtros ištekliai _(angl. [Development Resource](https://www.viewpoints-and-perspectives.info/home/perspectives/development-resource-perspective/))_
-Nereikia.
+
+| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                                |
+|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Taikymas _(angl. Applicability)_**         | Perspektyva taikoma ITIS sistemos kūrimo ir priežiūros procesui — programuotojams, testuotojams ir sistemą palaikančiai komandai. Ji padeda nustatyti, kokių išteklių reikia efektyviam vystymui.                                                                                                                                                       |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Ar turima pakankamai žmogiškųjų išteklių sistemai kurti ir palaikyti.<br/>- Ar yra reikalingi įrankiai (IDE, CI/CD, testavimo aplinkos).<br/>- Ar atliekami mokymai naujiems komandos nariams.<br/>- Ar užtikrinti resursai testavimui, diegimui, monitoringui.<br/>- Ar suplanuotas laikas refaktoringui ir techninei skolai.                        |
+| **Veiksmai _(angl. Activities)_**            | - Įdiegti standartizuotą kodo stiliaus ir review procesą.<br/>- Nustatyti CI/CD pipeline ir automatinį testavimą.<br/>- Užtikrinti testinę infrastruktūrą (staging aplinka).<br/>- Planuoti resursus didesniems leidimams (releases).<br/>- Kurti techninės dokumentacijos gaires naujiems komandos nariams.                                            |
+| **Taktikos _(angl. Tactics)_**               | - Naudoti GitFlow arba trunk-based development strategiją.<br/>- Automatizuoti unit ir integracinius testus PHPUnit.<br/>- Naudoti statinę analizę (phpstan, psalm).<br/>- Naudoti konteinerizaciją (Docker) vietinei aplinkai.<br/>- Planuoti sprintus su „capacity planning“.<br/>- Prioritizuoti techninę skolą prieš pridedant naują funkcionalumą. |
+| **Spąstai _(angl. Pitfalls)_**               | - Per mažai laiko skiriama testams ir kodo kokybei.<br/>- Per didelė priklausomybė nuo vieno programuotojo („bus factor“ problema).<br/>- Neapibrėžtas resursų poreikis — sunku planuoti darbus.<br/>- Nepakankamas onboarding naujiems programuotojams.<br/>- Nėra laiko refaktoringui, todėl kaupiasi techninė skola.                                 |
+
 
 ## 5.4. Evoliucija _(angl. [Evolution](https://www.viewpoints-and-perspectives.info/home/perspectives/evolution/))_
 
@@ -753,10 +769,26 @@ Nereikia.
 | **Spąstai _(angl. Pitfalls)_**               | - Architektūra tampa pernelyg monolitinė, todėl kiekvienas pakeitimas paveikia visą sistemą.<br>- Nepakankamas testų rinkinys – didelė rizika sugadinti esamas funkcijas.<br>- Priklausomybės nuo konkrečios Symfony ar PHP versijos gali apsunkinti atnaujinimus.<br>- Nepakankamas dokumentacijos atnaujinimas lemia žinių praradimą.<br>- Nenumatyta duomenų migracijos strategija sukelia klaidas atnaujinimų metu.                                                                           |
 
 ## 5.5. Internacionalizacija _(angl. [Internationalization](https://www.viewpoints-and-perspectives.info/home/perspectives/internationalization/))_
-Nereikia.
+
+| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                               |
+|----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Taikymas _(angl. Applicability)_**         | Taikoma, kai sistema turi būti pritaikoma skirtingoms kalboms, šalims ir kultūroms. ITIS šiuo metu lokalizuota tik lietuvių kalbai, bet architektūra turi numatyti augimo galimybę.                                                                                                    |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kaip lengvai pridėti naujas kalbas.<br/>- Kaip tvarkomi formatavimo skirtumai (data, valiuta, skaičiai).<br/>- Kaip išvengti „hardcodintų“ tekstų kode.<br/>- Kaip tvarkyti PDF sąskaitų kalbinį turinį.<br/>- Kaip lokalizuojami el. laiškai.                                       |
+| **Veiksmai _(angl. Activities)_**            | - Visi tekstai perkelti į Symfony vertimų sistemos `.yaml` failus.<br/>- Twig šablonuose naudoti `trans` funkciją.<br/>- TVS ir savitarnoje naudoti vieningą kalbos perjungimo mechanizmą, jei prireiktų ateityje.<br/>- Parengti el. laiškų šablonus kelioms kalboms.                 |
+| **Taktikos _(angl. Tactics)_**               | - Nenaudoti „hardcoded“ tekstų — tik vertimų failus.<br/>- Naudoti `Intl` PHP biblioteką valiutos ir datų formatavimui.<br/>- PDF generavime naudoti UTF-8 ir daugiašrifčių biblioteką.<br/>- Laikyti kalbinius failus atskiruose kataloguose pagal kalbą (lt, en).                    |
+| **Spąstai _(angl. Pitfalls)_**               | - Neparuoštos žinutės iš Paysera callback – gali būti neaiškios vartotojams.<br/>- PDF šriftai gali nepalaikyti tarptautinių simbolių.<br/>- Kodo vietose gali likti neperkelti tekstai, sunkinantys plėtrą.<br/>- Nepilnai lokalizuoti el. laiškų šablonai gali klaidinti vartotojus. |
+
 
 ## 5.6. Vieta _(angl. [Location](https://www.viewpoints-and-perspectives.info/home/perspectives/location/))_
-Nereikia.
+
+| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                |
+|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Taikymas _(angl. Applicability)_**         | Perspektyva svarbi, kai sistema veikia skirtingose fizinėse ar virtualiose vietose: klientai gali jungtis iš skirtingų regionų.                                                                                                                         |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kur hostinama ITIS (testinė, produkcinė aplinka).<br/>- Ar laikomasi duomenų saugojimo vietos reikalavimų (ES / Lietuva).<br/>- Ar naudotojai iš skirtingų vietų turi vienodą atsako laiką.<br/>- Ar naudotojai mato savo vietinį laiką, ar Lietuvos. |
+| **Veiksmai _(angl. Activities)_**            | - Užtikrinti, kad DB ir aplikacijos serveriai būtų ES (BDAR reikalavimai).<br/>- Naudoti CDN statiniams failams (CSS/JS).                                                                                                                               |
+| **Taktikos _(angl. Tactics)_**               | - Geografiškai arti esančios hosting platformos (pvz., Lietuvoje).<br/>- Tinklo kompresija (`gzip`, `brotli`).<br/>- Statinių failų kešavimas naršyklėje ir CDN.                                                                                        |
+| **Spąstai _(angl. Pitfalls)_**               | - Serveriai už ES ribų gali pažeisti BDAR.<br/>- Prastas tinklo ryšys žemėlapio sluoksniams gali lėtinti žemėlapio atvaizdavimą.<br/>- Paysera ir SMTP serverių vieta gali turėti įtaką atsako laikui.                                                  |
+
 
 ## 5.7. Našumas ir mastelio keitimas _(angl. [Performance and Scalability](https://www.viewpoints-and-perspectives.info/home/perspectives/performance-and-scalability/))_
 
@@ -770,7 +802,15 @@ Nereikia.
 
 
 ## 5.8. Teisinis reguliavimas _(angl. [Regulation](https://www.viewpoints-and-perspectives.info/home/perspectives/regulation-perspective/))_
-Nereikia.
+
+| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                  |
+|----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Taikymas _(angl. Applicability)_**         | Perspektyva taikoma siekiant užtikrinti, kad ITIS atitiktų vietinius ir tarptautinius teisinius reikalavimus — ypač susijusius su asmens duomenimis ir mokėjimais.                                                                                                                                        |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - BDAR _(angl. GDPR)_ laikymasis tvarkant asmens duomenis.<br/>- Finansinių duomenų tvarkymo reikalavimai.<br/>- Paysera integracijos teisiniai aspektai.<br/>- Duomenų saugojimo ir ištrinimo taisyklės.<br/>- Log'ų saugojimo reikalavimai.<br/>- PDF sąskaitų turinio atitikimas buhalterinei tvarkai. | 
+| **Veiksmai _(angl. Activities)_**            | - Įdiegti duomenų subjektų teisių (DSR) funkcijas: duomenų peržiūra, korekcija, ištrynimas.<br/>- Užtikrinti duomenų šifravimą per HTTPS.<br/>- Nustatyti automatines atsargines kopijas ir laikymo politiką.<br/>- Parengti duomenų saugojimo tvarką (retention policy).                                 |
+| **Taktikos _(angl. Tactics)_**               | - Privacy-by-design principas.<br/>- Audit log'ai svarbiems veiksmams.<br/>- Duomenų minimizavimas — saugoti tik būtinas reikšmes.<br/>- Slaptų duomenų netalpinimas į Git ar UI.                                                                                                                         |
+| **Spąstai _(angl. Pitfalls)_**               | - Netinkamai realizuoti duomenų ištrynimo scenarijai gali prieštarauti BDAR.<br/>- Per ilgas log'ų saugojimas be reguliavimo pagrindo.<br/>- Vadybininko rolių per platus funkcionalumas gali kelti saugumo rizikų.<br/>- Dokumentacija neatnaujinama — sunku įrodyti atitiktį auditui.                    |
+
 
 ## 5.9. Saugumas _(angl. [Security](https://www.viewpoints-and-perspectives.info/home/perspectives/security/))_
 
@@ -783,7 +823,15 @@ Nereikia.
 | **Spąstai _(angl. Pitfalls)_**               | - Prasta rolių valdymo sistema leidžia neautorizuotą prieigą prie administracinės dalies.<br>- Neužšifruotas srautas (HTTP vietoje HTTPS) gali leisti duomenų perėmimą.<br>- Netinkamai valdomos sesijos (neuždarius prisijungimų).<br>- Perteklinė klaidų informacija gali atskleisti sistemos struktūrą.<br>- Nepakankamas log'ų stebėjimas lemia saugumo incidentų praleidimą.<br>- Trūksta periodinių saugumo auditų ir testavimo procesų.                                                                                                                                                                                                                       |
 
 ## 5.10. Naudojimo patogumas _(angl. [Usability](https://www.viewpoints-and-perspectives.info/home/perspectives/usability-perspective/))_
-Nereikia.
+
+| Aspektas                                     | Taikymas                                                                                                                                                                                                                                             |
+|----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Taikymas _(angl. Applicability)_**         | Perspektyva taikoma UI/UX sričiai, kad sistema būtų patogi ir greitai suprantama tiek klientams, tiek vadybininkams.                                                                                                                                 |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kaip greitai vartotojas randa reikiamą informaciją.<br>- Kaip sumažinti veiksmų skaičių pagrindiniams procesams.<br>- Ar TVS patogi kasdieniam naudojimui.<br>- Kaip pateikiama klaidų informacija.<br>- Ar sistema pritaikyta mobiliesiems.       |
+| **Veiksmai _(angl. Activities)_**            | - Įgyvendinti vienodus UI komponentus (mygtukus, formas, lenteles, korteles).<br>- Naudoti aiškią navigaciją savitarnoje ir TVS.<br>- Išlaikyti 3 paspaudimų principą iki pagrindinės informacijos.<br>- Parengti UX testus su realiais vartotojais. |
+| **Taktikos _(angl. Tactics)_**               | - Naudoti išdėstymo standartus ir dizaino sistemas.<br>- Atvaizduoti klaidas aiškiais tekstais, be techninių terminų.<br>- Palaikyti prisitaikantį prie ekrano dydžio _(angl. responsive)_ dizainą.                                                  |
+| **Spąstai _(angl. Pitfalls)_**               | - Per daug informacijos viename puslapyje (ypač TVS).<br>- Sudėtingos formos su per daug laukų.<br>- Per lėti UI komponentai, priklausomi nuo didelių DB sąrašų.<br>- Nenuoseklus dizainas tarp Frontend ir TVS.                                     |
+
 
 # Priedai
 ## Priedas 1. Funkcinio vaizdo Use Case diagramos kodas

@@ -1,9 +1,10 @@
 # lab 2.A
-Points: 0.25
-## Reikalavimai _(angl. Requirements)_
+**Reikalavimai _(angl. Requirements)_**
 * Think of a business case and of a large enough IT system which will help solve business case
 * Define stakeholders of IT system
 * Create architectural description with context view of the system
+
+Points: 0.25
 
 #### Į ką atkreipia dėmesį
 - Funkciniai, nefunkciniai reikalavimai
@@ -14,20 +15,21 @@ Points: 0.25
 - Neturi būti konkrečios technologijos - reikia rašyti iš verslo pusės
 
 # lab 2.B
-Points: 1.5  
-Bonus Points : Document all 7 views 0.25
-## Reikalavimai _(angl. Requirements)_
+**Reikalavimai _(angl. Requirements)_**
 * Document 5 chosen views in architectural description
 * Choose views from view catalog
 * Use viewpoints to document views
 
+Points: 1.5  
+Bonus Points : Document all 7 views 0.25
+
 # lab 2.C
-Points: 1  
-Bonus Points: Use all 4 perspectives 0.25
-## Reikalavimai _(angl. Requirements)_
+**Reikalavimai _(angl. Requirements)_**
 * Adjust architectural description by using 2 different perspectives
 * Choose perspectives from Security, Performance and scalability, Availability and resilience, Evolution perspectives
 
+Points: 1  
+Bonus Points: Use all 4 perspectives 0.25
 
 ---
 <h1 style="text-align:center;">Architektūrinis aprašymas <i>(angl. Architectural description)</i></h1>
@@ -182,7 +184,8 @@ Sistema susideda iš dviejų pagrindinių sričių:
 - **Frontend (naudotojo sąsaja):** skirta klientams prisijungti, peržiūrėti sąskaitas, apmokėti per e-mokėjimų sistemą Paysera.
 - **TVS (Turinio valdymo sistema):** skirta administratoriams, rinkodaroms specialistams valdyti klientus, paslaugas ir sąskaitas.
 
-![context_view.png](context_view.png)
+![context_view.png](context_view.png)  
+_UML konteksto diagrama_
 
 ### Konteksto scenarijai
 
@@ -234,7 +237,7 @@ Sistema padalinta į funkcinius modulius, atspindinčius verslo procesus:
 - **Administratorių modulis** – valdo sistemos administratorius - vadybininkus, rinkodaros specialistus.
 
 ![functional_view.png](functional_view.png)  
-_<center>UML funkcinio vaizdo diagrama</center>_
+_UML funkcinio vaizdo diagrama_
 
 ### 4.2.1. Rūpesčiai _(angl. Concerns)_
 Šis funkcinis požiūris apibrėžia sistemos funkcines galimybes — **ką sistema privalo daryti ir ko sistema nedaro**, atsižvelgiant į verslo poreikius ir proceso ribas.
@@ -284,7 +287,7 @@ Sistemai keliami šie funkciniai reikalavimai:
    - Sistema nekeičia klientų sutarčių be vadybininko įsikišimo.
 
 ![function_view_use_case_diagram.png](function_view_use_case_diagram.png)  
-_<center>UML panaudos atvejų (angl. Use Case) diagrama<br/>Išeities kodas pateiktas priede 1</center>_
+_UML panaudos atvejų (angl. Use Case) diagrama<br/>Išeities kodas pateiktas 1 priede_
 
 ### 4.2.2. Išorinės sąsajos _(angl. External Interfaces)_
 Šiame skyriuje aprašomos visos ITIS sistemos funkcinės sąveikos su išoriniais aktoriais ir trečiųjų šalių sistemomis. Tai leidžia identifikuoti, kokie duomenys, įvykiai ir valdymo srautai būtini sistemai atlikti funkcijas, aprašytas Funkciniame vaizde.
@@ -357,13 +360,13 @@ Duomenų modelis paremtas **Entity–Relationship (ER)** struktūra. Pagrindinė
 - **Klausimai** – frontend'e užduoti klausimai.
 
 ![information_view.png](information_view_classdiagram.png)
-_<center>UML klasių diagrama</center>_
+_UML klasių diagrama_
 
 ![information_view.png](information_view_erdiagram_star.png)  
-_<center>UML Klasių diagrama (žvaigždės schema)</center>_
+_UML Klasių diagrama (žvaigždės schema)_
 
 ![information_view.png](information_view_erdiagram.png)  
-_<center>UML Esybių ryšių diagrama (Baronas (Chen) notation)</center>_
+_UML Esybių ryšių diagrama (Baronas (Chen) notation)_
 
 ### 4.3.1. Informacijos tikslas ir naudojimas _(angl. Information Purpose & Usage)_
 Pagal informacinio požiūrio praktiką sistemoje yra dvi skirtingos informacijos naudojimo kategorijos:  
@@ -430,7 +433,7 @@ ISO/IEC 42010:2022 informacinio požiūrio gairės teigia, kad būtina aiškiai 
 4. Apmokėta – el.mokėjimo sistemos callback
 
 ![information_view_state_diagram_saskaita.png](information_view_state_diagram_saskaita.png)  
-_<center>UML Sąskaitos gyyvavimo ciklo _(angl. Invoice state)_ diagrama.<br/>Išeities kodas pateiktas priede 2</center>_
+_UML Sąskaitos gyyvavimo ciklo _(angl. Invoice state)_ diagrama<br/>Išeities kodas pateiktas 2 priede_
 
 **Kliento klausimo gyvavimo ciklas**
 1. Sukurtas
@@ -438,7 +441,7 @@ _<center>UML Sąskaitos gyyvavimo ciklo _(angl. Invoice state)_ diagrama.<br/>I�
 3. Klientas peržiūri atsakymą
 
 ![information_view_state_diagram_klausimas.png](information_view_state_diagram_klausimas.png)  
-_<center>UML Kliento klausimo gyyvavimo ciklo diagrama.<br/>Išeities kodas pateiktas priede 3</center>_
+_UML Kliento klausimo gyyvavimo ciklo diagrama<br/>Išeities kodas pateiktas 3 priede_
 
 ### 4.3.6. Informacijos kokybės modelis _(angl. Information Quality)_
 
@@ -461,67 +464,260 @@ Pagal informacijos vaizdo gaires, archyvavimas turi būti natūralus informacijo
 - Backup kopijos: **kasdien**, saugomos **30 dienų**.
 
 ## 4.4. Lygiagretumo vaizdas _(angl. Concurrency  View)_
-**Aprašymas:**  
-ITIS sistema palaiko vienalaikį kelių naudotojų prisijungimą:
-- Naudojamas **Symfony sesijų valdymas** – atskira sesija kiekvienam naudotojui.
-- **Doctrine ORM** užtikrina duomenų vientisumą užrakinant įrašus (transactional locks).
-- **crontab** procesas generuoja sąskaitas fone (asinchroninis vykdymas).
-- Testuota su **Apache JMeter**, iki 10000 užklausų per 1 s.
+Lygiagretumo vaizdas parodo, **kurios ITIS sistemos dalys gali veikti vienu metu**, kaip jos koordinuojamos, kokie procesai ir gijos atsakingi už vykdymą ir kaip užtikrinama duomenų integracija bei išvengiama konfliktų.
 
-**TODO diagram**
+### 4.4.1. Lygiagrečiai vykstančios veiklos ITIS sistemoje
+Pagal ITIS architektūrą egzistuoja **keturi pagrindiniai lygiagretūs vykdymo tipai**:
+1. **Vartotojų užklausos (klientai + vadybininkai)**
+   - Į sistemą vienu metu gali jungtis tūkstančiai vartotojų.
+   - Kiekviena HTTP užklausa vykdoma atskiroje Apache/PHP-FPM worker gijoje _(angl. thread)_.
+   - Duomenys įrašomi naudojant DB transakcijas.
+2. **Fono procesai (cron)**
+   - Automatinis sąskaitų generavimas kasdien 02:00.
+   - Vykdomas kaip atskiras OS procesas (cron → php bin/console).
+   - Veikia nepriklausomai nuo UI apkrovos.
+3. **Išoriniai įvykiai (el.mokėjimų callback)**
+   - Paysera serveris inicijuoja HTTP POST užklausą į sistemą.
+   - Gali vykti lygiagrečiai su kliento pusės mokėjimo inicijavimu.
+   - Reikalauja griežtos konkurencijos kontrolės, nes keičia sąskaitos būseną.
+4. **Paralelūs el. pašto siuntimo veiksmai**
+   - Sistema siunčia el. laiškus asinchroniškai.
+   - Vykdomi atskiroje eilėje, atskiru worker'iu.
+
+### 4.4.2. Funkcinių elementų susiejimas su užduotimis _(angl. Task mapping)_
+
+| Funkcinis elementas       | Vykdymo būdas | Aprašymas                                                   |
+|---------------------------|---------------|-------------------------------------------------------------|
+| Kliento veiklos (UI)      | PHP gija      | Kiekviena HTTP užklausa – atskira gija                      |
+| Vadybininko veiklos (TVS) | PHP gija      | Operacijos vykdomos transakcijose                           |
+| Cron sąskaitų generavimas | OS procesas   | Savarankiškas procesas, nepriklausomas nuo UI               |
+| Paysera callback          | PHP gija      | Gali vykti lygiagrečiai su cron ir kitomis užklausomis      |
+| El. pašto siuntimas       | PHP gija      | Vykdomas kitu foniniu procesu                               |
+| Log'ų rašymas             | PHP gija      | Prieiga sinchronizuojama per Monolog                        |
+| DB operacijos             | PHP gija      | Užraktai _(angl. locks)_ ir transakcijos valdo konkurenciją |
+
+### 4.4.3. Užraktai, konfliktai ir transakcijos _(angl. State & Consistency Management)_
+
+![concurency_view.png](concurency_view.png)  
+_Lygiagretumo modelis<br/>Išeities kodas pateiktas 5 priede_
+
+#### Kritinės vietos ITIS sistemoje
+##### 1. Kliento duomenų keitimas
+- Klientas redaguoja savo profilį.
+- Vadybininkas redaguoja klientą TVS dalyje.
+
+**Sprendimas:**
+- Leidžiamos tik iš anksto apibrėžtos sritys klientui (telefono nr., kontaktai).
+- Full update – tik vadybininkui.
+- Optimistinis užraktas (Doctrine versioning) rekomenduojamas.
+
+
+##### 2. Cron generuoja tūkstančius sąskaitų kas mėnesį
+- Didelis I/O krūvis → gali užlaikyti DB.
+
+**Sprendimas:**
+- Generuoti sąskaitas naktį, kai mažesnis lankytojų kiekis.
+- Skaidyti generavimą į mažesnius paketus _(angl. batches)_.
+- Naudoti transakcijų paketavimą.
+- Naudoti grynas SQL užklausas.
+- Perkelti brangius veiksmus (PDF generavimą) į Queue worker'ius.
+- Perkelti brangius veiksmus (el.laiškų siuntimą) į foninę siuntimų eilę.
+
+##### 3. El. laiškų siuntimas
+- Lėtas el. laiškų siuntimas
+
+**Sprendimas:**
+- Perkelti į foninę siuntimų eilę.
+
+### 4.4.4. IPC _(angl. Inter-Process Communication)_ mechanizmai
+
+| Procesai      | Naudojamas mechanizmas | Priežastis                |
+|---------------|------------------------|---------------------------|
+| Web → DB      | SQL (TCP)              | Naudotojo veiksmai        |
+| Cron → DB     | SQL (TCP)              | Masiniai atnaujinimai     |
+| Paysera → Web | HTTPS (Callback)       | Išorinė IPC               |
+| Log'ai        | I/O                    | Centralizuotas log'inimas |
+
+### 4.4.5. Gijų (Threading) analizė
+#### Numatomos aktyvios gijos vienu metu
+
+| Procesas              | Apytikslinis gijų kiekis |
+|-----------------------|--------------------------|
+| PHP                   | 0-1000 gijų              |
+| Cron                  | 0-1 gija                 |
+| Message Queue workers | 0-10 gijų                |
+| El.mokėjimų callback  | 0-1000 gijų              |
+
+
+Diagrama rodanti kelių gijų ir procesų sąveika veikinu metu.
+![concurency_view_payment.png](concurency_view_payment.png)  
+_Sąskaitos apmokėjimo lygiagretumo sekų diagrama – mokėjimo scenarijus<br/>Išeities kodas pateiktas 4 priede_
+
+Diagrama atskleidžia kritines vietas:
+- Cron ir Web abu gali redaguoti sąskaitą prieš callback.
+- Web ir Callback gali vienu metu pasiekti tą pačią sąskaitą.
+- Callback turi prioritetą, nes būtent jis nusprendžia mokėjimo būseną.
 
 
 ## 4.5. Vystymo vaizdas _(angl. Development View)_
-**Aprašymas:**  
-Kodas organizuotas pagal **MVC (Model–View–Controller)** šabloną:
-- **Model:** Doctrine ORM modeliai.
-- **Controller:** Symfony kontrolerio klasės, valdantys logiką.
-- **View:** Twig šablonai.
+Vystymo vaizdas apibrėžia, **kaip ITIS programinis kodas yra organizuotas ir vystomas**: kokie loginiai moduliai egzistuoja, kokios tarp jų priklausomybės, kokie bendri dizaino sprendimai ir kokia kodo versijavimo bei diegimo praktika naudojama. Šis vaizdas remiasi ISO/IEC 42010:2022 ir Development viewpoint gairėmis – daugiausia orientuotas į programuotojus ir testuotojus.
+Kodas organizuotas pagal **MVC (Model–View–Controller)** šabloną, kurį natūraliai palaiko Symfony 7 karkasas:
+- **Model** – Doctrine ORM entitetai, repozitorijos ir domeno logika.
+- **Controller** – Symfony kontroleriai, priimantys HTTP užklausas ir kviečiantys serviso sluoksnį.
+- **View** – Twig šablonai bei EasyAdmin automatiškai generuojami ekranai.
 
-Papildomai:
-- Naudojamas **EasyAdmin 3** TVS daliai.
-- PHP bibliotekų priklausomybės valdomos per **Composer**.
-- Kodo kokybė tikrinama per **PHPUnit** testus.
+Papildomai naudojami **servisų** ir **repzitorijų** sluoksniai, leidžiantys aiškiai atskirti verslo logiką, prieigą prie DB ir integracijas su išorinėmis sistemomis (Paysera, SMTP ir pan.).
 
-**Rezultatas:**  
-Development View užtikrina, kad programinė architektūra būtų tvarkinga, modulinė ir lengvai plečiama.
+### 4.5.1. Modulių struktūros modelis _(angl. Module Structure Model)_
+Modulių struktūros modelis parodo, kaip ITIS šaltinio kodas yra suskaidytas į sluoksnius ir komponentus bei kokios priklausomybės tarp jų leidžiamos. Tai padeda sumažinti priklausomybių „chaosą“ ir palaikyti skaidrią architektūrą.
 
-**TODO diagram**
+**Moduliai sugrupuoti į tris pagrindinius sluoksnius:**
+- **Presentation layer (Web UI)** – vieninga naudotojo sąsaja, kurioje yra ir kliento savitarna, ir administracinė TVS. Šis sluoksnis neturi verslo logikos – jis tik priima HTTP užklausas, validuoja duomenis ir kviečia atitinkamą bounded context’ą.
+- **Core bounded contexts** – pagrindiniai verslo moduliai. Kiekvienas turi savo modelius, servisus ir taisykles:
+  - Klientai BC – klientai ir jų objektai.
+  - Paslaugos BC – paslaugos ir paslaugų paketai.
+  - Sąskaitos BC – sąskaitos, mokėjimai.
+  - Klausimai BC – klientų klausimai ir atsakymai.
+  - Akcijos BC – akcijos, nuolaidos ir jų taikymo taisyklės.
+  - Nustatymai – sistemos nustatymai.
+  - Struktūra BC – statiniai puslapiai
+  - Administratoriai BC – naudotojai, rolės.
+- **Infrastructure layer** – bendra techninė infrastruktūra visiems kontekstams:  
+MariaDB (Doctrine ORM), Paysera API klientas, SMTP Mailer, PDF generatorius, Monolog log’inimas, cron scheduleris.
 
+**Priklausomybių taisyklės:**
+- Web UI gali kviesti visus „Core bounded contexts“, bet negali tiesiogiai bendrauti su infrastruktūra (DB, Paysera, Mailer ir pan.).
+- Kiekvienas bounded context bendrauja tik per savo servisus ir repozitorijas su infrastruktūros sluoksniu.
+
+### 4.5.2. Bendro dizaino modelis (angl. Common Design Model)
+Bendro dizaino modelis apibrėžia bendrus programavimo principus ir šablonus, kurių privalo laikytis visi ITIS programinės įrangos kūrėjai.
+
+**Inicializavimas ir uždarymas**
+- Visi HTTP užklausų įėjimo taškai (Controller'iai) naudoja Symfony „kernel“ mechanizmą – papildomų „bootstrap“ scenarijų nenumatyta.
+- Fono užduotys (cron komandos) kuriamos kaip Symfony Console komponento komandos.
+
+**Log'inimas ir monitoringo integracija**
+- Visi moduliai vietoje `echo`/`var_dump` ar kokio kito būdo išvedimo į ekraną, privalo naudoti Monolog logger'į (įskaitant klaidas, sąskaitų generavimą, callback'us, Paysera integraciją).
+- Kritinės klaidos papildomai siunčiamos į Sentry servisą.
+
+**Lokalizacija**
+- Vartotojui rodomi tekstai generuojami Twig šablonuose, naudojant Symfony vertimų mechanizmą (`trans`). Pagrindinė kalba – lietuvių, praplėtimas kitoms kalboms galimas ateityje.
+
+**Saugumas**
+- Autentifikacija ir autorizacija atliekama per `Symfony Security` modulį.
+- Visi POST formų veiksmai turi naudoti CSRF apsaugą.
+- Slaptažodžiai saugomi naudojant `bcrypt` arba `Argon2` šifravimo algoritmus.
+
+**Standartiniai dizaino šablonai ir bibliotekos**
+- **MVC + Servisų sluoksnis** – Controller'iai lieka maži, verslo logika keliama į servisų klases.
+- **Repository šablonas** – visa prieiga prie DB vyksta per Doctrine repozitorijas, tiesioginio `PDO` nenaudojama (išskyrus išimtinius našumo atvejus).
+- **DTO / Form model šablonas** – sudėtingesniems formos duomenims naudojami atskiri DTO (Data Transfer Object).
+- **Factory šablonas** – sąskaitų ir mokėjimo objektų kūrimui naudojamos „factory“ klasės, kad būtų vienodas inicializavimas.
+- **Adapter šablonas** – integracijoms su Paysera ir SMTP naudojami adapteriai, slepiantys trečiųjų šalių API ypatumus.
+
+**Testavimo standartizavimas**
+- **Unit testai** – taikomi servisams, domeno logikai (pvz., sąskaitos sumos skaičiavimas, būsenų keitimas).
+- **Integraciniai testai** – testuoja Doctrine repozitorijas, Paysera integracija, el. pašto siuntimą „fake“ SMTP serveriui Mailhog.
+- **End-to-End (E2E) testai** – esminiai scenarijai (prisijungimas, sąskaitos apmokėjimas, klausimo pateikimas) automatizuoti naudojant naršyklės testų įrankį (pvz., Symfony Panther / Cypress).
+
+### 4.5.3. Kodo linijos modelis _(angl. Codeline Model)_
+Codeline modelis apibrėžia, **kaip organizuotas kodas repozitorijoje, kaip jis „build'inamas“, testuojamas ir diegiamas**. Tai padeda užtikrinti, kad „veikia ne tik mano kompiuteryje“, bet ir testinėje, ir produkcinėje aplinkose.  
+
+Kodo failų ir aplankų struktūra:
+```
+assets/
+  styles/
+bin/
+config/        <!-- konfiguracijos
+  packages/
+  routes/
+migrations/    <!-- Doctrine DB migracijos
+node_modules/  <!-- Javascript bibliotekų failai
+public/
+src/           <!-- Programos kodas pagal
+  Commands/
+  Controller/
+    Admin/
+      Field/
+  Core/
+    Form/
+      Type/
+  DataFixtures/
+  DoctrineExtensions/
+    Query/
+      Mysql/
+  EasyAdmin/
+    Filter/
+      Configurator/
+  Entity/             <!-- Modeliai
+    Enum/
+    Payments/
+  Event/
+  EventListener/
+  EventSubscriber/
+  Forms/
+  Repository/         <!-- Repozitorijos
+  Security/
+  Service/
+  Traits/
+  Twig/
+templates/            <!-- šablonai
+  admin/              <!-- šablonai TVS dalies
+  general/
+  payments/
+  questions/
+  security_admin/
+  security_front/
+  services/
+  structure/
+  users/
+  base.twig
+tests/                <!-- testai, (unit, integraciniai, E2E)
+translations/
+var/
+vendor/               <!-- PHP bibliotekų failai
+vendors/
+.env, .env.local, .env.test   <!-- konfiguracijos, slapti raktai
+.gitignore
+.htaccess
+composer.json
+composer.lock
+composer.lock
+importmap.php
+robots.txt
+symfony.lock
+```
+
+**Versijų ir šakų _(angl. branches)_ valdymas**  
+Naudojamas Git su paprastu „GitFlow“ variantu:
+- `main` – produkcinės versijos šaka.
+- `staging` – pre-prod šaka.
+- `develop` – integravimo šaka.
+- `feature/*` – naujoms funkcijoms šakos.
+
+Kiekvienas „`release`“ žymimas Git tag'u X.Y.Z pagal semantinį versijavimą _(angl. semantic versioning)_, kuris susiejamas su konkrečia diegta versija.
+
+**Build, integracija ir testavimas**  
+Kiekvienas „`push`“ į `develop` arba „`merge request`“ paleidžia CI pipeline:
+1. `composer install` (be dev priklausomybių produkcinėms build'ams).
+2. Statinė analizė (`phpstan` / `psalm`) ir programinio kodo stiliaus code tikrinimas (`php-cs-fixer`).
+3. Unit ir integracinių testų paleidimas (`phpunit`).
+4. Jei testai sėkmingi – suformuojamas artefaktas (pvz., Docker image arba archyvas) ir automatiškai diegiamas į **staging** aplinką.
+5. Diegimas į **production** atliekamas pusiau automatiškai – su „manual approval“ žingsniu, kad būtų galima atstatyti _(angl. rollback)_ į paskutinę stabilią versiją.
+
+**Konfigūracijų ir aplinkų valdymas**
+- Konfigūracijos saugomos `.env` failuose ir serverio „environment“ kintamuosiuose.
+- Slapti raktai (Paysera, SMTP) nekeliami į Git – laikomi tik saugiose paslaugose (pvz., CI „secret store“).
+- DB migracijos vykdomos automatiškai „deploy“ metu, su „rollback“ scenarijais kritinių klaidų atveju.
 
 ## 4.6. Diegimo vaizdas _(angl. Deployment View)_
-**Aprašymas:**
-Sistemos komponentai diegiami į dvi aplinkas:
-- **Testinę** (staging) – naujų funkcijų bandymams.
-- **Produkcijos** (production) – veikianti versija vartotojams.
-
-**Serverių konfigūracija:**
-- OS: Ubuntu 24 LTS
-- Web serveris: Apache
-- DBVS: MariaDB 11
-- PHP 8.2, JavaScript
-- Automatizuoti darbai: crontab (sąskaitų generavimas)
-- Log'inimas: Symfony Monolog
-
-**TODO diagram**
-
+TODO
 
 ## 4.7. Operacinis vaizdas _(angl. Operational View)_
-**Aprašymas:**
-- **Monolog** fiksuoja veiksmus ir klaidas („.log“ failai saugomi 90 dienų).
-- **Automatinės atsarginės kopijos** vykdomos periodiškai.
-- **Serverio stebėsena** atliekama per OS įrankius (pvz., `top`, `journalctl`).
-- **Klaidos** siunčiamos administratoriui el. paštu, Sentry įrankiu.
-- **Atnaujinimai** vykdomi per „composer update“ ir cache valymą.
-
-**Rezultatas:**  
-Operational View parodo, kaip sistema veikia realiame gyvenimo cikle — kaip ji stebima, palaikoma ir atstatoma gedimo atveju.
-
-**TODO diagram**
-
+TODO
 
 ## 4.8. Santrauka
-Šie vaizdai bendrai aprašo **ITIS architektūrą iš kelių perspektyvų**, kad kiekviena suinteresuotųjų šalis galėtų suprasti jai svarbius aspektus:
+Šie vaizdai bendrai aprašo **ITIS architektūrą iš vaizdų**, kad kiekviena suinteresuotųjų šalis galėtų suprasti jai svarbius aspektus:
 - klientai – kontekstą ir funkcijas;
 - vadybininkai – terpę valdyti klientus;
 - rinkodaros specialistai – terpę valdyti klientus;
@@ -529,21 +725,19 @@ Operational View parodo, kaip sistema veikia realiame gyvenimo cikle — kaip ji
 - testuotojai – duomenų patikimumą;
 - sistemos savininkas (tiekėjas) – diegimą, saugumą ir našumą.
 
-Kartu jie sudaro išsamų, subalansuotą architektūros aprašymą, atitinkantį ISO/IEC 42010 reikalavimus.
-
 # 5. Perspektyvos _(angl. [Perspectives](https://www.viewpoints-and-perspectives.info/home/perspectives/))_
 ## 5.1. Prieinamumas neįgaliems _(angl. [Accessibility](https://www.viewpoints-and-perspectives.info/home/perspectives/accessibility/))_
 Nereikia.
 
-## 5.2. Prieinamumas ir Atsparumas _(angl. [Availability and Resilience](https://www.viewpoints-and-perspectives.info/home/perspectives/availability-and-resilience/))_
+## 5.2. Prieinamumas ir atsparumas _(angl. [Availability and Resilience](https://www.viewpoints-and-perspectives.info/home/perspectives/availability-and-resilience/))_
 
-| Aspektas                                     | Taikymas                                                                                                                                                                                                                 |
-|----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Taikymas _(angl. Applicability)_**         |                                                                                                                                                                                                                          |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Laikas iki atstatymo (time to repair) po gedimo.<br/>- Nelaimės atstatymo (disaster recovery) strategijos.<br/>- Vienos klaidos taško (single point of failure) identifikavimas.                                                                                                      |
-| **Veiksmai _(angl. Activities)_**            |                                                                                                                                                                                                                          |
-| **Taktikos _(angl. Tactics)_**               | - Sistemos „kūrimo gedimams“ _(angl. „design for failure“)_ principas — manyti, kad komponentas gali sugesti, ir numatyti mechanizmus atstatymui.<br/>- Automatizuotos atsarginių kopijų procesai, atstatymo procedūros. |
-| **Spąstai _(angl. Pitfalls)_**               |                                                                                                                                                                                                                          |
+| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                         |
+|----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Taikymas _(angl. Applicability)_**         | Ši perspektyva taikoma ITIS sistemai, nes ji tvarko klientų duomenis, sąskaitas ir mokėjimus. Gedimai tiesiogiai paveikia verslą. Ji taikoma Deployment, Operational ir Concurrency vaizduose.                                                                                                                                                   |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Laikas iki atstatymo (time to repair) po gedimo.<br/>- Nelaimės atstatymo (disaster recovery) strategijos.<br/>- Vienos klaidos taško (single point of failure) identifikavimas.                                                                                                                                                               |
+| **Veiksmai _(angl. Activities)_**            | - Identifikuoti kritinius komponentus (DB, Paysera callback, cron).<br/>- Įdiegti monitoringą (DB, CPU, cron sėkmė, callback klaidos).<br/>- Testuoti atsarginių kopijų atkūrimą.<br/>- Analizuoti konkurenciją tarp cron ir callback.<br/>- Parengti incidentų reakcijos planą.<br/>- Įdiegti sistemines klaidų žinutes (graceful degradation). |
+| **Taktikos _(angl. Tactics)_**               | - Sistemos „kūrimo gedimams“ _(angl. „design for failure“)_ principas — manyti, kad komponentas gali sugesti, ir numatyti mechanizmus atstatymui.<br/>- Automatizuotos atsarginių kopijų procesai, atstatymo procedūros.                                                                                                                         |
+| **Spąstai _(angl. Pitfalls)_**               | - Per didelis pasikliovimas viena DB instancija (SPOF).<br/>- Trūksta atsarginių kopijų atstatymo testų.<br/>- Tinklas tarp ITIS ↔ Paysera laikomas patikimu, nors jis toks nėra.<br/>- Foniniai cron procesai nėra prižiūrimi — gali tyliai sugesti.<br/>- Monitoringas įdiegtas, bet alertai nenustatyti.                                      |
 
 ## 5.3. Plėtros ištekliai _(angl. [Development Resource](https://www.viewpoints-and-perspectives.info/home/perspectives/development-resource-perspective/))_
 Nereikia.
@@ -566,13 +760,14 @@ Nereikia.
 
 ## 5.7. Našumas ir mastelio keitimas _(angl. [Performance and Scalability](https://www.viewpoints-and-perspectives.info/home/perspectives/performance-and-scalability/))_
 
-| Aspektas                                     | Taikymas |
-|----------------------------------------------|----------|
-| **Taikymas _(angl. Applicability)_**         |          |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** |          |
-| **Veiksmai _(angl. Activities)_**            |          |
-| **Taktikos _(angl. Tactics)_**               |          |
-| **Spąstai _(angl. Pitfalls)_**               |          |
+| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Taikymas _(angl. Applicability)_**         | Ši perspektyva taikoma tam, kad ITIS atitiktų nefunkcinius našumo ir mastelio keitimo reikalavimus (NF1, NF7, NF9) ir kad sistema elgtųsi prognozuojamai didėjant naudotojų skaičiui. Ji taikoma projektuojant **Funkcinį**, **Lygiagretumo**, **Vystymo**, **Diegimo** ir **Operacinį** vaizdus – t. y. kai priimami sprendimai dėl DB struktūros, cron procesų, Paysera integracijos, el. pašto eilių, PHP-FPM / Apache konfigūracijos, resursų skyrimo testinei ir produkcinei aplinkoms.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kokia maksimali apdorojamų HTTP užklausų apimtis per sekundę / minutę (processing volume, throughput), įskaitant klientų savitarną ir TVS dalį.<br/>- Koks yra pagrindinių scenarijų atsako laikas – prisijungimas, sąskaitų sąrašo peržiūra, sąskaitos atidarymas, „Apmokėti“ scenarijus (response time, responsiveness).<br/>- Kaip sistema elgiasi piko metu (mėnesio pradžia, masinis sąskaitų generavimas, intensyvūs Paysera callback’ai) ir ar našumas išlieka prognozuojamas (predictability).<br/>- Kur yra siaurieji taškai – DB užklausos, disko I/O, PHP-FPM gijų skaičius, el. pašto siuntimas, PDF generavimas.<br/>- Kaip sistema gali būti **horizontaliai/vertikaliai** plečiama (papildomi web serveriai, daugiau DB resursų, papildomi queue worker’iai) augant klientų ir sąskaitų skaičiui.<br/>- Kaip naujos funkcijos (pvz., papildomas mokėjimų tiekėjas ar ataskaitos) nepablogins esamo našumo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| **Veiksmai _(angl. Activities)_**            | - Aiškiai suformuluoti kiekybinius našumo tikslus: maksimalus atsako laikas UI puslapiams, leistinas užklausų kiekis per sekundę, sąskaitų generavimo „langas“ (kiek sąskaitų per valandą turi sugeneruoti cron).<br/>- Atlikti **apkrovos ir darbo krūvio charakterizavimą**: tipinių naudotojų skaičius, piko valandos, kas mėnesio generavimo šuoliai, Paysera callback’ų dažnis, el. laiškų apimtis.<br/>- Identifikuoti našumo kritines vietas architektūroje (DB lentelės su didžiausiu apkrovimu, dažniausiai kviečiami API endpoint’ai, sunkiausios ataskaitos, cron job’ai).<br/>- Peržiūrėti ir optimizuoti DB schemą bei užklausas: indeksai, JOIN’ų skaičius, agregavimo logika, „N+1“ problemų eliminavimas ORM sluoksnyje.<br/>- Suplanuoti ir įgyvendinti **veikimo testavimą** (load/stress testus) testinėje aplinkoje, imituojant realius scenarijus: daugybiniai prisijungimai, masinis sąskaitų generavimas, didelis Paysera callback srautas.<br/>- Nustatyti aplikacijos ir DB monitoringą (CPU, RAM, DB connection’ai, response time, error rate) bei sutarti, kokie rodikliai laikomi kritiniais (alertų slenksčiai).<br/>- Įtraukti našumą į „Definition of Done“ – naujos funkcijos negali ženkliai pabloginti esamų SLA be sąmoningo sprendimo.                                                                                                                                                                                                                                                                                     |
+| **Taktikos _(angl. Tactics)_**               | - **Sluoksniavimas ir moduliškumas:** aiški atskirtis tarp UI, serviso ir DB sluoksnių leidžia optimizuoti tik kritinius komponentus (pvz., sąskaitų generavimo servisą) nesugluminant kitų modulių.<br/>- **Caching ir rezultatų ribojimas:** naudoti rezultatų puslapiavimą (pagination), limituoti sąrašo dydžius, cache’inti dažnai skaitomus, bet retai kintančius duomenis (nustatymai, paslaugų katalogas, šalys).<br/>- **Asinchroninis apdorojimas:** sunkesnius veiksmus (PDF generavimą, el. laiškų siuntimą, dideles ataskaitas) perkelti į Message Queue worker’ius, kad web užklausa būtų greita, o fono darbai – nepriklausomi nuo naudotojo laukimo.<br/>- **DB optimizavimas:** sukurti reikiamus indeksus, vengti nereikalingų JOIN’ų, naudoti „batch“ įrašymą cron procesuose, esant reikalui – naudoti „raw SQL“ kritinėms užklausoms, apeinant ORM overhead’ą.<br/>- **HTTP ir statinių resursų optimizavimas:** suspausti asset’us (CSS/JS), naudoti naršyklės caching’ą statiniams failams (`Cache-Control`), minimizuoti HTTP užklausų skaičių UI puslapiuose.<br/>- **Mastelio didinimas:** konfigūruoti PHP-FPM/Apache taip, kad būtų pakankamai worker’ių piko metu, planuoti galimybę horizontaliai plėsti web sluoksnį (daugiau web instancų) ir vertikaliai/atskirai plėsti DB (daugiau resursų, atskira replika read-only ataskaitoms).<br/>- **Laiko langų naudojimas:** masinį sąskaitų generavimą, archyvavimą ir kitas „sunkaus“ darbo užduotis vykdyti nakties „langais“, kad jos nekonkuruotų su dienos vartotojų apkrova. |
+| **Spąstai _(angl. Pitfalls)_**               | - Nebūna aiškiai užrašytų našumo tikslų, todėl „veikia lėtai“ tampa subjektyvi problema ir sunku priimti architektūrinius sprendimus.<br/>- Optimizuojamos „netos“ vietos – skiriama daug laiko PHP kodui, bet ignoruojama viena lėta SQL užklausa, kuri sugadina visą scenarijų.<br/>- Sunkūs veiksmai vykdomi sinchroniškai HTTP užklausos metu (PDF generavimas, el. laiško siuntimas), dėl to naudotojas laukia kelias sekundes ar ilgiau.<br/>- Cron procesai ir Paysera callback’ai neįtraukiami į našumo analizę – optimizuojama tik savitarna, bet ne fono apkrovos, kurios iš tiesų „užmuša“ DB.<br/>- ORM naudojamas neapgalvotai (N+1 užklausų problema, „lazy loading“ dideliuose sąrašuose), dėl ko auga DB apkrova ir mažėja pralaidumas _(angl. throughput)_.<br/>- Nėra realistiškų testinių duomenų – sistema greita su 100 įrašų, bet sulėtėja turint 100 000 sąskaitų ir 10 metų istoriją.<br/>- Tikimasi, kad našumo problemas išspręs vien tik „didesnis serveris“ (vertikalus skalavimas) – neplanuojama architektūrinė plėtra (queue, caching, horizontali plėtra).                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+
 
 ## 5.8. Teisinis reguliavimas _(angl. [Regulation](https://www.viewpoints-and-perspectives.info/home/perspectives/regulation-perspective/))_
 Nereikia.
@@ -596,40 +791,40 @@ Nereikia.
 @startuml
 left to right direction
 
-actor Klientas as Client
-actor "Vadybininkas" as Vadybininkas
+actor Klientas             as Client
+actor "Vadybininkas"       as Vadybininkas
 actor "E-mokėjimų sistema" as PaymentProvider
-actor "El. pašto sistema" as Email
+actor "El. pašto sistema"  as Email
 
 rectangle "ITIS sistema" {
 
-  (Peržiūrėti paslaugas) as UC_101
-  (Peržiūrėti sąskaitas) as UC_102
-  ' (Atsisiųsti sąskaitą) as UC_103
-  (Apmokėti sąskaitą) as UC_104
-  (Pateikti klausimą) as UC_105
+  (Peržiūrėti paslaugas)             as UC_101
+  (Peržiūrėti sąskaitas)             as UC_102
+  ' (Atsisiųsti sąskaitą)            as UC_103
+  (Apmokėti sąskaitą)                as UC_104
+  (Pateikti klausimą)                as UC_105
 
-  (Kurti klientą) as UC_201
-  (Redaguoti klientą) as UC_202
-  (Tvarkyti objektus) as UC_203
-  (Valdyti paslaugas) as UC_204
-  (Valdyti paslaugų paketus) as UC_205
-  (Koreguoti akcijas) as UC_206
-  (Atsakyti į klausimus) as UC_207
-  (Tvarkyti klausimų kategorijas) as UC_208
+  (Kurti klientą)                    as UC_201
+  (Redaguoti klientą)                as UC_202
+  (Tvarkyti objektus)                as UC_203
+  (Valdyti paslaugas)                as UC_204
+  (Valdyti paslaugų paketus)         as UC_205
+  (Koreguoti akcijas)                as UC_206
+  (Atsakyti į klausimus)             as UC_207
+  (Tvarkyti klausimų kategorijas)    as UC_208
 
   (Generuoti sąskaitas automatiškai) as UC_301
-  (Atnaujinti mokėjimo būseną) as UC_302
-  (Išsiųsti pranešimą el. paštu) as UC_303
-  (Klaidų log'inimas) as UC_304
+  (Atnaujinti mokėjimo būseną)       as UC_302
+  (Išsiųsti pranešimą el. paštu)     as UC_303
+  (Klaidų log'inimas)                as UC_304
 }
 
 ' Kliento ryšiai
-Client --> UC_101
-Client --> UC_102
+Client  --> UC_101
+Client  --> UC_102
 'Client --> UC_103
-Client --> UC_104
-Client --> UC_105
+Client  --> UC_104
+Client  --> UC_105
 
 ' Vadybininko ryšiai
 Vadybininkas --> UC_201
@@ -645,8 +840,8 @@ Vadybininkas --> UC_208
 'Vadybininkas --> UC_304
 
 ' Sistemos procesai
-UC_104 --> PaymentProvider : "Inicijuoti mokėjimą"
-PaymentProvider --> UC_302 : "Callback: mokėjimo būsena"
+UC_104          --> PaymentProvider : "Inicijuoti mokėjimą"
+PaymentProvider --> UC_302          : "Callback: mokėjimo būsena"
 
 ' El. pašto sistema
 UC_303 <-- Email
@@ -667,22 +862,22 @@ title Sąskaitos gyvavimo ciklas (Invoice State Diagram)
 [*] --> Sukurta
 
 state Sukurta {
-    [*] --> LaukiaSiuntimo
-    
-    LaukiaSiuntimo --> Išsiųsta : siunčiama klientui\n(el. paštas)
+    [*]            --> LaukiaSiuntimo
+
+    LaukiaSiuntimo --> Išsiųsta          : siunčiama klientui\n(el. paštas)
 }
 
-Sukurta --> Išsiųsta : Cron generuoja sąskaitą\nir inicijuoja išsiuntimą
-Išsiųsta --> LaukiamaMokėjimo : Klientas peržiūri sąskaitą
+Sukurta            --> Išsiųsta          : Cron generuoja sąskaitą\nir inicijuoja išsiuntimą
+Išsiųsta           --> LaukiamaMokėjimo  : Klientas peržiūri sąskaitą
 
-LaukiamaMokėjimo --> ApmokėjimasVyksta : „Apmokėti“ Paysera
-ApmokėjimasVyksta --> Apmokėta : Paysera callback\nstatus = paid
-ApmokėjimasVyksta --> Nepavyko : Paysera callback\nstatus = failed
-ApmokėjimasVyksta --> Nepavyko : Paysera callback\nstatus = canceled
-Nepavyko --> LaukiamaMokėjimo : Klientas bando dar kartą
+LaukiamaMokėjimo   --> ApmokėjimasVyksta : „Apmokėti“ Paysera
+ApmokėjimasVyksta  --> Apmokėta          : Paysera callback\nstatus = paid
+ApmokėjimasVyksta  --> Nepavyko          : Paysera callback\nstatus = failed
+ApmokėjimasVyksta  --> Nepavyko          : Paysera callback\nstatus = canceled
+Nepavyko           --> LaukiamaMokėjimo  : Klientas bando dar kartą
 
 /' Galutinė būsena '/
-Apmokėta --> [*]
+Apmokėta           --> [*]
 @enduml
 ```
 
@@ -697,9 +892,98 @@ state Sukurtas {
     [*] --> Neatsakytas
 }
 
-Neatsakytas --> Atsakytas : Atsako vadybininkas
-Atsakytas --> Peržiūrėtas : Peržiūri klientas
+Neatsakytas --> Atsakytas   : Atsako vadybininkas
+Atsakytas   --> Peržiūrėtas : Peržiūri klientas
 
 Peržiūrėtas --> [*]
+@enduml
+```
+
+## Priedas 4. Sąskaitos apmokėjimo lygiagretumo sekos diagramos _(angl. Invoice Concurrency Sequence diagram)_ - mokėjimo scenarijaus kodas
+```plantuml
+@startuml
+title Sąskaitos apmokėjimo lygiagretumo sekų diagrama – mokėjimo scenarijus
+
+actor       Klientas
+actor       Cron
+participant "Web UI\n(PHP gija)"                as Web
+participant "Paysera\n(Payment Gateway)"        as Paysera
+participant "Callback Handler\n(PHP gija)"      as Callback
+participant "Cron Process\n(Invoice Generator)" as Cron
+database    "MariaDB\n(Transactional DB)"       as DB
+
+== Lygiagrečiai vykstantis cron procesas ==
+par Lygiagretus cron
+    Cron -> DB        : Sugeneruoja sąskaitą
+end
+
+== Klientas inicijuoja mokėjimą ==
+Klientas ->  Web      : Paspaudžia "Apmokėti"
+Web      ->  DB       : SELECT sąskaita\nFOR UPDATE
+DB       --> Web      : Sąskaitos duomenys
+Web      ->  Paysera  : Mokėjimo inicijavimas\n(payment request)
+Web      --> Klientas : Nukreipiamas į Paysera mokėjimo langą
+
+== Lygiagrečiai vykstantis cron procesas ==
+par Lygiagretus cron
+    Cron -> DB        : Įrašoma, kad buvo inicizuotas mokėjimas
+end
+
+== Paysera apdoroja mokėjimą ==
+Paysera  ->  Paysera  : Apdoroja mokėjimą\n(bank transfer, card, etc.)
+Paysera  ->  Callback : POST /callback\n(payment_status)
+
+== Callback atvyksta į ITIS ==
+Callback ->  DB       : SELECT sąskaita WHERE id = X\nFOR UPDATE
+DB       --> Callback : Sąskaita rasta
+Callback ->  DB       : INSERT sąskaitos apmokėjimas
+Callback ->  DB       : UPDATE sąskaita\nbūsena = "apmokėta", apmokėjimo_data = NOW()
+Callback --> Paysera  : OK
+
+== Klientas grįžta į sistemą ==
+Klientas ->  Web      : Sugrįžta į sąskaitos peržiūrą
+Web      ->  DB       : SELECT sąskaita
+DB       --> Web      : sąskaitos duomenys
+Web      --> Klientas : Rodo "Apmokėta"
+@enduml
+```
+
+## Priedas 5. Lygiagretumo modelis _(angl. UML Concurrency Model)_
+```plantuml
+@startuml
+title ITIS UML Concurrency Model (Processes, Threads, IPC)
+
+' ==== OS PROCESSES ====
+process "Apache / PHP-FPM\n(Web Process)" as WebProc {
+    thread "HTTP Request Thread\n(Client/Manager actions)" as WebThread
+}
+
+process "Cron Process\n(Invoice Generator)" as CronProc {
+    thread "Invoice Generation Thread" as CronThread
+}
+
+process "MessageBus Worker\n(Email Sender)" as MsgProc {
+    thread "Email Sending Thread" as EmailThread
+}
+
+process "Paysera Callback Handler\n(Webhook Process)" as CallbackProc {
+    thread "Callback Processing Thread" as CallbackThread
+}
+
+' ==== IPC & SHARED RESOURCES ====
+queue    "Message Queue"                as MQ
+database "MariaDB\n(Transactional DB)"  as DB
+
+' ==== RELATIONSHIPS ====
+WebThread      --> DB          : Read/Write (ACID)
+CallbackThread --> DB          : Update invoice status
+CronThread     --> DB          : Generate invoices
+
+CronThread     --> MQ          : "Queue email jobs"
+EmailThread    --> MQ          : Consume jobs
+DB             ->  EmailThread : Read invoice data
+
+WebThread      --> MQ          : "Queue support question notifications"
+
 @enduml
 ```

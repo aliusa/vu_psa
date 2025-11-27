@@ -715,7 +715,28 @@ Kiekvienas „`push`“ į `develop` arba „`merge request`“ paleidžia CI pi
 TODO
 
 ## 4.7. Operacinis vaizdas _(angl. Operational View)_
-TODO
+Operacinis vaizdas apibrėžia, kaip ITIS sistema veikia realioje aplinkoje: kaip ji stebima, prižiūrima, atnaujinama, kokie operaciniai procesai reikalingi stabiliai eksploatacijai ir kokie įrankiai naudojami veikimo problemoms diagnozuoti.
+
+Šis vaizdas yra orientuotas į sistemų administratorius, DevOps, programuotojus ir paslaugų teikėją (tiekėją), atsakingus už sistemos priežiūrą.
+
+### 4.7.1. Palaikymo infrastruktūra
+ITIS sistema veikia dviejose valdomose aplinkose:
+
+| Aplinka                       | Paskirtis                                 | Pagrindinės ypatybės                                                                    |
+|-------------------------------|-------------------------------------------|-----------------------------------------------------------------------------------------|
+| **Staging (testinė aplinka)** | Naujo kodo bandymai ir regresiniai testai | Testiniai duomenys, testinė DB, testinis el.laiškų sugavėjas Mailhog, Paysera „sandbox“ |
+| **Production (gyva aplinka)** | Realūs klientai, tikri mokėjimai          | Pilni resursai, saugumo konfigūracija, tikra Paysera integracija                        |
+
+### 4.7.2. Monitoringas
+
+| Kategorija     | Konkretūs rodikliai                                       | Priemonės                                |
+|----------------|-----------------------------------------------------------|------------------------------------------|
+| **Resursai**   | CPU, RAM, Disk I/O, tinklas                               | Hosting platformos monitoring'as, Zabbix |
+| **DB**         | Lėtos užklausos, aktyvios transakcijos, lentelių užraktai | `slow_query_log`, monitoring             |
+| **Mokėjimai**  | Paysera callback klaidos                                  | Sentry, log’ai                           |
+| **Cron**       | Sąskaitų generavimo trukmė, job sėkmė                     | Sentry, log’ai                           |
+| **El. paštas** | User notifications fail rate                              | Log'ai                                   |
+
 
 ## 4.8. Santrauka
 Šie vaizdai bendrai aprašo **ITIS architektūrą iš vaizdų**, kad kiekviena suinteresuotųjų šalis galėtų suprasti jai svarbius aspektus:

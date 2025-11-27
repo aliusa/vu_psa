@@ -550,6 +550,7 @@ _Lygiagretumo modelis<br/>Išeities kodas pateiktas 5 priede_
 
 
 Diagrama rodanti kelių gijų ir procesų sąveika veikinu metu.
+
 ![concurency_view_payment.png](concurency_view_payment.png)  
 _Sąskaitos apmokėjimo lygiagretumo sekų diagrama – mokėjimo scenarijus<br/>Išeities kodas pateiktas 4 priede_
 

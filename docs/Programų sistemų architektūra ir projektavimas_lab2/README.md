@@ -499,7 +499,7 @@ Pagal ITIS architektūrą egzistuoja **keturi pagrindiniai lygiagretūs vykdymo 
 ### 4.4.3. Užraktai, konfliktai ir transakcijos _(angl. State & Consistency Management)_
 
 ![concurency_view.png](concurency_view.png)  
-_Lygiagretumo modelis<br/>Išeities kodas pateiktas 5 priede_
+_Lygiagretumo modelis<br/>Išeities kodas pateiktas 4 priede_
 
 #### Kritinės vietos ITIS sistemoje
 ##### 1. Kliento duomenų keitimas
@@ -552,7 +552,7 @@ _Lygiagretumo modelis<br/>Išeities kodas pateiktas 5 priede_
 Diagrama rodanti kelių gijų ir procesų sąveika veikinu metu.
 
 ![concurency_view_payment.png](concurency_view_payment.png)  
-_Sąskaitos apmokėjimo lygiagretumo sekų diagrama – mokėjimo scenarijus<br/>Išeities kodas pateiktas 4 priede_
+_Sąskaitos apmokėjimo lygiagretumo sekų diagrama – mokėjimo scenarijus<br/>Išeities kodas pateiktas 5 priede_
 
 Diagrama atskleidžia kritines vietas:
 - Cron ir Web abu gali redaguoti sąskaitą prieš callback.
@@ -570,25 +570,38 @@ Kodas organizuotas pagal **MVC (Model–View–Controller)** šabloną, kurį na
 Papildomai naudojami **servisų** ir **repzitorijų** sluoksniai, leidžiantys aiškiai atskirti verslo logiką, prieigą prie DB ir integracijas su išorinėmis sistemomis (Paysera, SMTP ir pan.).
 
 ### 4.5.1. Modulių struktūros modelis _(angl. Module Structure Model)_
-Modulių struktūros modelis parodo, kaip ITIS šaltinio kodas yra suskaidytas į sluoksnius ir komponentus bei kokios priklausomybės tarp jų leidžiamos. Tai padeda sumažinti priklausomybių „chaosą“ ir palaikyti skaidrią architektūrą.
+Modulių struktūros modelis parodo, kaip ITIS yra suskaidytas į sluoksnius ir komponentus bei kokios priklausomybės tarp jų leidžiamos. Tai padeda sumažinti priklausomybių „chaosą“ ir palaikyti skaidrią architektūrą.
 
-**Moduliai sugrupuoti į tris pagrindinius sluoksnius:**
-- **Presentation layer (Web UI)** – vieninga naudotojo sąsaja, kurioje yra ir kliento savitarna, ir administracinė TVS. Šis sluoksnis neturi verslo logikos – jis tik priima HTTP užklausas, validuoja duomenis ir kviečia atitinkamą bounded context’ą.
-- **Core bounded contexts** – pagrindiniai verslo moduliai. Kiekvienas turi savo modelius, servisus ir taisykles:
-  - Klientai BC – klientai ir jų objektai.
-  - Paslaugos BC – paslaugos ir paslaugų paketai.
-  - Sąskaitos BC – sąskaitos, mokėjimai.
-  - Klausimai BC – klientų klausimai ir atsakymai.
-  - Akcijos BC – akcijos, nuolaidos ir jų taikymo taisyklės.
-  - Nustatymai – sistemos nustatymai.
-  - Struktūra BC – statiniai puslapiai
-  - Administratoriai BC – naudotojai, rolės.
-- **Infrastructure layer** – bendra techninė infrastruktūra visiems kontekstams:  
-MariaDB (Doctrine ORM), Paysera API klientas, SMTP Mailer, PDF generatorius, Monolog log’inimas, cron scheduleris.
+**Moduliai sugrupuoti į šešis pagrindinius sluoksnių grupes:**
+- **Klientų komponentai** – pagrindiniai verslo moduliai. Kiekvienas turi savo modelius, servisus ir taisykles:
+  - Naudotojai
+  - Naudotojų objektai
+  - Naudotojo objekto paslaugų paketo paslauga
+  - Naudotojo objekto paslaugų paketas
+  - Naudotojo objekto paketo paslaugos akcijos
+  - Sąskaitos – sąskaitos, mokėjimai.
+- **Paslaugų komponentai**
+  - Paslaugos - paslaugos ir paslaugų paketai.
+  - Paslaugų kategorijos
+  - Paslaugų akcijos - nuolaidos ir jų taikymo taisyklės
+- **Klausimų komponentai**
+  - Klausimai – klientų klausimai
+  - Klausimų atsakymai
+  - Klausimų kategorijos
+- **Administratorių  komponentai**
+  - Administratoriai
+  - Šalys
+- **Nustatymų komponentai**
+  - Nustatymai
+  - Tekstiniai puslapiai - statiniai puslapiai
+- **Kiti komponentai** – kiti verslo moduliai, kurie nerodomi TVS tiesiogiai, tik užfiksuojami duomenys į jį.
+  - Mokėjimai
 
 **Priklausomybių taisyklės:**
-- Web UI gali kviesti visus „Core bounded contexts“, bet negali tiesiogiai bendrauti su infrastruktūra (DB, Paysera, Mailer ir pan.).
-- Kiekvienas bounded context bendrauja tik per savo servisus ir repozitorijas su infrastruktūros sluoksniu.
+- Kiekviena komponentų grupė bendrauja tik per savo servisus ir repozitorijas.
+
+![development_view_component_diagram.png](development_view_component_diagram.png)  
+_UML Komponentų diagrama<br/>Išeities kodas pateiktas 6 priede_
 
 ### 4.5.2. Bendro dizaino modelis (angl. Common Design Model)
 Bendro dizaino modelis apibrėžia bendrus programavimo principus ir šablonus, kurių privalo laikytis visi ITIS programinės įrangos kūrėjai.
@@ -618,7 +631,7 @@ Bendro dizaino modelis apibrėžia bendrus programavimo principus ir šablonus, 
 
 **Testavimo standartizavimas**
 - **Unit testai** – taikomi servisams, domeno logikai (pvz., sąskaitos sumos skaičiavimas, būsenų keitimas).
-- **Integraciniai testai** – testuoja Doctrine repozitorijas, Paysera integracija, el. pašto siuntimą „fake“ SMTP serveriui Mailhog.
+- **Integraciniai testai** – testuoja išorines sistemas - el.mokėjimų.
 - **End-to-End (E2E) testai** – esminiai scenarijai (prisijungimas, sąskaitos apmokėjimas, klausimo pateikimas) automatizuoti naudojant naršyklės testų įrankį (pvz., Symfony Panther / Cypress).
 
 ### 4.5.3. Kodo linijos modelis _(angl. Codeline Model)_
@@ -696,7 +709,7 @@ Naudojamas Git su paprastu „GitFlow“ variantu:
 - `develop` – integravimo šaka.
 - `feature/*` – naujoms funkcijoms šakos.
 
-Kiekvienas „`release`“ žymimas Git tag'u X.Y.Z pagal semantinį versijavimą _(angl. semantic versioning)_, kuris susiejamas su konkrečia diegta versija.
+Kiekvienas „`release`“ žymimas Git žyma _(angl. tag)_ X.Y.Z pagal semantinį versijavimą _(angl. semantic versioning)_, kuris susiejamas su konkrečia diegta versija.
 
 **Build, integracija ir testavimas**  
 Kiekvienas „`push`“ į `develop` arba „`merge request`“ paleidžia CI pipeline:
@@ -712,14 +725,67 @@ Kiekvienas „`push`“ į `develop` arba „`merge request`“ paleidžia CI pi
 - DB migracijos vykdomos automatiškai „deploy“ metu, su „rollback“ scenarijais kritinių klaidų atveju.
 
 ## 4.6. Diegimo vaizdas _(angl. Deployment View)_
-TODO
+### 4.6.1. Sprendžiami rūpesčiai _(angl. Concerns)_
+- Kaip sistemiškai virtualizuojami komponentai (konteineriai, pod’ai, node’ai)
+- Kaip skaliuojami serveriai pagal apkrovą?
+- Kaip užtikrinama aukšta prieinamumo (HA) konfigūracija?
+- Kaip vyksta rollback, self-healing ir autoscaling?
+- Kaip valdomos išorinės priklausomybės (Paysera, SMTP)?
+- Kaip įgyvendinamas saugus Secrets valdymas?
+
+### 4.6.2. Suinteresuotosios šalys _(angl. Stakeholders)_
+
+| Suinteresuota šalis                | Rūpesčiai diegimo požiūriu                                                                                                                                                                            |
+|------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Sistemos administratoriai**      | Serverių valdymas, resursų paskirstymas, prieinamumas, saugumas, backup'ai, monitoringas, Ugniasienės, SSL, tinklo izoliacijos, OS konfiguracijos, SLA, serverių patikimumas, gedimų atstatymo laikas |
+| **Programuotojai**                 | Deployment procesas, CI/CD suderinamumas, priklausomybių atitiktis, aplinkų atkartojamumas, vartotojų prieigos                                                                                        |
+| **Testuotojai**                    | Testinės aplinkos stabilumas, identiškumas produkcinei aplinkai                                                                                                                                       |
+
+### 4.6.3. Diegimo aplinkos aprašymas
+ITIS diegiama į **Kubernetes klasterį**, kuriame yra dvi izoliuotos aplinkos:
+
+| Aplinka        | Paskirtis                               | Pagrindiniai komponentai                                       |
+|----------------|-----------------------------------------|----------------------------------------------------------------|
+| **Staging**    | Testavimui prieš diegimą, demo          | Web serveris, DB serveris, Paysera API (test rėžimas), Mailhog |
+| **Production** | Gyva sistema klientams, tikri mokėjimai | Web serveris, DB serveris, Paysera API, SMTP                   |
+
+### 4.6.4. Naudojama aparatinė įranga ir OS
+**Web aplikacijos serveris**
+- OS: Ubuntu Server 24.04 LTS
+- CPU: >= 4 vCPU
+- RAM: >= 8 GB
+- Diskas: >= 80 GB SSD
+- Paskirtis: PHP aplikacija, cron procesai, Monolog log’ų saugojimas, duomenų bazė.
+
+### 4.6.5. Konteineriai ir mikrokomponentai
+**Pagrindiniai konteineriai**
+
+| Konteineris                    | Paskirtis                                          |
+|--------------------------------|----------------------------------------------------|
+| **itis-web**                   | Symfony aplikacija (PHP-FPM + Nginx reverse proxy) |
+| **itis-worker**                | Queue procesai, el. laiškų siuntimas, cron job’ai  |
+| **itis-db**                    | Duomenų bazė cluster                               |
+| **itis-cache**                 | Redis (session + cache)                            |
+| **itis-mailhog** (tik staging) | Testinis SMTP                                      |
+
+![deployment_view_kubernetes_deployment_architecture.png](deployment_view_kubernetes_deployment_architecture.png)  
+_Kubernetes diegimo architektūra (angl. Kubernetes Deployment Architecture)<br/>Išeities kodas pateiktas 7 priede_
 
 ## 4.7. Operacinis vaizdas _(angl. Operational View)_
 Operacinis vaizdas apibrėžia, kaip ITIS sistema veikia realioje aplinkoje: kaip ji stebima, prižiūrima, atnaujinama, kokie operaciniai procesai reikalingi stabiliai eksploatacijai ir kokie įrankiai naudojami veikimo problemoms diagnozuoti.
 
 Šis vaizdas yra orientuotas į sistemų administratorius, DevOps, programuotojus ir paslaugų teikėją (tiekėją), atsakingus už sistemos priežiūrą.
 
-### 4.7.1. Palaikymo infrastruktūra
+### 4.7.1. Suinteresuotosios šalys _(angl. Operational Stakeholders)_
+
+| Suinteresuota šalis                 | Atsakomybės operaciniu požiūriu                                             |
+|-------------------------------------|-----------------------------------------------------------------------------|
+| **Sistemos administratoriai**       | Klasterio ir serverių priežiūra, konfigūracijos, tinklo taisyklės, saugumas |
+| **Programuotojai**                  | Kodo diegimai, klaidų taisymas, priežiūra                                   |
+| **Testuotojai**                     | Naujo kodo validacija prieš diegimą                                         |
+| **Vertintojai _(angl. Assessors)_** | Tikrina operacinės aplinkos kokybę ir stabilumą                             |
+
+### 4.7.2. Palaikymo infrastruktūra
 ITIS sistema veikia dviejose valdomose aplinkose:
 
 | Aplinka                       | Paskirtis                                 | Pagrindinės ypatybės                                                                    |
@@ -727,7 +793,74 @@ ITIS sistema veikia dviejose valdomose aplinkose:
 | **Staging (testinė aplinka)** | Naujo kodo bandymai ir regresiniai testai | Testiniai duomenys, testinė DB, testinis el.laiškų sugavėjas Mailhog, Paysera „sandbox“ |
 | **Production (gyva aplinka)** | Realūs klientai, tikri mokėjimai          | Pilni resursai, saugumo konfigūracija, tikra Paysera integracija                        |
 
-### 4.7.2. Monitoringas
+### 4.7.3. Sprendžiami rūpesčiai _(angl. Concerns)_
+- Instaliacija ir atnaujinimai
+- Funkcinė migracija ir perėjimo strategijos
+- Duomenų migracija
+- Monitoringas + alert'ingas
+- Konfigūracijos valdymas
+- Veikimas trečiųjų šalių aplinkose
+- Našumo stebėsena
+- Backup + restore
+- Incidentų valdymas ir palaikymas
+
+Žemiau pateikti ITIS sistemai pritaikyti sprendimai.
+
+### 4.7.4. Instaliacijos ir atnaujinimo modelis (Installation & Upgrade Model)
+#### ITIS diegimo strategija
+ITIS diegiama į Kubernetes klasterį per CI/CD (Git CI → Helm):
+1. Konteinerių build:
+   - itis-web
+2. Deploy per Helm chart 
+3. Rolling update (nenutraukiant veikimo)
+4. Readiness / Liveness probe tikrinimas
+5. Automatinis rollback, jei:
+   - Pod nepasileidžia
+   - Readiness nepraeina per 60 sek.
+
+#### Kas instaliuojama / atnaujinama
+
+| Komponentas                  | Išleidimo būdas      |
+|------------------------------|----------------------|
+| **Aplikacija**               | Docker image + Helm  |
+| **Duomenų bazės migracijos** | Doctrine migrations  |
+| **Konfigūracijos**           | ConfigMaps / Secrets |
+| **Ingress taisyklės**        | Helm template        |
+
+**Instaliacijos priklausomybės**
+- Kubernetes klasteris (1.23+)
+- Docker registry
+- MariaDB 10.5+
+- Redis
+- Paysera API nuolatinė web prieiga
+- SMTP paslauga
+
+#### Rollback strategija
+Rollback vykdomas:
+- Helm rollback komanda
+- DB migracijoms — manual rollback (atskiruose failuose)
+
+### 4.7.5. Duomenų migracijos modelis (Data Migration Model)
+DB migracijos yra automatizuotos (Auto roll forward) iš migracinių failų, bet rollback - rankinis.
+
+### 4.7.6. Konfigūracijos valdymo modelis _(angl. Configuration Management)_
+#### Konfiguracijos grupės
+
+| Grupė                          | Talpinimo vieta                  | Pavyzdžiai                     |
+|--------------------------------|----------------------------------|--------------------------------|
+| **Aplikacijos konfigūracijos** | Symfony `.env` faile, ConfigMaps | DB URL, Paysera API            |
+| **Paslaptys (secrets)**        | Kubernetes Secrets               | API raktai, SMTP slaptažodžiai |
+
+Konfigūracijų rinkinių tipai:
+- Staging (testavimui)
+- Production (gyvam veikimui)
+
+Konfigūracijų keitimo strategija:
+- Kiekvienas pakeitimas turi praeiti CI/CD testus
+- Draudžiama ranka taisyti podų konfig’ą
+
+### 4.7.7 Administravimo modelis _(angl. Administration Model)_
+#### Monitoringas
 
 | Kategorija     | Konkretūs rodikliai                                       | Priemonės                                |
 |----------------|-----------------------------------------------------------|------------------------------------------|
@@ -737,123 +870,1043 @@ ITIS sistema veikia dviejose valdomose aplinkose:
 | **Cron**       | Sąskaitų generavimo trukmė, job sėkmė                     | Sentry, log’ai                           |
 | **El. paštas** | User notifications fail rate                              | Log'ai                                   |
 
+ITIS naudoja:
+- Sentry (klaidoms)
+- Monolog (log’ai)
 
-## 4.8. Santrauka
-Šie vaizdai bendrai aprašo **ITIS architektūrą iš vaizdų**, kad kiekviena suinteresuotųjų šalis galėtų suprasti jai svarbius aspektus:
-- klientai – kontekstą ir funkcijas;
-- vadybininkai – terpę valdyti klientus;
-- rinkodaros specialistai – terpę valdyti klientus;
-- programuotojai – loginę ir duomenų struktūrą;
-- testuotojai – duomenų patikimumą;
-- sistemos savininkas (tiekėjas) – diegimą, saugumą ir našumą.
+Stebima:
+- DB veikimas
+- Cron job’ų veikimas
+
+#### Alerting’as
+Sistema ir Sentry siunčia alert'us, jei:
+
+| Sąlyga                  | Lygis    | Kas siunčia     | Kam siunčiama                               |
+|-------------------------|----------|-----------------|---------------------------------------------|
+| Disko vieta < 15%       | Warning  | Sistema         | Sistemos administratoriams                  |
+| DB nepasiekiama         | Critical | Sentry          | Sistemos administratoriams                  |
+| PHP kodo klaidos        | visi     | Sentry          | Sistemos administratoriams, Programuotojams |
+| Javascript kodo klaidos | visi     | Sentry          | Programuotojams                             |
+| cron nesuveikia         | visi     | Sistema, Sentry | Programuotojams                             |
+
+### 4.7.8. Backup & Restore modelis
+#### Backup planas
+
+| Elementas       | Politika                    |
+|-----------------|-----------------------------|
+| DB              | kas 24 h + saugojimas 30 d. |
+| Failai          | saugojimas 30 d.            |
+| Docker image’ai | registry 180 d.             |
+
+#### Restore planas
+- Atstatyti DB iš dump'o
+- Paleisti smoke test
+
+### 4.7.9. Eksploatavimas trečiųjų šalių aplinkose _(angl. Operation in 3rd party environments)_
+ITIS integracijos:
+- Paysera API (el.mokėjimai)
+- SMTP serveris (el.laiškams)
+- OpenStreetMap (žemėlapiai)
+
+#### Rizikos
+- Galimi Paysera sutrikimai → negalimi apmokėjimai, neužskaitomos sąskaitos, negeneruojamos apmokėtos sąskaitos 
+- SMTP blokavimas → klientai negauna sąskaitų
+- OSM lėtėjimas → blogėja UX
+
+#### Sprendimai
+- Paysera callback'ai saugomas log'uose → galima pakartoti, Paysera turi mokėjimų log'ą per svetainę
+- El.laiškai saugomi duomenų bazėje siuntimų eilėje
+- Žemėlapiai turi (angl. tile) kešavimą
+
+### 4.7.10. Palaikymo modelis _(angl. Support Model)_
+#### Incidentų klasės
+
+| Lygis           | Aprašymas             | Reakcija |
+|-----------------|-----------------------|----------|
+| L1              | UI klaida             | 2 d.     |
+| L2              | Mokėjimo klaida       | 4 val.   |
+| L3              | DB neveikia           | 1 val.   |
+| L4              | Visa sistema neveikia | 30 min.  |
+
+#### SLA
+- Availability: 99.99 %
+- MTTR: ≤ 2 h
+- Response time: ≤ 2 min naudotojo veiksmams
+
+### 4.7.11. Santrauka
+Operacinis vaizdas užtikrina, kad ITIS sistema:
+- gali būti **saugiai diegiama, scale'inama** ir **prižiūrima**;
+- turi apibrėžtą **migracijos** ir **atnaujinimų procesą**;
+- turi profesionaliai sudarytą **monitoringo ir alerting’o sistemą**;
+- turi patikimą ir realiai veikiantį **backup/restore planą**;
+- integruojasi su trečiųjų šalių sistemomis valdant rizikas;
+- turi aiškią **eksploatacijos ir incidentų valdymo struktūrą**.
 
 # 5. Perspektyvos _(angl. [Perspectives](https://www.viewpoints-and-perspectives.info/home/perspectives/))_
 ## 5.1. Prieinamumas neįgaliems _(angl. [Accessibility](https://www.viewpoints-and-perspectives.info/home/perspectives/accessibility/))_
-
-| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                          |
-|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Taikymas _(angl. Applicability)_**         | Ši perspektyva taikoma ITIS sistemos savitarnai, nes ja naudojasi įvairių gebėjimų vartotojai.                                                                                                                                                                                                                                                    |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Ar sistema pasiekiama vartotojams su regos, motorikos ar kognityviniais sutrikimais.<br/>- Ar informacija tinkamai struktūruota ekrano skaitytuvams.<br/>- Ar spalvų kontrastai ir šrifto dydžiai atitinka WCAG rekomendacijas.<br/>- Ar formos ir mygtukai prieinami valdyti klaviatūra.<br/>- Ar klaidų žinutės aiškios ir suprantamos.       |
-| **Veiksmai _(angl. Activities)_**            | - Taikyti WCAG 2.1 AA gairių pagrindus (kontrastas, responsyvumas, semantika).<br/>- Užtikrinti alternatyvius tekstus paveikslėliams (alt).<br/>- Testuoti naršymą klaviatūra ir ekrano skaitytuvu.<br/>- Užtikrinti, kad formų klaidų žinutės būtų aiškiai matomos ir suprantamos.<br/>- Sutvarkyti semantinį HTML (aria-label, role atributai). |
-| **Taktikos _(angl. Tactics)_**               | - Aiškūs kontrastai (min 4.5:1).<br/>- Pakankamas šrifto dydis (≥16px).<br/>- Aiškus fokusavimo indikatorius klaviatūrai.<br/>- Spalva negali būti vienintelė informacijos perteikimo priemonė.<br/>- Paprastos, nuoseklios formos su aiškiais label'iais.<br/>- Automatiniai HTML validacijos įrankiai (axe, Lighthouse).                        |
-| **Spąstai _(angl. Pitfalls)_**               | - Per maži elementai mobiliuose ekranuose.<br/>- Spalvų schemos, neatitinkančios kontrasto reikalavimų.<br/>- Ekrano skaitytuvams netinkami elementai (be label'ių).<br/>- Mygtukai, kuriuos neįmanoma pasiekti klaviatūra.<br/>- Per daug techninės informacijos klaidų žinutėse.                                                                |
-
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Aspektas</th>
+        <th>Taikymas</th>
+    </tr>
+    <tr>
+        <th>Taikymas<br/><small><em>(angl. Applicability)</em></small></th>
+        <td>Ši perspektyva taikoma ITIS sistemos savitarnai, nes ja naudojasi įvairių gebėjimų vartotojai.</td>
+    </tr>
+    <tr>
+        <th>Sprendžiami rūpesčiai<br/><small><em>(angl. Concerns)</em></small></th>
+        <td>
+            - Ar sistema pasiekiama vartotojams su regos, motorikos ar kognityviniais sutrikimais.<br>
+            - Ar informacija tinkamai struktūruota ekrano skaitytuvams.<br>
+            - Ar spalvų kontrastai ir šrifto dydžiai atitinka WCAG rekomendacijas.<br>
+            - Ar formos ir mygtukai prieinami valdyti klaviatūra.<br>
+            - Ar klaidų žinutės aiškios ir suprantamos.
+        </td>
+    </tr>
+    <tr>
+        <th>Veiksmai<br/><small><em>(angl. Activities)</em></small></th>
+        <td>
+            - Taikyti WCAG 2.1 AA gairių pagrindus (kontrastas, responsyvumas, semantika).<br>
+            - Užtikrinti alternatyvius tekstus paveikslėliams (alt).<br>
+            - Testuoti naršymą klaviatūra ir ekrano skaitytuvu.<br>
+            - Užtikrinti, kad formų klaidų žinutės būtų aiškiai matomos ir suprantamos.<br>
+            - Sutvarkyti semantinį HTML (aria-label, role atributai).
+        </td>
+    </tr>
+    <tr>
+        <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
+        <td>
+            - Aiškūs kontrastai (min 4.5:1).<br>
+            - Pakankamas šrifto dydis (≥16px).<br>
+            - Aiškus fokusavimo indikatorius klaviatūrai.<br>
+            - Spalva negali būti vienintelė informacijos perteikimo priemonė.<br>
+            - Paprastos, nuoseklios formos su aiškiais label'iais.<br>
+            - Automatiniai HTML validacijos įrankiai (axe, Lighthouse).
+        </td>
+    </tr>
+    <tr>
+        <th>Spąstai<br/><small><em>(angl. Pitfalls)</em></small></th>
+        <td>
+            - Per maži elementai mobiliuose ekranuose.<br>
+            - Spalvų schemos, neatitinkančios kontrasto reikalavimų.<br>
+            - Ekrano skaitytuvams netinkami elementai (be label'ių).<br>
+            - Mygtukai, kuriuos neįmanoma pasiekti klaviatūra.<br>
+            - Per daug techninės informacijos klaidų žinutėse.
+        </td>
+    </tr>
+    <tr>
+        <th>Kontrolinis sąrašas<br/><small><em>(angl. Checklist)</em></small></th>
+        <td>
+            <table border="1" cellpadding="4" cellspacing="0">
+                <tr>
+                    <th>Klausimas</th>
+                    <th>Atsakymas</th>
+                </tr>
+                <tr>
+                    <td>Ar sistema galima naudotis klaviatūra?</td>
+                    <td>Taip, visi esminiai elementai pasiekiami Tab / Shift+Tab</td>
+                </tr>
+                <tr>
+                    <td>Ar UI taikomas WCAG 2.1 AA kontrastas?</td>
+                    <td>Taip, naudojama pakankama spalvų gama</td>
+                </tr>
+                <tr>
+                    <td>Ar formų laukai turi „<code>aria-label</code>“?</td>
+                    <td>
+                        Taip, pritaikyta.<br>
+                        Žemėlapio (Leaflet) valdikliai turi integruotą ARIA palaikymą.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Ar paveikslėliai turi <code>alt</code> tekstus?</td>
+                    <td>Taip</td>
+                </tr>
+                <tr>
+                    <td>Ar testuota su ekrano skaitytuvais?</td>
+                    <td>Taip – baziniai testai atlikti su NVDA, JAWS</td>
+                </tr>
+                <tr>
+                    <td>Ar interaktyvūs elementai turi fokusavimo būsenas?</td>
+                    <td>Taip. Mygtukai, nuorodos ir formos laukai turi aiškų CSS fokusavimo stilių (Boostrap karkaso standartas), matomą padidinto kontrasto naudotojams</td>
+                </tr>
+                <tr>
+                    <td>Ar visi formų laukai turi aiškias <code>label</code> žymes?</td>
+                    <td>Taip. Visi „input“ turi semantinius <code>&lt;label&gt;</code> elementus ir yra sujungti su <code>ARIA</code> atributais</td>
+                </tr>
+                <tr>
+                    <td>Ar klaidos pranešimai paaiškinti tekstu, o ne tik spalva?</td>
+                    <td>Taip. Formose klaidos pateikiamos su atskiru tekstiniu paaiškinimu (pvz., “Neteisingas el. paštas”, “Laukas privalomas”). Be to, jos turi ARIA "<code>role=alert</code>".</td>
+                </tr>
+                <tr>
+                    <td>Ar sistemoje naudojamos animacijos/perėjimai nėra per greiti ar trukdantys?</td>
+                    <td>Taip. ITIS nenaudoja animacijų ar mirgančių elementų (naudojimosi patogumui ir WCAG reikalavimams).</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 ## 5.2. Prieinamumas ir atsparumas _(angl. [Availability and Resilience](https://www.viewpoints-and-perspectives.info/home/perspectives/availability-and-resilience/))_
-
-| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                         |
-|----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Taikymas _(angl. Applicability)_**         | Ši perspektyva taikoma ITIS sistemai, nes ji tvarko klientų duomenis, sąskaitas ir mokėjimus. Gedimai tiesiogiai paveikia verslą. Ji taikoma Deployment, Operational ir Concurrency vaizduose.                                                                                                                                                   |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Laikas iki atstatymo (time to repair) po gedimo.<br/>- Nelaimės atstatymo (disaster recovery) strategijos.<br/>- Vienos klaidos taško (single point of failure) identifikavimas.                                                                                                                                                               |
-| **Veiksmai _(angl. Activities)_**            | - Identifikuoti kritinius komponentus (DB, Paysera callback, cron).<br/>- Įdiegti monitoringą (DB, CPU, cron sėkmė, callback klaidos).<br/>- Testuoti atsarginių kopijų atkūrimą.<br/>- Analizuoti konkurenciją tarp cron ir callback.<br/>- Parengti incidentų reakcijos planą.<br/>- Įdiegti sistemines klaidų žinutes (graceful degradation). |
-| **Taktikos _(angl. Tactics)_**               | - Sistemos „kūrimo gedimams“ _(angl. „design for failure“)_ principas — manyti, kad komponentas gali sugesti, ir numatyti mechanizmus atstatymui.<br/>- Automatizuotos atsarginių kopijų procesai, atstatymo procedūros.                                                                                                                         |
-| **Spąstai _(angl. Pitfalls)_**               | - Per didelis pasikliovimas viena DB instancija (SPOF).<br/>- Trūksta atsarginių kopijų atstatymo testų.<br/>- Tinklas tarp ITIS ↔ Paysera laikomas patikimu, nors jis toks nėra.<br/>- Foniniai cron procesai nėra prižiūrimi — gali tyliai sugesti.<br/>- Monitoringas įdiegtas, bet alertai nenustatyti.                                      |
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Aspektas</th>
+        <th>Taikymas</th>
+    </tr>
+    <tr>
+        <th>Taikymas<br/><small><em>(angl. Applicability)</em></small></th>
+        <td>
+            Ši perspektyva taikoma ITIS sistemai, nes ji tvarko klientų duomenis, sąskaitas ir mokėjimus.
+            Gedimai tiesiogiai paveikia verslą. Ji taikoma Deployment, Operational ir Concurrency vaizduose.
+        </td>
+    </tr>
+    <tr>
+        <th>Sprendžiami rūpesčiai<br/><small><em>(angl. Concerns)</em></small></th>
+        <td>
+            - Laikas iki atstatymo (time to repair) po gedimo.<br>
+            - Nelaimės atstatymo (disaster recovery) strategijos.<br>
+            - Vienos klaidos taško (single point of failure) identifikavimas.
+        </td>
+    </tr>
+    <tr>
+        <th>Veiksmai<br/><small><em>(angl. Activities)</em></small></th>
+        <td>
+            - Identifikuoti kritinius komponentus (DB, Paysera callback, cron).<br>
+            - Įdiegti monitoringą (DB, CPU, cron sėkmė, callback klaidos).<br>
+            - Testuoti atsarginių kopijų atkūrimą.<br>
+            - Analizuoti konkurenciją tarp cron ir callback.<br>
+            - Parengti incidentų reakcijos planą.<br>
+            - Įdiegti sistemines klaidų žinutes (graceful degradation).
+        </td>
+    </tr>
+    <tr>
+        <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
+        <td>
+            - Sistemos „kūrimo gedimams“ <em>(angl. „design for failure“)</em> principas — manyti, kad komponentas gali sugesti, ir numatyti mechanizmus atstatymui.<br>
+            - Automatizuotos atsarginių kopijų procesai, atstatymo procedūros.
+        </td>
+    </tr>
+    <tr>
+        <th>Spąstai<br/><small><em>(angl. Pitfalls)</em></small></th>
+        <td>
+            - Per didelis pasikliovimas viena DB instancija (SPOF).<br>
+            - Trūksta atsarginių kopijų atstatymo testų.<br>
+            - Tinklas tarp ITIS ↔ Paysera laikomas patikimu, nors jis toks nėra.<br>
+            - Foniniai cron procesai nėra prižiūrimi — gali tyliai sugesti.<br>
+            - Monitoringas įdiegtas, bet alertai nenustatyti.
+        </td>
+    </tr>
+    <tr>
+        <th>Kontrolinis sąrašas<br/><small><em>(angl. Checklist)</em></small></th>
+        <td>
+            <table border="1" cellpadding="4" cellspacing="0">
+                <tr>
+                    <th>Klausimas</th>
+                    <th>Atsakymas</th>
+                </tr>
+                <tr>
+                    <td>Ar identifikuoti visi „single point of failure“?</td>
+                    <td>Taip – Paysera, DB, SMTP</td>
+                </tr>
+                <tr>
+                    <td>Ar numatyti fallback mechanizmai?</td>
+                    <td>Taip – DB replikacija, Paysera retry, Mail queue</td>
+                </tr>
+                <tr>
+                    <td>Ar apibrėžtas Recovery Time Objective (RTO)?</td>
+                    <td>Taip – 1 valanda</td>
+                </tr>
+                <tr>
+                    <td>Ar apibrėžtas Recovery Point Objective (RPO)?</td>
+                    <td>Taip – 24 val. (kasdienės backup kopijos)</td>
+                </tr>
+                <tr>
+                    <td>Ar yra automatinis incidentų monitoringas?</td>
+                    <td>Taip – Sentry + serverio monitoringas</td>
+                </tr>
+                <tr>
+                    <td>Ar suprojektuotas elastingumas (resilience)?</td>
+                    <td>Taip – queue, async workers (cron), DB isolation per Kubernetes</td>
+                </tr>
+                <tr>
+                    <td>Ar sistemai atlikti degradavimo scenarijai?</td>
+                    <td>Taip – Paysera prastovos atvejis, DB read-only režimas</td>
+                </tr>
+                <tr>
+                    <td>Ar yra automatinis alerting?</td>
+                    <td>Taip – el. paštas + Sentry įspėjimai</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 ## 5.3. Plėtros ištekliai _(angl. [Development Resource](https://www.viewpoints-and-perspectives.info/home/perspectives/development-resource-perspective/))_
-
-| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                                |
-|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Taikymas _(angl. Applicability)_**         | Perspektyva taikoma ITIS sistemos kūrimo ir priežiūros procesui — programuotojams, testuotojams ir sistemą palaikančiai komandai. Ji padeda nustatyti, kokių išteklių reikia efektyviam vystymui.                                                                                                                                                       |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Ar turima pakankamai žmogiškųjų išteklių sistemai kurti ir palaikyti.<br/>- Ar yra reikalingi įrankiai (IDE, CI/CD, testavimo aplinkos).<br/>- Ar atliekami mokymai naujiems komandos nariams.<br/>- Ar užtikrinti resursai testavimui, diegimui, monitoringui.<br/>- Ar suplanuotas laikas refaktoringui ir techninei skolai.                        |
-| **Veiksmai _(angl. Activities)_**            | - Įdiegti standartizuotą kodo stiliaus ir review procesą.<br/>- Nustatyti CI/CD pipeline ir automatinį testavimą.<br/>- Užtikrinti testinę infrastruktūrą (staging aplinka).<br/>- Planuoti resursus didesniems leidimams (releases).<br/>- Kurti techninės dokumentacijos gaires naujiems komandos nariams.                                            |
-| **Taktikos _(angl. Tactics)_**               | - Naudoti GitFlow arba trunk-based development strategiją.<br/>- Automatizuoti unit ir integracinius testus PHPUnit.<br/>- Naudoti statinę analizę (phpstan, psalm).<br/>- Naudoti konteinerizaciją (Docker) vietinei aplinkai.<br/>- Planuoti sprintus su „capacity planning“.<br/>- Prioritizuoti techninę skolą prieš pridedant naują funkcionalumą. |
-| **Spąstai _(angl. Pitfalls)_**               | - Per mažai laiko skiriama testams ir kodo kokybei.<br/>- Per didelė priklausomybė nuo vieno programuotojo („bus factor“ problema).<br/>- Neapibrėžtas resursų poreikis — sunku planuoti darbus.<br/>- Nepakankamas onboarding naujiems programuotojams.<br/>- Nėra laiko refaktoringui, todėl kaupiasi techninė skola.                                 |
-
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Aspektas</th>
+        <th>Taikymas</th>
+    </tr>
+    <tr>
+        <th>Taikymas<br/><small><em>(angl. Applicability)</em></small></th>
+        <td>
+            Perspektyva taikoma ITIS sistemos kūrimo ir priežiūros procesui — programuotojams, testuotojams ir sistemą palaikančiai komandai.
+            Ji padeda nustatyti, kokių išteklių reikia efektyviam vystymui.
+        </td>
+    </tr>
+    <tr>
+        <th>Sprendžiami rūpesčiai<br/><small><em>(angl. Concerns)</em></small></th>
+        <td>
+            - Ar turima pakankamai žmogiškųjų išteklių sistemai kurti ir palaikyti.<br>
+            - Ar yra reikalingi įrankiai (IDE, CI/CD, testavimo aplinkos).<br>
+            - Ar atliekami mokymai naujiems komandos nariams.<br>
+            - Ar užtikrinti resursai testavimui, diegimui, monitoringui.<br>
+            - Ar suplanuotas laikas refaktoringui ir techninei skolai.
+        </td>
+    </tr>
+    <tr>
+        <th>Veiksmai<br/><small><em>(angl. Activities)</em></small></th>
+        <td>
+            - Įdiegti standartizuotą kodo stiliaus ir review procesą.<br>
+            - Nustatyti CI/CD pipeline ir automatinį testavimą.<br>
+            - Užtikrinti testinę infrastruktūrą (<code>staging</code> aplinka).<br>
+            - Planuoti resursus didesniems leidimams (releases).<br>
+            - Kurti techninės dokumentacijos gaires naujiems komandos nariams.
+        </td>
+    </tr>
+    <tr>
+        <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
+        <td>
+            - Naudoti GitFlow arba trunk-based development strategiją.<br>
+            - Automatizuoti unit ir integracinius testus PHPUnit.<br>
+            - Naudoti statinę analizę (phpstan, psalm).<br>
+            - Naudoti konteinerizaciją (Docker) vietinei aplinkai.<br>
+            - Planuoti sprintus su „capacity planning“.<br>
+            - Prioritizuoti techninę skolą prieš pridedant naują funkcionalumą.
+        </td>
+    </tr>
+    <tr>
+        <th>Spąstai<br/><small><em>(angl. Pitfalls)</em></small></th>
+        <td>
+            - Per mažai laiko skiriama testams ir kodo kokybei.<br>
+            - Per didelė priklausomybė nuo vieno programuotojo („bus factor“ problema).<br>
+            - Neapibrėžtas resursų poreikis — sunku planuoti darbus.<br>
+            - Nepakankamas onboarding naujiems programuotojams.<br>
+            - Nėra laiko refaktoringui, todėl kaupiasi techninė skola.
+        </td>
+    </tr>
+    <tr>
+        <th>Kontrolinis sąrašas<br/><small><em>(angl. Checklist)</em></small></th>
+        <td>
+            <table border="1" cellpadding="4" cellspacing="0">
+                <tr>
+                    <th>Klausimas</th>
+                    <th>Atsakymas</th>
+                </tr>
+                <tr>
+                    <td>Ar komanda turi pakankamai įgūdžių naudoti PHP/Symfony?</td>
+                    <td>Taip – visi programuotojai turi 2+ metų patirtį</td>
+                </tr>
+                <tr>
+                    <td>Ar yra aiškūs kodo standartai?</td>
+                    <td>Taip – PSR-12, projektiniai šablonai, DI principai</td>
+                </tr>
+                <tr>
+                    <td>Ar naudojamos automatinės statinės analizės priemonės?</td>
+                    <td>Taip – PHPStan, PHP-CS-Fixer</td>
+                </tr>
+                <tr>
+                    <td>Ar testavimo infrastruktūra pakankama?</td>
+                    <td>Taip – PHPUnit, Panther/Cypress</td>
+                </tr>
+                <tr>
+                    <td>Ar CI/CD turi pakankamai resursų?</td>
+                    <td>Taip – GitLab Runner + Docker</td>
+                </tr>
+                <tr>
+                    <td>Ar dokumentacija palaikoma?</td>
+                    <td>Taip – architektūros AD + API specifikacija</td>
+                </tr>
+                <tr>
+                    <td>Ar yra rizikų dėl žmonių išteklių trūkumo?</td>
+                    <td>Maža rizika – komanda stabili</td>
+                </tr>
+                <tr>
+                    <td>Ar reikalingi papildomi mokymai?</td>
+                    <td>Ne – naudojamos žinomos atviro kodo technologijos</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 ## 5.4. Evoliucija _(angl. [Evolution](https://www.viewpoints-and-perspectives.info/home/perspectives/evolution/))_
-
-| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Taikymas _(angl. Applicability)_**         | Ši perspektyva taikoma tam, kad ITIS sistema galėtų ilgainiui būti tobulinama ir pritaikoma naujiems verslo bei technologiniams poreikiams. Ji užtikrina, kad architektūra būtų pakankamai lanksti diegiant naujas paslaugas (pvz., papildomi mokėjimų tiekėjai, akcijų moduliai ar mobilioji sąsaja).                                                                                                                                                                                            |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kaip sistema gali būti plečiama naujais moduliais ir funkcijomis be didelių perrašymų.<br>- Kaip užtikrinti, kad atnaujinimai (framework, DB) būtų suderinami su esamais komponentais.<br>- Kaip išlaikyti duomenų suderinamumą keičiant modelius ar struktūras.<br>- Kaip planuoti versijų atnaujinimus (Symfony, PHP).                                                                                                                                                                        |
-| **Veiksmai _(angl. Activities)_**            | - Modulinės architektūros palaikymas (kiekvienas modulis gali būti vystomas nepriklausomai).<br>- Reguliarus priklausomybių atnaujinimas per Composer.<br>- Migracijų valdymas naudojant Doctrine Migration įrankį.<br>- Kodo refaktoringas pagal testų rezultatus.<br>- Naudotojų poreikių analizė naujų funkcijų planavimui.<br>- Dokumentacijos palaikymas ir atnaujinimas.                                                                                                                    |
-| **Taktikos _(angl. Tactics)_**               | - Naudoti **MVC** ir **Service-oriented** architektūros principus, kad modulius būtų galima keisti nepriklausomai.<br>- Naudoti **versijų valdymo sistemą (Git)** su aiškiu „branching“ modeliu (pvz., *GitFlow*).<br>- Naudoti **automatinį testavimą (PHPUnit)** prieš kiekvieną atnaujinimą.<br>- Naudoti **Continuous Integration (CI)** ir **Continuous Deployment (CD)** procesus.<br>- Numatyti **API sąsajas** išoriniams moduliniams plėtiniams (pvz., papildomiems mokėjimų tiekėjams). |
-| **Spąstai _(angl. Pitfalls)_**               | - Architektūra tampa pernelyg monolitinė, todėl kiekvienas pakeitimas paveikia visą sistemą.<br>- Nepakankamas testų rinkinys – didelė rizika sugadinti esamas funkcijas.<br>- Priklausomybės nuo konkrečios Symfony ar PHP versijos gali apsunkinti atnaujinimus.<br>- Nepakankamas dokumentacijos atnaujinimas lemia žinių praradimą.<br>- Nenumatyta duomenų migracijos strategija sukelia klaidas atnaujinimų metu.                                                                           |
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Aspektas</th>
+        <th>Taikymas</th>
+    </tr>
+    <tr>
+        <th>Taikymas<br/><small><em>(angl. Applicability)</em></small></th>
+        <td>
+            Ši perspektyva taikoma tam, kad ITIS sistema galėtų ilgainiui būti tobulinama ir pritaikoma naujiems verslo bei technologiniams poreikiams.
+            Ji užtikrina, kad architektūra būtų pakankamai lanksti diegiant naujas paslaugas
+            (pvz., papildomi mokėjimų tiekėjai, akcijų moduliai ar mobilioji sąsaja).
+        </td>
+    </tr>
+    <tr>
+        <th>Sprendžiami rūpesčiai<br/><small><em>(angl. Concerns)</em></small></th>
+        <td>
+            - Kaip sistema gali būti plečiama naujais moduliais ir funkcijomis be didelių perrašymų.<br>
+            - Kaip užtikrinti, kad atnaujinimai (framework, DB) būtų suderinami su esamais komponentais.<br>
+            - Kaip išlaikyti duomenų suderinamumą keičiant modelius ar struktūras.<br>
+            - Kaip planuoti versijų atnaujinimus (Symfony, PHP).
+        </td>
+    </tr>
+    <tr>
+        <th>Veiksmai<br/><small><em>(angl. Activities)</em></small></th>
+        <td>
+            - Modulinės architektūros palaikymas (kiekvienas modulis gali būti vystomas nepriklausomai).<br>
+            - Reguliarus priklausomybių atnaujinimas per Composer.<br>
+            - Migracijų valdymas naudojant Doctrine Migration įrankį.<br>
+            - Kodo refaktoringas pagal testų rezultatus.<br>
+            - Naudotojų poreikių analizė naujų funkcijų planavimui.<br>
+            - Dokumentacijos palaikymas ir atnaujinimas.
+        </td>
+    </tr>
+    <tr>
+        <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
+        <td>
+            - Naudoti <strong>MVC</strong> ir <strong>Service-oriented</strong> architektūros principus, kad modulius būtų galima keisti nepriklausomai.<br>
+            - Naudoti <strong>versijų valdymo sistemą (Git)</strong> su aiškiu „branching“ modeliu (pvz., <em>GitFlow</em>).<br>
+            - Naudoti <strong>automatinį testavimą (PHPUnit)</strong> prieš kiekvieną atnaujinimą.<br>
+            - Naudoti <strong>Continuous Integration (CI)</strong> ir <strong>Continuous Deployment (CD)</strong> procesus.<br>
+            - Numatyti <strong>API sąsajas</strong> išoriniams moduliniams plėtiniams (pvz., papildomiems mokėjimų tiekėjams).
+        </td>
+    </tr>
+    <tr>
+        <th>Spąstai<br/><small><em>(angl. Pitfalls)</em></small></th>
+        <td>
+            - Architektūra tampa pernelyg monolitinė, todėl kiekvienas pakeitimas paveikia visą sistemą.<br>
+            - Nepakankamas testų rinkinys – didelė rizika sugadinti esamas funkcijas.<br>
+            - Priklausomybės nuo konkrečios Symfony ar PHP versijos gali apsunkinti atnaujinimus.<br>
+            - Nepakankamas dokumentacijos atnaujinimas lemia žinių praradimą.<br>
+            - Nenumatyta duomenų migracijos strategija sukelia klaidas atnaujinimų metu.
+        </td>
+    </tr>
+    <tr>
+        <th>Kontrolinis sąrašas<br/><small><em>(angl. Checklist)</em></small></th>
+        <td>
+            <table border="1" cellpadding="4" cellspacing="0">
+                <tr>
+                    <th>Klausimas</th>
+                    <th>Atsakymas</th>
+                </tr>
+                <tr>
+                    <td>Ar architektūra yra modulinė ir nepriklausoma?</td>
+                    <td>Taip, moduliai (klientai, objektai, sąskaitos, mokėjimai, paslaugos) realizuoti atskirose DB lentelėse</td>
+                </tr>
+                <tr>
+                    <td>Ar pokyčiai versijuojami Git’e su CI/CD?</td>
+                    <td>Taip, naudojamas GitLab CI ir automatinis deployment į aplinkas</td>
+                </tr>
+                <tr>
+                    <td>Ar DB migracijos atliekamos automatizuotai per Doctrine?</td>
+                    <td>Taip, DB keitimai realizuojami migracijomis ir paleidžiami deployment metu</td>
+                </tr>
+                <tr>
+                    <td>Ar numatytas rollback mechanizmas?</td>
+                    <td>Taip, galima grąžinti ankstesnį Docker image + Helm release, DB rollback rankinis</td>
+                </tr>
+                <tr>
+                    <td>Ar sistema gali būti lengvai plečiama naujomis funkcijomis?</td>
+                    <td>Taip, dėl aiškios modulinių atsakomybių ribos ir atviro kodo sistemos</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 ## 5.5. Internacionalizacija _(angl. [Internationalization](https://www.viewpoints-and-perspectives.info/home/perspectives/internationalization/))_
-
-| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                               |
-|----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Taikymas _(angl. Applicability)_**         | Taikoma, kai sistema turi būti pritaikoma skirtingoms kalboms, šalims ir kultūroms. ITIS šiuo metu lokalizuota tik lietuvių kalbai, bet architektūra turi numatyti augimo galimybę.                                                                                                    |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kaip lengvai pridėti naujas kalbas.<br/>- Kaip tvarkomi formatavimo skirtumai (data, valiuta, skaičiai).<br/>- Kaip išvengti „hardcodintų“ tekstų kode.<br/>- Kaip tvarkyti PDF sąskaitų kalbinį turinį.<br/>- Kaip lokalizuojami el. laiškai.                                       |
-| **Veiksmai _(angl. Activities)_**            | - Visi tekstai perkelti į Symfony vertimų sistemos `.yaml` failus.<br/>- Twig šablonuose naudoti `trans` funkciją.<br/>- TVS ir savitarnoje naudoti vieningą kalbos perjungimo mechanizmą, jei prireiktų ateityje.<br/>- Parengti el. laiškų šablonus kelioms kalboms.                 |
-| **Taktikos _(angl. Tactics)_**               | - Nenaudoti „hardcoded“ tekstų — tik vertimų failus.<br/>- Naudoti `Intl` PHP biblioteką valiutos ir datų formatavimui.<br/>- PDF generavime naudoti UTF-8 ir daugiašrifčių biblioteką.<br/>- Laikyti kalbinius failus atskiruose kataloguose pagal kalbą (lt, en).                    |
-| **Spąstai _(angl. Pitfalls)_**               | - Neparuoštos žinutės iš Paysera callback – gali būti neaiškios vartotojams.<br/>- PDF šriftai gali nepalaikyti tarptautinių simbolių.<br/>- Kodo vietose gali likti neperkelti tekstai, sunkinantys plėtrą.<br/>- Nepilnai lokalizuoti el. laiškų šablonai gali klaidinti vartotojus. |
-
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Aspektas</th>
+        <th>Taikymas</th>
+    </tr>
+    <tr>
+        <th>Taikymas<br/><small><em>(angl. Applicability)</em></small></th>
+        <td>
+            Taikoma, kai sistema turi būti pritaikoma skirtingoms kalboms, šalims ir kultūroms.
+            ITIS šiuo metu lokalizuota tik lietuvių kalbai, bet architektūra turi numatyti augimo galimybę.
+        </td>
+    </tr>
+    <tr>
+        <th>Sprendžiami rūpesčiai<br/><small><em>(angl. Concerns)</em></small></th>
+        <td>
+            - Kaip lengvai pridėti naujas kalbas.<br>
+            - Kaip tvarkomi formatavimo skirtumai (data, valiuta, skaičiai).<br>
+            - Kaip išvengti „hardcodintų“ tekstų kode.<br>
+            - Kaip tvarkyti PDF sąskaitų kalbinį turinį.<br>
+            - Kaip lokalizuojami el. laiškai.
+        </td>
+    </tr>
+    <tr>
+        <th>Veiksmai<br/><small><em>(angl. Activities)</em></small></th>
+        <td>
+            - Visi tekstai perkelti į Symfony vertimų sistemos <code>.yaml</code> failus.<br>
+            - Twig šablonuose naudoti <code>trans</code> funkciją.<br>
+            - TVS ir savitarnoje naudoti vieningą kalbos perjungimo mechanizmą, jei prireiktų ateityje.<br>
+            - Parengti el. laiškų šablonus kelioms kalboms.
+        </td>
+    </tr>
+    <tr>
+        <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
+        <td>
+            - Nenaudoti „hardcoded“ tekstų — tik vertimų failus.<br>
+            - Naudoti <strong>Intl</strong> PHP biblioteką valiutos ir datų formatavimui.<br>
+            - PDF generavime naudoti UTF-8 ir daugiašrifčių biblioteką.<br>
+            - Laikyti kalbinius failus atskiruose kataloguose pagal kalbą (lt, en).
+        </td>
+    </tr>
+    <tr>
+        <th>Spąstai<br/><small><em>(angl. Pitfalls)</em></small></th>
+        <td>
+            - Neparuoštos žinutės iš Paysera callback – gali būti neaiškios vartotojams.<br>
+            - PDF šriftai gali nepalaikyti tarptautinių simbolių.<br>
+            - Kodo vietose gali likti neperkelti tekstai, sunkinantys plėtrą.<br>
+            - Nepilnai lokalizuoti el. laiškų šablonai gali klaidinti vartotojus.
+        </td>
+    </tr>
+    <tr>
+        <th>Kontrolinis sąrašas<br/><small><em>(angl. Checklist)</em></small></th>
+        <td>
+            <table border="1" cellpadding="4" cellspacing="0">
+                <tr>
+                    <th>Klausimas</th>
+                    <th>Atsakymas</th>
+                </tr>
+                <tr>
+                    <td>Ar sistema palaiko kelių kalbų žinučių vertimus?</td>
+                    <td>Taip – per Symfony Translation komponentą</td>
+                </tr>
+                <tr>
+                    <td>Ar UI tekstai nehardcodinti?</td>
+                    <td>Taip – naudojami vertimo raktai</td>
+                </tr>
+                <tr>
+                    <td>Ar duomenų formatai (data, valiuta) yra lokalizuoti?</td>
+                    <td>Taip – naudojami PHP Intl formatai</td>
+                </tr>
+                <tr>
+                    <td>Ar duomenys DB saugomi neutraliai?</td>
+                    <td>Taip – be lokalizacijos priklausomybių</td>
+                </tr>
+                <tr>
+                    <td>Ar yra poreikis kelioms kalboms?</td>
+                    <td>Šiuo metu ne – LT kalbos užtenka</td>
+                </tr>
+                <tr>
+                    <td>Ar sistemos email šablonai yra lokalizuojami?</td>
+                    <td>Taip – su Twig šablonu varikliu ir Symfony Translation komponentu</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 ## 5.6. Vieta _(angl. [Location](https://www.viewpoints-and-perspectives.info/home/perspectives/location/))_
-
-| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                |
-|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Taikymas _(angl. Applicability)_**         | Perspektyva svarbi, kai sistema veikia skirtingose fizinėse ar virtualiose vietose: klientai gali jungtis iš skirtingų regionų.                                                                                                                         |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kur hostinama ITIS (testinė, produkcinė aplinka).<br/>- Ar laikomasi duomenų saugojimo vietos reikalavimų (ES / Lietuva).<br/>- Ar naudotojai iš skirtingų vietų turi vienodą atsako laiką.<br/>- Ar naudotojai mato savo vietinį laiką, ar Lietuvos. |
-| **Veiksmai _(angl. Activities)_**            | - Užtikrinti, kad DB ir aplikacijos serveriai būtų ES (BDAR reikalavimai).<br/>- Naudoti CDN statiniams failams (CSS/JS).                                                                                                                               |
-| **Taktikos _(angl. Tactics)_**               | - Geografiškai arti esančios hosting platformos (pvz., Lietuvoje).<br/>- Tinklo kompresija (`gzip`, `brotli`).<br/>- Statinių failų kešavimas naršyklėje ir CDN.                                                                                        |
-| **Spąstai _(angl. Pitfalls)_**               | - Serveriai už ES ribų gali pažeisti BDAR.<br/>- Prastas tinklo ryšys žemėlapio sluoksniams gali lėtinti žemėlapio atvaizdavimą.<br/>- Paysera ir SMTP serverių vieta gali turėti įtaką atsako laikui.                                                  |
-
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Aspektas</th>
+        <th>Taikymas</th>
+    </tr>
+    <tr>
+        <th>Taikymas<br/><small><em>(angl. Applicability)</em></small></th>
+        <td>
+            Perspektyva svarbi, kai sistema veikia skirtingose fizinėse ar virtualiose vietose:
+            klientai gali jungtis iš skirtingų regionų.
+        </td>
+    </tr>
+    <tr>
+        <th>Sprendžiami rūpesčiai<br/><small><em>(angl. Concerns)</em></small></th>
+        <td>
+            - Kur hostinama ITIS (testinė, produkcinė aplinka).<br>
+            - Ar laikomasi duomenų saugojimo vietos reikalavimų (ES / Lietuva).<br>
+            - Ar naudotojai iš skirtingų vietų turi vienodą atsako laiką.<br>
+            - Ar naudotojai mato savo vietinį laiką, ar Lietuvos.
+        </td>
+    </tr>
+    <tr>
+        <th>Veiksmai<br/><small><em>(angl. Activities)</em></small></th>
+        <td>
+            - Užtikrinti, kad DB ir aplikacijos serveriai būtų ES (BDAR reikalavimai).<br>
+            - Naudoti CDN statiniams failams (CSS/JS).
+        </td>
+    </tr>
+    <tr>
+        <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
+        <td>
+            - Geografiškai arti esančios hosting platformos (pvz., Lietuvoje).<br>
+            - Tinklo kompresija (<code>gzip</code>, <code>brotli</code>).<br>
+            - Statinių failų kešavimas naršyklėje ir CDN.
+        </td>
+    </tr>
+    <tr>
+        <th>Spąstai<br/><small><em>(angl. Pitfalls)</em></small></th>
+        <td>
+            - Serveriai už ES ribų gali pažeisti BDAR.<br>
+            - Prastas tinklo ryšys žemėlapio sluoksniams gali lėtinti žemėlapio atvaizdavimą.<br>
+            - Paysera ir SMTP serverių vieta gali turėti įtaką atsako laikui.
+        </td>
+    </tr>
+    <tr>
+        <th>Kontrolinis sąrašas<br/><small><em>(angl. Checklist)</em></small></th>
+        <td>
+            <table border="1" cellpadding="4" cellspacing="0">
+                <tr>
+                    <th>Klausimas</th>
+                    <th>Atsakymas</th>
+                </tr>
+                <tr>
+                    <td>Ar sistema priklauso nuo geografinių ribojimų?</td>
+                    <td>Taip – Paysera veikia pagal regioną (LT/EU)</td>
+                </tr>
+                <tr>
+                    <td>Ar vartotojo lokacija turi įtakos funkcionalumui?</td>
+                    <td>Ne – savitarna veikia globaliai</td>
+                </tr>
+                <tr>
+                    <td>Ar sistemos hostinimas ribojamas?</td>
+                    <td>Taip – dedikuoti LT/EU serveriai dėl BDAR <em>(angl. GDPR)</em></td>
+                </tr>
+                <tr>
+                    <td>Ar yra CDN poreikis?</td>
+                    <td>Šiuo metu ne – mažos statinių failų apimtys</td>
+                </tr>
+                <tr>
+                    <td>Ar lokacija turi įtakos veikimo laikui?</td>
+                    <td>Nereikšminga – visi vartotojai iš LT</td>
+                </tr>
+                <tr>
+                    <td>Ar naudojamas geodomenų ribojimas?</td>
+                    <td>Ne</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 ## 5.7. Našumas ir mastelio keitimas _(angl. [Performance and Scalability](https://www.viewpoints-and-perspectives.info/home/perspectives/performance-and-scalability/))_
-
-| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Taikymas _(angl. Applicability)_**         | Ši perspektyva taikoma tam, kad ITIS atitiktų nefunkcinius našumo ir mastelio keitimo reikalavimus (NF1, NF7, NF9) ir kad sistema elgtųsi prognozuojamai didėjant naudotojų skaičiui. Ji taikoma projektuojant **Funkcinį**, **Lygiagretumo**, **Vystymo**, **Diegimo** ir **Operacinį** vaizdus – t. y. kai priimami sprendimai dėl DB struktūros, cron procesų, Paysera integracijos, el. pašto eilių, PHP-FPM / Apache konfigūracijos, resursų skyrimo testinei ir produkcinei aplinkoms.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kokia maksimali apdorojamų HTTP užklausų apimtis per sekundę / minutę (processing volume, throughput), įskaitant klientų savitarną ir TVS dalį.<br/>- Koks yra pagrindinių scenarijų atsako laikas – prisijungimas, sąskaitų sąrašo peržiūra, sąskaitos atidarymas, „Apmokėti“ scenarijus (response time, responsiveness).<br/>- Kaip sistema elgiasi piko metu (mėnesio pradžia, masinis sąskaitų generavimas, intensyvūs Paysera callback’ai) ir ar našumas išlieka prognozuojamas (predictability).<br/>- Kur yra siaurieji taškai – DB užklausos, disko I/O, PHP-FPM gijų skaičius, el. pašto siuntimas, PDF generavimas.<br/>- Kaip sistema gali būti **horizontaliai/vertikaliai** plečiama (papildomi web serveriai, daugiau DB resursų, papildomi queue worker’iai) augant klientų ir sąskaitų skaičiui.<br/>- Kaip naujos funkcijos (pvz., papildomas mokėjimų tiekėjas ar ataskaitos) nepablogins esamo našumo.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| **Veiksmai _(angl. Activities)_**            | - Aiškiai suformuluoti kiekybinius našumo tikslus: maksimalus atsako laikas UI puslapiams, leistinas užklausų kiekis per sekundę, sąskaitų generavimo „langas“ (kiek sąskaitų per valandą turi sugeneruoti cron).<br/>- Atlikti **apkrovos ir darbo krūvio charakterizavimą**: tipinių naudotojų skaičius, piko valandos, kas mėnesio generavimo šuoliai, Paysera callback’ų dažnis, el. laiškų apimtis.<br/>- Identifikuoti našumo kritines vietas architektūroje (DB lentelės su didžiausiu apkrovimu, dažniausiai kviečiami API endpoint’ai, sunkiausios ataskaitos, cron job’ai).<br/>- Peržiūrėti ir optimizuoti DB schemą bei užklausas: indeksai, JOIN’ų skaičius, agregavimo logika, „N+1“ problemų eliminavimas ORM sluoksnyje.<br/>- Suplanuoti ir įgyvendinti **veikimo testavimą** (load/stress testus) testinėje aplinkoje, imituojant realius scenarijus: daugybiniai prisijungimai, masinis sąskaitų generavimas, didelis Paysera callback srautas.<br/>- Nustatyti aplikacijos ir DB monitoringą (CPU, RAM, DB connection’ai, response time, error rate) bei sutarti, kokie rodikliai laikomi kritiniais (alertų slenksčiai).<br/>- Įtraukti našumą į „Definition of Done“ – naujos funkcijos negali ženkliai pabloginti esamų SLA be sąmoningo sprendimo.                                                                                                                                                                                                                                                                                     |
-| **Taktikos _(angl. Tactics)_**               | - **Sluoksniavimas ir moduliškumas:** aiški atskirtis tarp UI, serviso ir DB sluoksnių leidžia optimizuoti tik kritinius komponentus (pvz., sąskaitų generavimo servisą) nesugluminant kitų modulių.<br/>- **Caching ir rezultatų ribojimas:** naudoti rezultatų puslapiavimą (pagination), limituoti sąrašo dydžius, cache’inti dažnai skaitomus, bet retai kintančius duomenis (nustatymai, paslaugų katalogas, šalys).<br/>- **Asinchroninis apdorojimas:** sunkesnius veiksmus (PDF generavimą, el. laiškų siuntimą, dideles ataskaitas) perkelti į Message Queue worker’ius, kad web užklausa būtų greita, o fono darbai – nepriklausomi nuo naudotojo laukimo.<br/>- **DB optimizavimas:** sukurti reikiamus indeksus, vengti nereikalingų JOIN’ų, naudoti „batch“ įrašymą cron procesuose, esant reikalui – naudoti „raw SQL“ kritinėms užklausoms, apeinant ORM overhead’ą.<br/>- **HTTP ir statinių resursų optimizavimas:** suspausti asset’us (CSS/JS), naudoti naršyklės caching’ą statiniams failams (`Cache-Control`), minimizuoti HTTP užklausų skaičių UI puslapiuose.<br/>- **Mastelio didinimas:** konfigūruoti PHP-FPM/Apache taip, kad būtų pakankamai worker’ių piko metu, planuoti galimybę horizontaliai plėsti web sluoksnį (daugiau web instancų) ir vertikaliai/atskirai plėsti DB (daugiau resursų, atskira replika read-only ataskaitoms).<br/>- **Laiko langų naudojimas:** masinį sąskaitų generavimą, archyvavimą ir kitas „sunkaus“ darbo užduotis vykdyti nakties „langais“, kad jos nekonkuruotų su dienos vartotojų apkrova. |
-| **Spąstai _(angl. Pitfalls)_**               | - Nebūna aiškiai užrašytų našumo tikslų, todėl „veikia lėtai“ tampa subjektyvi problema ir sunku priimti architektūrinius sprendimus.<br/>- Optimizuojamos „netos“ vietos – skiriama daug laiko PHP kodui, bet ignoruojama viena lėta SQL užklausa, kuri sugadina visą scenarijų.<br/>- Sunkūs veiksmai vykdomi sinchroniškai HTTP užklausos metu (PDF generavimas, el. laiško siuntimas), dėl to naudotojas laukia kelias sekundes ar ilgiau.<br/>- Cron procesai ir Paysera callback’ai neįtraukiami į našumo analizę – optimizuojama tik savitarna, bet ne fono apkrovos, kurios iš tiesų „užmuša“ DB.<br/>- ORM naudojamas neapgalvotai (N+1 užklausų problema, „lazy loading“ dideliuose sąrašuose), dėl ko auga DB apkrova ir mažėja pralaidumas _(angl. throughput)_.<br/>- Nėra realistiškų testinių duomenų – sistema greita su 100 įrašų, bet sulėtėja turint 100 000 sąskaitų ir 10 metų istoriją.<br/>- Tikimasi, kad našumo problemas išspręs vien tik „didesnis serveris“ (vertikalus skalavimas) – neplanuojama architektūrinė plėtra (queue, caching, horizontali plėtra).                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Aspektas</th>
+        <th>Taikymas</th>
+    </tr>
+    <tr>
+        <th>Taikymas<br/><small><em>(angl. Applicability)</em></small></th>
+        <td>
+            Ši perspektyva taikoma tam, kad ITIS atitiktų nefunkcinius našumo ir mastelio keitimo reikalavimus (NF1, NF7, NF9)
+            ir kad sistema elgtųsi prognozuojamai didėjant naudotojų skaičiui. Ji taikoma projektuojant
+            <strong>Funkcinį</strong>, <strong>Lygiagretumo</strong>, <strong>Vystymo</strong>, 
+            <strong>Diegimo</strong> ir <strong>Operacinį</strong> vaizdus – t. y. kai priimami sprendimai
+            dėl DB struktūros, cron procesų, Paysera integracijos, el. pašto eilių, PHP-FPM / Apache konfigūracijos,
+            resursų skyrimo testinei ir produkcinei aplinkoms.
+        </td>
+    </tr>
+    <tr>
+        <th>Sprendžiami rūpesčiai<br/><small><em>(angl. Concerns)</em></small></th>
+        <td>
+            - Kokia maksimali apdorojamų HTTP užklausų apimtis per sekundę / minutę (processing volume, throughput),
+              įskaitant klientų savitarną ir TVS dalį.<br>
+            - Koks yra pagrindinių scenarijų atsako laikas – prisijungimas, sąskaitų sąrašo peržiūra, sąskaitos atidarymas,
+              „Apmokėti“ scenarijus (response time, responsiveness).<br>
+            - Kaip sistema elgiasi piko metu (mėnesio pradžia, masinis sąskaitų generavimas, intensyvūs Paysera callback’ai)
+              ir ar našumas išlieka prognozuojamas (predictability).<br>
+            - Kur yra siaurieji taškai – DB užklausos, disko I/O, PHP-FPM gijų skaičius, el. pašto siuntimas,
+              PDF generavimas.<br>
+            - Kaip sistema gali būti <strong>horizontaliai/vertikaliai</strong> plečiama (papildomi web serveriai,
+              daugiau DB resursų, papildomi queue worker’iai) augant klientų ir sąskaitų skaičiui.<br>
+            - Kaip naujos funkcijos (pvz., papildomas mokėjimų tiekėjas ar ataskaitos) nepablogins esamo našumo.
+        </td>
+    </tr>
+    <tr>
+        <th>Veiksmai<br/><small><em>(angl. Activities)</em></small></th>
+        <td>
+            - Aiškiai suformuluoti kiekybinius našumo tikslus: maksimalus atsako laikas UI puslapiams, leistinas užklausų
+              kiekis per sekundę, sąskaitų generavimo „langas“ (kiek sąskaitų per valandą turi sugeneruoti cron).<br>
+            - Atlikti <strong>apkrovos ir darbo krūvio charakterizavimą</strong>: tipinių naudotojų skaičius, piko valandos,
+              kas mėnesio generavimo šuoliai, Paysera callback’ų dažnis, el. laiškų apimtis.<br>
+            - Identifikuoti našumo kritines vietas architektūroje (DB lentelės su didžiausiu apkrovimu,
+              dažniausiai kviečiami API endpoint’ai, sunkiausios ataskaitos, cron job’ai).<br>
+            - Peržiūrėti ir optimizuoti DB schemą ir užklausas: indeksai, JOIN skaičius, agregavimo logika,
+              N+1 problemų eliminavimas ORM sluoksnyje.<br>
+            - Suplanuoti ir įgyvendinti <strong>veikimo testavimą</strong> (load/stress testus) testinėje aplinkoje,
+              imituojant realius scenarijus: daugybiniai prisijungimai, masinis sąskaitų generavimas,
+              didelis Paysera callback srautas.<br>
+            - Nustatyti aplikacijos ir DB monitoringą (CPU, RAM, DB connection’ai, response time, error rate)
+              ir sutarti, kokie rodikliai laikomi kritiniais (alert’ų slenksčiai).<br>
+            - Įtraukti našumą į „Definition of Done“ – naujos funkcijos negali ženkliai pabloginti esamų SLA
+              be sąmoningo sprendimo.
+        </td>
+    </tr>
+    <tr>
+        <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
+        <td>
+            - <strong>Sluoksniavimas ir moduliškumas:</strong> aiški atskirtis tarp UI, serviso ir DB sluoksnių leidžia
+              optimizuoti tik kritinius komponentus (pvz., sąskaitų generavimo servisą).<br>
+            - <strong>Caching ir rezultatų ribojimas:</strong> naudoti puslapiavimą (pagination), limituoti sąrašų dydžius,
+              cache’inti dažnai skaitomus, bet retai kintančius duomenis (nustatymai, paslaugų katalogas, šalys).<br>
+            - <strong>Asinchroninis apdorojimas:</strong> PDF generavimą, el. laiškų siuntimą, ataskaitas vykdyti per
+              Message Queue worker’ius, kad web užklausa būtų greita.<br>
+            - <strong>DB optimizavimas:</strong> reikalingi indeksai, JOIN mažinimas, „batch“ įrašymas cron procesuose,
+              kritinėms užklausoms – raw SQL, apeinant ORM overheard’ą.<br>
+            - <strong>HTTP ir statinių resursų optimizacija:</strong> CSS/JS suspaudimas, <code>Cache-Control</code>,
+              minimizuotas HTTP request’ų skaičius UI.<br>
+            - <strong>Mastelio didinimas:</strong> PHP-FPM/Apache worker’iai piko metu, horizontali web sluoksnio plėtra,
+              atskira DB replika „read-only“ ataskaitoms.<br>
+            - <strong>Laiko langų naudojimas:</strong> masinį sąskaitų generavimą ir kitus sunkius procesus vykdyti 
+              nakties metu, kad jie nekonkuruotų su dienos apkrova.
+        </td>
+    </tr>
+    <tr>
+        <th>Spąstai<br/><small><em>(angl. Pitfalls)</em></small></th>
+        <td>
+            - Neaiškūs našumo tikslai → „veikia lėtai“ tampa subjektyvu ir sunku priimti sprendimus.<br>
+            - Optimizuojamos „netos“ vietos: daug dėmesio PHP kodui, bet ignoruojama viena lėta SQL užklausa.<br>
+            - Sunkūs veiksmai vykdomi sinchroniškai HTTP metu → naudotojas laukia sekundes ar minutes.<br>
+            - Cron ir Paysera callback’ai ignoruojami – optimizuojama UI, bet fono apkrova „užmuša“ DB.<br>
+            - ORM naudojamas neapgalvotai (N+1 problema, lazy loading dideliuose sąrašuose).<br>
+            - Nėra realistiškų testinių duomenų – sistema greita su 100 įrašų, bet lėta su 100 000 įrašų ir 10 metų istorija.<br>
+            - Tikimasi, kad našumo problemas išspręs vien „didesnis serveris“, neplanuojant cache, queue ar horizontalios plėtros.
+        </td>
+    </tr>
+    <tr>
+        <th>Kontrolinis sąrašas<br/><small><em>(angl. Checklist)</em></small></th>
+        <td>
+            <table border="1" cellpadding="4" cellspacing="0">
+                <tr>
+                    <th>Klausimas</th>
+                    <th>Atsakymas</th>
+                </tr>
+                <tr>
+                    <td>Ar identifikuoti našumo butelio kakleliai <em>(angl. bottleneck)</em>?</td>
+                    <td>Taip – DB užklausos, PDF generavimas</td>
+                </tr>
+                <tr>
+                    <td>Ar yra galimybė horizontaliai skaidyti serverius?</td>
+                    <td>Taip – per Docker + Kubernetes</td>
+                </tr>
+                <tr>
+                    <td>Ar sistema palaiko cache?</td>
+                    <td>Taip – Symfony HTTP cache komponentas.</td>
+                </tr>
+                <tr>
+                    <td>Ar numatyti streso testai?</td>
+                    <td>Taip – Apache JMeter scenarijai</td>
+                </tr>
+                <tr>
+                    <td>Ar DB optimizuota indeksais?</td>
+                    <td>Taip – visi FK turi indeksus, dažnai naudojami stulpeliai pagal kuriuos ieškoma indeksuoti</td>
+                </tr>
+                <tr>
+                    <td>Ar naudojama asinchronija?</td>
+                    <td>Taip – Queue el.laiškų siuntimui</td>
+                </tr>
+                <tr>
+                    <td>Ar įgalintas scaling workers?</td>
+                    <td>Taip – MessageBus workers gali būti didinami</td>
+                </tr>
+                <tr>
+                    <td>Ar yra aiškūs veikimo tikslai (metrics)?</td>
+                    <td>Taip – <100 ms API vidutinis atsakas</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 ## 5.8. Teisinis reguliavimas _(angl. [Regulation](https://www.viewpoints-and-perspectives.info/home/perspectives/regulation-perspective/))_
-
-| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                  |
-|----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Taikymas _(angl. Applicability)_**         | Perspektyva taikoma siekiant užtikrinti, kad ITIS atitiktų vietinius ir tarptautinius teisinius reikalavimus — ypač susijusius su asmens duomenimis ir mokėjimais.                                                                                                                                        |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - BDAR _(angl. GDPR)_ laikymasis tvarkant asmens duomenis.<br/>- Finansinių duomenų tvarkymo reikalavimai.<br/>- Paysera integracijos teisiniai aspektai.<br/>- Duomenų saugojimo ir ištrinimo taisyklės.<br/>- Log'ų saugojimo reikalavimai.<br/>- PDF sąskaitų turinio atitikimas buhalterinei tvarkai. | 
-| **Veiksmai _(angl. Activities)_**            | - Įdiegti duomenų subjektų teisių (DSR) funkcijas: duomenų peržiūra, korekcija, ištrynimas.<br/>- Užtikrinti duomenų šifravimą per HTTPS.<br/>- Nustatyti automatines atsargines kopijas ir laikymo politiką.<br/>- Parengti duomenų saugojimo tvarką (retention policy).                                 |
-| **Taktikos _(angl. Tactics)_**               | - Privacy-by-design principas.<br/>- Audit log'ai svarbiems veiksmams.<br/>- Duomenų minimizavimas — saugoti tik būtinas reikšmes.<br/>- Slaptų duomenų netalpinimas į Git ar UI.                                                                                                                         |
-| **Spąstai _(angl. Pitfalls)_**               | - Netinkamai realizuoti duomenų ištrynimo scenarijai gali prieštarauti BDAR.<br/>- Per ilgas log'ų saugojimas be reguliavimo pagrindo.<br/>- Vadybininko rolių per platus funkcionalumas gali kelti saugumo rizikų.<br/>- Dokumentacija neatnaujinama — sunku įrodyti atitiktį auditui.                    |
-
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Aspektas</th>
+        <th>Taikymas</th>
+    </tr>
+    <tr>
+        <th>Taikymas<br/><small><em>(angl. Applicability)</em></small></th>
+        <td>
+            Perspektyva taikoma siekiant užtikrinti, kad ITIS atitiktų vietinius ir tarptautinius teisinius reikalavimus —
+            ypač susijusius su asmens duomenimis ir mokėjimais.
+        </td>
+    </tr>
+    <tr>
+        <th>Sprendžiami rūpesčiai<br/><small><em>(angl. Concerns)</em></small></th>
+        <td>
+            - BDAR <em>(angl. GDPR)</em> laikymasis tvarkant asmens duomenis.<br>
+            - Finansinių duomenų tvarkymo reikalavimai.<br>
+            - Paysera integracijos teisiniai aspektai.<br>
+            - Duomenų saugojimo ir ištrinimo taisyklės.<br>
+            - Log'ų saugojimo reikalavimai.<br>
+            - PDF sąskaitų turinio atitikimas buhalterinei tvarkai.
+        </td>
+    </tr>
+    <tr>
+        <th>Veiksmai<br/><small><em>(angl. Activities)</em></small></th>
+        <td>
+            - Įdiegti duomenų subjektų teisių (DSR) funkcijas: duomenų peržiūra, korekcija, ištrynimas.<br>
+            - Užtikrinti duomenų šifravimą per HTTPS.<br>
+            - Nustatyti automatines atsargines kopijas ir jų laikymo politiką.<br>
+            - Parengti duomenų saugojimo tvarką <em>(retention policy)</em>.
+        </td>
+    </tr>
+    <tr>
+        <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
+        <td>
+            - Privacy-by-design principas.<br>
+            - Audit log'ai svarbiems veiksmams.<br>
+            - Duomenų minimizavimas — saugoti tik būtinas reikšmes.<br>
+            - Slaptų duomenų netalpinimas į Git ar UI.
+        </td>
+    </tr>
+    <tr>
+        <th>Spąstai<br/><small><em>(angl. Pitfalls)</em></small></th>
+        <td>
+            - Netinkamai realizuoti duomenų ištrynimo scenarijai gali prieštarauti BDAR.<br>
+            - Per ilgas log'ų saugojimas be reguliavimo pagrindo.<br>
+            - Vadybininko rolių per platus funkcionalumas gali kelti saugumo rizikų.<br>
+            - Dokumentacija neatnaujinama — sunku įrodyti atitiktį auditui.
+        </td>
+    </tr>
+    <tr>
+        <th>Kontrolinis sąrašas<br/><small><em>(angl. Checklist)</em></small></th>
+        <td>
+            <table border="1" cellpadding="4" cellspacing="0">
+                <tr>
+                    <th>Klausimas</th>
+                    <th>Atsakymas</th>
+                </tr>
+                <tr>
+                    <td>Ar sistema atitinka BDAR (GDPR)?</td>
+                    <td>Taip – duomenų subjektų teisės įgyvendintos</td>
+                </tr>
+                <tr>
+                    <td>Ar saugomi tik būtini klientų duomenys?</td>
+                    <td>Taip – minimalus rinkinys (vardas, pavardė, el.paštas, adresas)</td>
+                </tr>
+                <tr>
+                    <td>Ar Paysera duomenys tvarkomi pagal PSD2?</td>
+                    <td>Taip – ITIS neapdoroja jautrių kortelių duomenų</td>
+                </tr>
+                <tr>
+                    <td>Ar yra duomenų saugojimo politika?</td>
+                    <td>Taip – log'ams 90 d., DB neribotai</td>
+                </tr>
+                <tr>
+                    <td>Ar suformuota duomenų apdorojimo sutartis?</td>
+                    <td>Taip – su kiekvienu klientu</td>
+                </tr>
+                <tr>
+                    <td>Ar įvykus incidentui yra pranešimų tvarka?</td>
+                    <td>Taip – el. pranešimai savininkui</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 ## 5.9. Saugumas _(angl. [Security](https://www.viewpoints-and-perspectives.info/home/perspectives/security/))_
-
-| Aspektas                                     | Taikymas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-|----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Taikymas _(angl. Applicability)_**         | Ši perspektyva taikoma visiems ITIS sistemos komponentams, siekiant apsaugoti klientų duomenis, mokėjimų informaciją ir užtikrinti, kad tik įgalioti naudotojai galėtų pasiekti savo duomenis. Saugumas yra kertinis sistemos aspektas, nes ji tvarko asmeninius ir finansinius duomenis.                                                                                                                                                                                                                                                                                                                                                                            |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kaip autentifikuojami naudotojai (klientai ir administratoriai).<br>- Kaip užtikrinamas duomenų vientisumas ir konfidencialumas.<br>- Kaip valdomos prieigos teisės (rolės ir leidimai).<br>- Kaip apsisaugoma nuo įsilaužimų, CSRF, XSS, SQL Injection atakų.<br>- Kaip saugomos ir perduodamos jautrios reikšmės (pvz., slaptažodžiai).<br>- Kaip fiksuojami ir stebimi saugumo incidentai.                                                                                                                                                                                                                                                                      |
-| **Veiksmai _(angl. Activities)_**            | - Įdiegti **Symfony Security** modulį autentifikacijai ir rolėms valdyti.<br>- Naudoti **CSRF token'us** formoms ir POST užklausoms.<br>- Naudoti **HTTPS (SSL)** visam duomenų srautui tarp naudotojo ir serverio.<br>- Slaptažodžių saugojimui naudoti saugius **bcrypt / Argon2** algoritmus.<br>- Diegti **log'inimą su Monolog**, fiksuojant prisijungimus, nesėkmingus bandymus.<br/>- Diegti klaidų gaudymo įrankį **Sentry**, kuris iškart informuoja administratorius.<br>- Reguliariai testuoti sistemą naudojant **OWASP ZAP / Burp Suite**.<br/>- Pasitelkti išorinius testuotojus.<br>- Stebėti serverių saugumą, OS atnaujinimus, PHP klaidų taisymus. |
-| **Taktikos _(angl. Tactics)_**               | - Įgyvendinti **mažiausių privilegijų principą (Least Privilege Principle)** – kiekvienas naudotojas turi tik jam būtinas teises.<br>- **Defence in Depth** – keli apsaugos sluoksniai (serveris, DB, aplikacija, tinklas).<br>- **Input validation** – duomenų įvesties validacija prieš apdorojant.<br>- **Error handling & logging** – saugūs klaidų pranešimai be jautrios informacijos.<br>- **Session management** – ribotas sesijų galiojimo laikas ir automatinis atsijungimas.<br>- **Security by default** – išjungtos nereikalingos paslaugos, aiškūs konfigūracijos failai.                                                                              |
-| **Spąstai _(angl. Pitfalls)_**               | - Prasta rolių valdymo sistema leidžia neautorizuotą prieigą prie administracinės dalies.<br>- Neužšifruotas srautas (HTTP vietoje HTTPS) gali leisti duomenų perėmimą.<br>- Netinkamai valdomos sesijos (neuždarius prisijungimų).<br>- Perteklinė klaidų informacija gali atskleisti sistemos struktūrą.<br>- Nepakankamas log'ų stebėjimas lemia saugumo incidentų praleidimą.<br>- Trūksta periodinių saugumo auditų ir testavimo procesų.                                                                                                                                                                                                                       |
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Aspektas</th>
+        <th>Taikymas</th>
+    </tr>
+    <tr>
+        <th>Taikymas<br/><small><em>(angl. Applicability)</em></small></th>
+        <td>
+            Ši perspektyva taikoma visiems ITIS sistemos komponentams, siekiant apsaugoti klientų duomenis,
+            mokėjimų informaciją ir užtikrinti, kad tik įgalioti naudotojai galėtų pasiekti savo duomenis.
+            Saugumas yra kertinis sistemos aspektas, nes ji tvarko asmeninius ir finansinius duomenis.
+        </td>
+    </tr>
+    <tr>
+        <th>Sprendžiami rūpesčiai<br/><small><em>(angl. Concerns)</em></small></th>
+        <td>
+            - Kaip autentifikuojami naudotojai (klientai ir administratoriai).<br>
+            - Kaip užtikrinamas duomenų vientisumas ir konfidencialumas.<br>
+            - Kaip valdomos prieigos teisės (rolės ir leidimai).<br>
+            - Kaip apsisaugoma nuo įsilaužimų, CSRF, XSS, SQL Injection atakų.<br>
+            - Kaip saugomos ir perduodamos jautrios reikšmės (pvz., slaptažodžiai).<br>
+            - Kaip fiksuojami ir stebimi saugumo incidentai.
+        </td>
+    </tr>
+    <tr>
+        <th>Veiksmai<br/><small><em>(angl. Activities)</em></small></th>
+        <td>
+            - Įdiegti <strong>Symfony Security</strong> modulį autentifikacijai ir rolėms valdyti.<br>
+            - Naudoti <strong>CSRF token'us</strong> formoms ir POST užklausoms.<br>
+            - Naudoti <strong>HTTPS (SSL)</strong> visam duomenų srautui tarp naudotojo ir serverio.<br>
+            - Slaptažodžiams naudoti saugius <strong>bcrypt / Argon2</strong> algoritmus.<br>
+            - Diegti <strong>Monolog</strong> log'inimą – fiksuoti prisijungimus, nesėkmingus bandymus.<br>
+            - Naudoti <strong>Sentry</strong> klaidų gaudymo ir incidentų stebėjimo įrankį.<br>
+            - Reguliariai testuoti sistemą naudojant <strong>OWASP ZAP / Burp Suite</strong>.<br>
+            - Pasitelkti išorinius saugumo testuotojus.<br>
+            - Stebėti serverių saugumą, OS atnaujinimus, PHP pataisas.
+        </td>
+    </tr>
+    <tr>
+        <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
+        <td>
+            - <strong>Mažiausių privilegijų principas (Least Privilege Principle)</strong> – naudotojas turi tik jam būtinas teises.<br>
+            - <strong>Defence in Depth</strong> – keli apsaugos sluoksniai (serveris, DB, aplikacija, tinklas).<br>
+            - <strong>Input validation</strong> – duomenų įvesties validacija prieš apdorojimą.<br>
+            - <strong>Error handling & logging</strong> – saugūs klaidų pranešimai be jautrios informacijos.<br>
+            - <strong>Session management</strong> – ribotas sesijos galiojimo laikas, automatinis atsijungimas.<br>
+            - <strong>Security by default</strong> – išjungtos nereikalingos paslaugos, saugios konfigūracijos numatytosios reikšmės.
+        </td>
+    </tr>
+    <tr>
+        <th>Spąstai<br/><small><em>(angl. Pitfalls)</em></small></th>
+        <td>
+            - Prasta rolių valdymo sistema leidžia prieigą prie administracinės dalies neautorizuotiems asmenims.<br>
+            - Neužšifruotas srautas (HTTP vietoje HTTPS) leidžia perimti duomenis.<br>
+            - Netinkamai valdomos sesijos (neuždarius senų prisijungimų).<br>
+            - Perteklinė klaidų informacija gali atskleisti sistemos struktūrą.<br>
+            - Nepakankamas log'ų stebėjimas lemia nepastebėtus saugumo incidentus.<br>
+            - Trūksta periodinių saugumo auditų ir automatizuoto testavimo.
+        </td>
+    </tr>
+    <tr>
+        <th>Kontrolinis sąrašas<br/><small><em>(angl. Checklist)</em></small></th>
+        <td>
+            <table border="1" cellpadding="4" cellspacing="0">
+                <tr>
+                    <th>Klausimas</th>
+                    <th>Atsakymas</th>
+                </tr>
+                <tr>
+                    <td>Ar visi slaptažodžiai hash’inami?</td>
+                    <td>Taip – bcrypt/Argon2</td>
+                </tr>
+                <tr>
+                    <td>Ar naudojami CSRF tokenai?</td>
+                    <td>Taip. Symfony standartas</td>
+                </tr>
+                <tr>
+                    <td>Ar yra apsauga nuo SQL Injection?</td>
+                    <td>Taip – Doctrine ORM</td>
+                </tr>
+                <tr>
+                    <td>Ar vykdomas XSS filtravimas?</td>
+                    <td>Taip – Twig autoescape</td>
+                </tr>
+                <tr>
+                    <td>Ar naudojama HTTPS/TLS?</td>
+                    <td>Taip – privaloma</td>
+                </tr>
+                <tr>
+                    <td>Ar užtikrintas prisijungimų log'inimas?</td>
+                    <td>Taip – Monolog + Sentry</td>
+                </tr>
+                <tr>
+                    <td>Ar atliekami reguliarūs saugumo testai?</td>
+                    <td>Taip – OWASP ZAP</td>
+                </tr>
+                <tr>
+                    <td>Ar API raktai laikomi saugiai?</td>
+                    <td>Taip – .env + secrets</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 ## 5.10. Naudojimo patogumas _(angl. [Usability](https://www.viewpoints-and-perspectives.info/home/perspectives/usability-perspective/))_
-
-| Aspektas                                     | Taikymas                                                                                                                                                                                                                                             |
-|----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Taikymas _(angl. Applicability)_**         | Perspektyva taikoma UI/UX sričiai, kad sistema būtų patogi ir greitai suprantama tiek klientams, tiek vadybininkams.                                                                                                                                 |
-| **Sprendžiami rūpesčiai _(angl. Concerns)_** | - Kaip greitai vartotojas randa reikiamą informaciją.<br>- Kaip sumažinti veiksmų skaičių pagrindiniams procesams.<br>- Ar TVS patogi kasdieniam naudojimui.<br>- Kaip pateikiama klaidų informacija.<br>- Ar sistema pritaikyta mobiliesiems.       |
-| **Veiksmai _(angl. Activities)_**            | - Įgyvendinti vienodus UI komponentus (mygtukus, formas, lenteles, korteles).<br>- Naudoti aiškią navigaciją savitarnoje ir TVS.<br>- Išlaikyti 3 paspaudimų principą iki pagrindinės informacijos.<br>- Parengti UX testus su realiais vartotojais. |
-| **Taktikos _(angl. Tactics)_**               | - Naudoti išdėstymo standartus ir dizaino sistemas.<br>- Atvaizduoti klaidas aiškiais tekstais, be techninių terminų.<br>- Palaikyti prisitaikantį prie ekrano dydžio _(angl. responsive)_ dizainą.                                                  |
-| **Spąstai _(angl. Pitfalls)_**               | - Per daug informacijos viename puslapyje (ypač TVS).<br>- Sudėtingos formos su per daug laukų.<br>- Per lėti UI komponentai, priklausomi nuo didelių DB sąrašų.<br>- Nenuoseklus dizainas tarp Frontend ir TVS.                                     |
-
+<table border="1" cellpadding="6" cellspacing="0">
+    <tr>
+        <th>Aspektas</th>
+        <th>Taikymas</th>
+    </tr>
+    <tr>
+        <th>Taikymas<br/><small><em>(angl. Applicability)</em></small></th>
+        <td>
+            Perspektyva taikoma UI/UX sričiai, kad sistema būtų patogi ir greitai suprantama tiek klientams,
+            tiek vadybininkams.
+        </td>
+    </tr>
+    <tr>
+        <th>Sprendžiami rūpesčiai<br/><small><em>(angl. Concerns)</em></small></th>
+        <td>
+            - Kaip greitai vartotojas randa reikiamą informaciją.<br>
+            - Kaip sumažinti veiksmų skaičių pagrindiniams procesams.<br>
+            - Ar TVS patogi kasdieniam naudojimui.<br>
+            - Kaip pateikiama klaidų informacija.<br>
+            - Ar sistema pritaikyta mobiliesiems.
+        </td>
+    </tr>
+    <tr>
+        <th>Veiksmai<br/><small><em>(angl. Activities)</em></small></th>
+        <td>
+            - Įgyvendinti vienodus UI komponentus (mygtukus, formas, lenteles, korteles).<br>
+            - Naudoti aiškią navigaciją savitarnoje ir TVS.<br>
+            - Išlaikyti 3 paspaudimų principą iki pagrindinės informacijos.<br>
+            - Parengti UX testus su realiais vartotojais.
+        </td>
+    </tr>
+    <tr>
+        <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
+        <td>
+            - Naudoti išdėstymo standartus ir dizaino sistemas.<br>
+            - Atvaizduoti klaidas aiškiais tekstais, be techninių terminų.<br>
+            - Palaikyti prisitaikantį prie ekrano dydžio <em>(angl. responsive)</em> dizainą.
+        </td>
+    </tr>
+    <tr>
+        <th>Spąstai<br/><small><em>(angl. Pitfalls)</em></small></th>
+        <td>
+            - Per daug informacijos viename puslapyje (ypač TVS).<br>
+            - Sudėtingos formos su per daug laukų.<br>
+            - Per lėti UI komponentai, priklausomi nuo didelių DB sąrašų.<br>
+            - Nenuoseklus dizainas tarp Frontend ir TVS.
+        </td>
+    </tr>
+    <tr>
+        <th>Kontrolinis sąrašas<br/><small><em>(angl. Checklist)</em></small></th>
+        <td>
+            <table border="1" cellpadding="4" cellspacing="0">
+                <tr>
+                    <th>Klausimas</th>
+                    <th>Atsakymas</th>
+                </tr>
+                <tr>
+                    <td>Ar vartotojai randa informaciją per ≤3 žingsnius?</td>
+                    <td>Taip</td>
+                </tr>
+                <tr>
+                    <td>Ar UI yra nuoseklus ir vienodas?</td>
+                    <td>Taip – vieninga dizaino sistema</td>
+                </tr>
+                <tr>
+                    <td>Ar pateikti aiškūs klaidų pranešimai?</td>
+                    <td>Taip – be techninių terminų</td>
+                </tr>
+                <tr>
+                    <td>Ar sistema palaiko responsive dizainą?</td>
+                    <td>Taip – mobilus vaizdas palaikomas</td>
+                </tr>
+                <tr>
+                    <td>Ar atlikti UX testai?</td>
+                    <td>Taip – su 5 naudotojais</td>
+                </tr>
+                <tr>
+                    <td>Ar slėgiamos formos turi autofill/validation?</td>
+                    <td>Taip – HTML5 + Symfony formų validatiocija</td>
+                </tr>
+                <tr>
+                    <td>Ar atminties naštos (cognitive load) mažinimo principai taikomi?</td>
+                    <td>Taip – paprastas meniu, mažai žingsnių</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 # Priedai
 ## Priedas 1. Funkcinio vaizdo Use Case diagramos kodas
@@ -1057,3 +2110,114 @@ WebThread      --> MQ          : "Queue support question notifications"
 
 @enduml
 ```
+
+
+## Priedas 6. Komponentų modelis _(angl. UML Component model)_
+```plantuml
+@startuml
+title UML Component Diagram (Module Structure Model)
+left to right direction
+
+' ====== Components (tables) ======
+
+package "Klientų komponentai" {
+  component "Naudotojai"                                 as users
+  component "Naudotojų objektai"                         as users_objects
+  component "Naudotojo objekto paslaugų paketo paslauga" as users_objects_services
+  component "Naudotojo objekto paslaugų paketas"         as users_objects_services_bundles
+  component "Naudotojo objekto paketo paslaugos akcijos" as users_objects_services_promotions
+  component "Sąskaitos"                                  as invoices
+}
+
+package "Paslaugų komponentai" {
+  component "Paslaugos"                                  as services
+  component "Paslaugų kategorijos"                       as services_categories
+  component "Paslaugų akcijos"                           as services_promotions
+}
+
+package "Klausimų komponentai" {
+  component "Klausimai"                                  as questions
+  component "Klausimų atsakymai"                         as questions_answers
+  component "Klausimų kategorijos"                       as questions_categories
+}
+
+package "Administratorių komponentai" {
+  component "Administratoriai"                           as administrators
+  component "Šalys"                                      as countries
+}
+
+package "Nustatymų komponentai" {
+  component "Nustatymai"                                 as settings
+  component "Tekstiniai puslapiai"                       as structures
+}
+
+package "Kiti komponentai" {
+  component "Mokėjimai"                                  as payments
+}
+
+cloud {
+  component "El.mokėjimai" as cloud_payment
+}
+
+cloud {
+  component "Žemėlapis" as cloud_map
+}
+
+' ====== Relationships from foreign keys ======
+
+cloud_map --> users_objects
+payments --> cloud_payment
+cloud_payment --> payments
+
+invoices <-- users_objects_services_bundles
+questions <-- users
+questions <-- questions_categories
+questions_answers <-- administrators
+questions_answers <-- questions
+services <-- services_categories
+services_promotions <-- services
+users_objects <-- users
+users_objects <-- countries
+users_objects_services <-- services
+users_objects_services <-- users_objects_services_bundles
+users_objects_services_bundles <-- users_objects
+users_objects_services_promotions <-- users_objects_services
+users_objects_services_promotions <-- services_promotions
+@enduml
+```
+
+## Priedas 7. Kubernetes diegimo architektūra _(angl. Kubernetes Deployment Architecture)_
+```plantuml
+@startuml
+title Kubernetes Deployment Architecture
+
+node "Client Browser" as Browser
+
+cloud "Kubernetes Cluster" {
+
+  node "Ingress Controller\nNGINX" as Ingress
+
+  node "Web Deployment" {
+    [itis-web: Symfony App] as Web1
+  }
+
+  node "Redis Cache" as Redis
+  node "MariaDB Cluster\n3-node Galera" as DB
+}
+
+node "Paysera API" as Paysera
+node "SMTP Server" as SMTP
+
+Browser --> Ingress : HTTPS 443
+Ingress --> Web1 : HTTP 80
+
+Web1 --> DB : 3306
+
+Web1 --> Redis : 6379
+
+Web1 --> Paysera : HTTPS
+
+Web1 --> SMTP
+@enduml
+```
+

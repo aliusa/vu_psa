@@ -128,20 +128,20 @@ Interneto tiekėjo informacinė sistema (ITIS) skirta automatizuoti klientų duo
 
 ### 1.4.2. Nefunkciniai reikalavimai _(angl. Non-functional requirements)_
 
-| Nr.      | Reikalavimas                            | Aprašymas                                                                                                                             |
-|----------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| **NF1**  | **Našumas (Performance)**               | Sistema turi apdoroti bent 10000 užklausų per 1 sekundę esant apkrovai.                                                               |
-| **NF2**  | **Prieinamumas (Availability)**         | Sistema turi būti pasiekiama bent 99,99 % laiko per mėnesį.                                                                           |
-| **NF3**  | **Atsparumas (Resilience)**             | Gedimo atveju sistema turi būti atstatoma ne vėliau kaip per 2 valandas (MTTR ≤ 2 h).                                                 |
-| **NF4**  | **Saugumas (Security)**                 | Visi duomenys perduodami HTTPS protokolu; slaptažodžiai saugomi su bcrypt / Argon2; naudojami CSRF token'ai.                          |
-| **NF5**  | **Duomenų apsauga (Privacy)**           | Sistema turi atitikti BDAR _(angl. GDPR)_ reikalavimus — klientas turi teisę peržiūrėti, ištaisyti ir prašyti ištrinti savo duomenis. |
-| **NF6**  | **Pritaikomumas (Usability)**           | Kliento savitarna turi būti aiški ir pasiekiama per 3 paspaudimus iki pagrindinės informacijos (sąskaitos ar paslaugos).              |
-| **NF7**  | **Patikimumas (Reliability)**           | Sistema turi išlaikyti stabilų veikimą be klaidų esant keliems šimtams aktyvių vartotojų.                                             |
-| **NF8**  | **Palaikymas (Maintainability)**        | Architektūra turi būti modulinė (MVC), kad kiekvienas modulis galėtų būti atnaujinamas nepriklausomai.                                |
-| **NF9**  | **Išplečiamumas (Scalability)**         | Sistema turi būti parengta pridėti papildomus modulinius komponentus (pvz., naujus mokėjimo tiekėjus).                                |
-| **NF10** | **Perkeliamumas (Portability)**         | Sistema turi būti paleidžiama tiek Linux, tiek Windows serveriuose be kodo keitimo.                                                   |
-| **NF11** | **Testuojamumas (Testability)**         | Visi verslo moduliai turi būti padengti bent 70 % vienetinių testų (unit tests).                                                      |
-| **NF12** | **Naudojamumo stebėjimas (Monitoring)** | Sistema turi fiksuoti klaidas, įvykius ir siųsti pranešimus el. paštu (Monolog + Sentry).                                             |
+| Nr.      | Reikalavimas                                    | Aprašymas                                                                                                                             |
+|----------|-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| **NF1**  | **Našumas _(angl. Performance)_**               | Sistema turi apdoroti bent 10000 užklausų per 1 sekundę esant apkrovai.                                                               |
+| **NF2**  | **Prieinamumas _(angl. Availability)_**         | Sistema turi būti pasiekiama bent 99,99 % laiko per mėnesį.                                                                           |
+| **NF3**  | **Atsparumas _(angl. Resilience)_**             | Gedimo atveju sistema turi būti atstatoma ne vėliau kaip per 2 valandas (MTTR ≤ 2 h).                                                 |
+| **NF4**  | **Saugumas _(angl. Security)_**                 | Visi duomenys perduodami HTTPS protokolu; slaptažodžiai saugomi su bcrypt / Argon2; naudojami CSRF token'ai.                          |
+| **NF5**  | **Duomenų apsauga _(angl. Privacy)_**           | Sistema turi atitikti BDAR _(angl. GDPR)_ reikalavimus — klientas turi teisę peržiūrėti, ištaisyti ir prašyti ištrinti savo duomenis. |
+| **NF6**  | **Pritaikomumas _(angl. Usability)_**           | Kliento savitarna turi būti aiški ir pasiekiama per 3 paspaudimus iki pagrindinės informacijos (sąskaitos ar paslaugos).              |
+| **NF7**  | **Patikimumas _(angl. Reliability)_**           | Sistema turi išlaikyti stabilų veikimą be klaidų esant keliems šimtams aktyvių vartotojų.                                             |
+| **NF8**  | **Palaikymas _(angl. Maintainability)_**        | Architektūra turi būti modulinė (MVC), kad kiekvienas modulis galėtų būti atnaujinamas nepriklausomai.                                |
+| **NF9**  | **Išplečiamumas _(angl. Scalability)_**         | Sistema turi būti parengta pridėti papildomus modulinius komponentus (pvz., naujus mokėjimo tiekėjus).                                |
+| **NF10** | **Perkeliamumas _(angl. Portability)_**         | Sistema turi būti paleidžiama tiek Linux, tiek Windows serveriuose be kodo keitimo.                                                   |
+| **NF11** | **Testuojamumas _(angl. Testability)_**         | Visi verslo moduliai turi būti padengti bent 80 % vienetų testų _(angl. unit tests)_.                                                 |
+| **NF12** | **Naudojamumo stebėjimas _(angl. Monitoring)_** | Sistema turi fiksuoti klaidas, įvykius ir siųsti pranešimus el. paštu (Monolog + Sentry).                                             |
 
 # 2. Suinteresuotosios šalys ir rūpesčiai _(angl. Stakeholders and concerns)_
 ## 2.1. Suinteresuotos šalys _(angl. Stakeholders)_
@@ -187,7 +187,7 @@ Sistema susideda iš dviejų pagrindinių sričių:
 ![context_view.png](context_view.png)  
 _UML konteksto diagrama_
 
-### Konteksto scenarijai
+### 4.1.1. Konteksto scenarijai
 
 **Scenarijus 1 — Klientas prisijungia ir peržiūri paslaugas**
 1. Klientas atidaro sistemos savitarnos puslapį.
@@ -223,6 +223,9 @@ _UML konteksto diagrama_
 4. Sistema automatiškai atsistato, kai DB vėl pradeda veikti.
 5. Administratorius gauna pranešimą el. paštu arba Sentry.
 
+### 4.1.2. Rūpesčiai _(angl. Concerns)_
+**Išorinių sistemų identifikavimas**
+- Būtina nustatyti, su kokiomis išorinėmis sistemomis ITIS sąveikauja (Paysera, el. pašto serveris, žemėlapių tiekėjas), ir kokie yra jų vaidmenys.
 
 ## 4.2. Funkcinis vaizdas _(angl. Functional View)_
 **Aprašymas:**  
@@ -301,8 +304,8 @@ _UML panaudos atvejų (angl. Use Case) diagrama<br/>Išeities kodas pateiktas 1 
 | **Žemėlapis (Leaflet / OpenStreetMap)** | Duomenų užklausos (tiles)                           | Atvaizduoja klientų objektus žemėlapyje administracinė dalyje.        |
 
 ### 4.2.3. Duomenų mainų srautai _(angl. Data Flows)_
-**ITIS → Paysera**
-Siunčiama:
+#### ITIS → Paysera
+**Siunčiama:**
 - mokėjimo inicijavimo užklausa:  
 `invoice_id`, `customer_id`, `amount`, `currency`, `redirect_url`, `callback_url`, `cancel_url`, `accept_url`
 
@@ -310,22 +313,22 @@ Siunčiama:
 - mokėjimo būsena (`paid`, `canceled`, `failed`)
 - Paysera parašas (`sign`) duomenų patikrai
 
-**ITIS → El. pašto sistema**
+#### ITIS → El. pašto sistema
 - sąskaitos PDF failas
 - kliento el. pašto adresas
 - laiško tema ir turinys
 - slaptažodžio keitimo nuoroda
 
-**ITIS → Leaflet/OpenStreetMap**
+#### ITIS → Leaflet/OpenStreetMap
 - HTTP GET užklausos žemėlapio sluoksniams
 - Kliento objektų koordinatės
 
-**ITIS ↔ Klientas**
+#### ITIS ↔ Klientas
 - Peržiūros funkcijos (sąskaitos, paslaugos)
 - Mokėjimo inicijavimas
 - Klausimų pateikimas
 
-**ITIS ↔ Administratorius**
+#### ITIS ↔ Administratorius
 - Klientų, paslaugų, objektų, sąskaitų keitimas
 - Sistemos nustatymų valdymas
 - Prieigos valdymo operacijos
@@ -484,7 +487,15 @@ Pagal ITIS architektūrą egzistuoja **keturi pagrindiniai lygiagretūs vykdymo 
    - Sistema siunčia el. laiškus asinchroniškai.
    - Vykdomi atskiroje eilėje, atskiru worker'iu.
 
-### 4.4.2. Funkcinių elementų susiejimas su užduotimis _(angl. Task mapping)_
+### 4.4.2. Pagrindiniai rūpesčiai _(angl. Concerns)_
+1. Būsenų valdymas _(angl. State management)_
+   - Sąskaitų ir mokėjimų būsenos turi būti nuoseklios, nepaisant tuo pačiu metu vykstančių web ir cron operacijų.
+   - Reikia naudoti transakcijas, kad užtikrinti, jog duomenų būsenos perėjimai yra atominiai.
+2. Paleidimas ir stabdymas _(angl. Startup & shutdown)_
+   - Procesų stabdymas turi užtikrinti, kad nebaigtos transakcijos neužrakins resursų.
+   - Prieš sustabdant - saugiai išsaugotų esamą būseną į DB ir iš jos užkrautų paskutinę būseną, kai paleidžia.
+
+### 4.4.3. Funkcinių elementų susiejimas su užduotimis _(angl. Task mapping)_
 
 | Funkcinis elementas       | Vykdymo būdas | Aprašymas                                                   |
 |---------------------------|---------------|-------------------------------------------------------------|
@@ -496,7 +507,7 @@ Pagal ITIS architektūrą egzistuoja **keturi pagrindiniai lygiagretūs vykdymo 
 | Log'ų rašymas             | PHP gija      | Prieiga sinchronizuojama per Monolog                        |
 | DB operacijos             | PHP gija      | Užraktai _(angl. locks)_ ir transakcijos valdo konkurenciją |
 
-### 4.4.3. Užraktai, konfliktai ir transakcijos _(angl. State & Consistency Management)_
+### 4.4.4. Užraktai, konfliktai ir transakcijos _(angl. State & Consistency Management)_
 
 ![concurency_view.png](concurency_view.png)  
 _Lygiagretumo modelis<br/>Išeities kodas pateiktas 4 priede_
@@ -529,7 +540,7 @@ _Lygiagretumo modelis<br/>Išeities kodas pateiktas 4 priede_
 **Sprendimas:**
 - Perkelti į foninę siuntimų eilę.
 
-### 4.4.4. IPC _(angl. Inter-Process Communication)_ mechanizmai
+### 4.4.5. IPC _(angl. Inter-Process Communication)_ mechanizmai
 
 | Procesai      | Naudojamas mechanizmas | Priežastis                |
 |---------------|------------------------|---------------------------|
@@ -538,7 +549,7 @@ _Lygiagretumo modelis<br/>Išeities kodas pateiktas 4 priede_
 | Paysera → Web | HTTPS (Callback)       | Išorinė IPC               |
 | Log'ai        | I/O                    | Centralizuotas log'inimas |
 
-### 4.4.5. Gijų (Threading) analizė
+### 4.4.6. Gijų (Threading) analizė
 #### Numatomos aktyvios gijos vienu metu
 
 | Procesas              | Apytikslinis gijų kiekis |
@@ -569,7 +580,28 @@ Kodas organizuotas pagal **MVC (Model–View–Controller)** šabloną, kurį na
 
 Papildomai naudojami **servisų** ir **repzitorijų** sluoksniai, leidžiantys aiškiai atskirti verslo logiką, prieigą prie DB ir integracijas su išorinėmis sistemomis (Paysera, SMTP ir pan.).
 
-### 4.5.1. Modulių struktūros modelis _(angl. Module Structure Model)_
+### 4.5.1. Rūpesčiai _(angl. Concerns)_
+#### 1. Modulių organizacija
+**Rūpestis:** Užtikrinti aiškią ITIS modulių struktūrą, kad būtų lengva suprasti, modifikuoti ir plėsti sistemą.  
+**Kaip sprendžiama ITIS:** Moduliai padalyti į atskiras komponentų grupes, atskiras programinio kodo klases.
+
+#### 2. Bendrų procesų identifikavimas
+**Rūpestis:** Atskiri programos moduliai neturi dubliuoti bendrų, bazinių funkcijų.  
+**Kaip sprendžiama ITIS:** Naudojanos bendri Symfony komponentai (logging, autentifikacija, el. paštas, Paysera integracija, konfigūracija) ir prieinamus visiems moduliams.
+
+#### 3. Kodo dizaino šablonų standartizacija
+**Rūpestis:** Naudoti vieningą projektavimo metodiką ir kodo dizaino šablonus, kad sumažėtų rizika ir padidėtų vientisumas.  
+**Kaip sprendžiama ITIS:** Taikomi MVC + Service Layer, Repository, DTO, Factory, Adapter šablonai; laikomasi Symfony gerųjų praktikų ir PSR standartų.
+
+#### 4. Testavimo standartizacija
+**Rūpestis:** Visi moduliai turi būti testuojami vieningai: vienodi įrankiai, taisyklės, lygiai.  
+**Kaip sprendžiama ITIS:** Naudojami unit, integraciniai ir E2E testai; PHPUnit, Symfony Panther; CI/CD vykdo testus automatiškai prieš kiekvieną įdiegimą.
+
+#### 5. Instrumentavimas (Logging, monitoring, debugging)
+**Rūpestis:** Kodo elementai turi būti padengti analitine informacija, kad būtų galima sekti sistemą, analizuoti klaidas ir našumą.
+**Kaip sprendžiama ITIS:** Visa sistema privalomai naudoja Monolog; kritinės klaidos siunčiamos į Sentry; DB veikimas stebimas per hostingo serverio įrankį.
+
+### 4.5.2. Modulių struktūros modelis _(angl. Module Structure Model)_
 Modulių struktūros modelis parodo, kaip ITIS yra suskaidytas į sluoksnius ir komponentus bei kokios priklausomybės tarp jų leidžiamos. Tai padeda sumažinti priklausomybių „chaosą“ ir palaikyti skaidrią architektūrą.
 
 **Moduliai sugrupuoti į šešis pagrindinius sluoksnių grupes:**
@@ -603,7 +635,7 @@ Modulių struktūros modelis parodo, kaip ITIS yra suskaidytas į sluoksnius ir 
 ![development_view_component_diagram.png](development_view_component_diagram.png)  
 _UML Komponentų diagrama<br/>Išeities kodas pateiktas 6 priede_
 
-### 4.5.2. Bendro dizaino modelis (angl. Common Design Model)
+### 4.5.3. Bendro dizaino modelis (angl. Common Design Model)
 Bendro dizaino modelis apibrėžia bendrus programavimo principus ir šablonus, kurių privalo laikytis visi ITIS programinės įrangos kūrėjai.
 
 **Inicializavimas ir uždarymas**
@@ -634,7 +666,7 @@ Bendro dizaino modelis apibrėžia bendrus programavimo principus ir šablonus, 
 - **Integraciniai testai** – testuoja išorines sistemas - el.mokėjimų.
 - **End-to-End (E2E) testai** – esminiai scenarijai (prisijungimas, sąskaitos apmokėjimas, klausimo pateikimas) automatizuoti naudojant naršyklės testų įrankį (pvz., Symfony Panther / Cypress).
 
-### 4.5.3. Kodo linijos modelis _(angl. Codeline Model)_
+### 4.5.4. Kodo linijos modelis _(angl. Codeline Model)_
 Codeline modelis apibrėžia, **kaip organizuotas kodas repozitorijoje, kaip jis „build'inamas“, testuojamas ir diegiamas**. Tai padeda užtikrinti, kad „veikia ne tik mano kompiuteryje“, bet ir testinėje, ir produkcinėje aplinkose.  
 
 Kodo failų ir aplankų struktūra:
@@ -865,7 +897,7 @@ Konfigūracijų keitimo strategija:
 | Kategorija     | Konkretūs rodikliai                                       | Priemonės                                |
 |----------------|-----------------------------------------------------------|------------------------------------------|
 | **Resursai**   | CPU, RAM, Disk I/O, tinklas                               | Hosting platformos monitoring'as, Zabbix |
-| **DB**         | Lėtos užklausos, aktyvios transakcijos, lentelių užraktai | `slow_query_log`, monitoring             |
+| **DB**         | Lėtos užklausos, aktyvios transakcijos, lentelių užraktai | `slow_query_log`, monitoring, DB log'as  |
 | **Mokėjimai**  | Paysera callback klaidos                                  | Sentry, log’ai                           |
 | **Cron**       | Sąskaitų generavimo trukmė, job sėkmė                     | Sentry, log’ai                           |
 | **El. paštas** | User notifications fail rate                              | Log'ai                                   |
@@ -1574,7 +1606,7 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
             - Optimizuojamos „netos“ vietos: daug dėmesio PHP kodui, bet ignoruojama viena lėta SQL užklausa.<br>
             - Sunkūs veiksmai vykdomi sinchroniškai HTTP metu → naudotojas laukia sekundes ar minutes.<br>
             - Cron ir Paysera callback’ai ignoruojami – optimizuojama UI, bet fono apkrova „užmuša“ DB.<br>
-            - ORM naudojamas neapgalvotai (N+1 problema, lazy loading dideliuose sąrašuose).<br>
+            - ORM naudojamas neapgalvotai (eager loading dideliuose sąrašuose).<br>
             - Nėra realistiškų testinių duomenų – sistema greita su 100 įrašų, bet lėta su 100 000 įrašų ir 10 metų istorija.<br>
             - Tikimasi, kad našumo problemas išspręs vien „didesnis serveris“, neplanuojant cache, queue ar horizontalios plėtros.
         </td>
@@ -1838,7 +1870,8 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
             - Kaip sumažinti veiksmų skaičių pagrindiniams procesams.<br>
             - Ar TVS patogi kasdieniam naudojimui.<br>
             - Kaip pateikiama klaidų informacija.<br>
-            - Ar sistema pritaikyta mobiliesiems.
+            - Ar sistema pritaikyta mobiliesiems.<br>
+            - Ar yra duomenų filtravimas, puslapiavimas?
         </td>
     </tr>
     <tr>
@@ -1847,7 +1880,8 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
             - Įgyvendinti vienodus UI komponentus (mygtukus, formas, lenteles, korteles).<br>
             - Naudoti aiškią navigaciją savitarnoje ir TVS.<br>
             - Išlaikyti 3 paspaudimų principą iki pagrindinės informacijos.<br>
-            - Parengti UX testus su realiais vartotojais.
+            - Parengti UX testus su realiais vartotojais.<br>
+            - Padaryti duomenų filtravimą, puslapiavimą.
         </td>
     </tr>
     <tr>
@@ -1864,7 +1898,8 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
             - Per daug informacijos viename puslapyje (ypač TVS).<br>
             - Sudėtingos formos su per daug laukų.<br>
             - Per lėti UI komponentai, priklausomi nuo didelių DB sąrašų.<br>
-            - Nenuoseklus dizainas tarp Frontend ir TVS.
+            - Nenuoseklus dizainas tarp Frontend ir TVS.<br>
+            - Nėra tiek testinių duomenų, tad reikia juos sukurti arba sugeneruoti.
         </td>
     </tr>
     <tr>
@@ -1881,7 +1916,7 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
                 </tr>
                 <tr>
                     <td>Ar UI yra nuoseklus ir vienodas?</td>
-                    <td>Taip – vieninga dizaino sistema</td>
+                    <td>Taip – vieninga dizaino sistema naudojant tuos pačius UI komponentus</td>
                 </tr>
                 <tr>
                     <td>Ar pateikti aiškūs klaidų pranešimai?</td>
@@ -1889,19 +1924,23 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
                 </tr>
                 <tr>
                     <td>Ar sistema palaiko responsive dizainą?</td>
-                    <td>Taip – mobilus vaizdas palaikomas</td>
+                    <td>Taip – vaizdas pritaikomas pagal ekrano rezoliuciją</td>
                 </tr>
                 <tr>
                     <td>Ar atlikti UX testai?</td>
-                    <td>Taip – su 5 naudotojais</td>
+                    <td>Taip – su 5 naudotojais gaunant jų atsaką</td>
                 </tr>
                 <tr>
                     <td>Ar slėgiamos formos turi autofill/validation?</td>
-                    <td>Taip – HTML5 + Symfony formų validatiocija</td>
+                    <td>Taip – HTML5 + Symfony formų validacija</td>
                 </tr>
                 <tr>
                     <td>Ar atminties naštos (cognitive load) mažinimo principai taikomi?</td>
                     <td>Taip – paprastas meniu, mažai žingsnių</td>
+                </tr>
+                <tr>
+                    <td>Ar išsiskleidžiantys sąrašai nelėtina UI darbo, jeigu yra daug įrašų?</td>
+                    <td>Taip – išsiskleidžiantys sąrašai kraunami tik su autocomplete</td>
                 </tr>
             </table>
         </td>

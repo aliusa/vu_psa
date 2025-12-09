@@ -242,6 +242,9 @@ Sistema padalinta į funkcinius modulius, atspindinčius verslo procesus:
 ![functional_view.png](functional_view.png)  
 _UML funkcinio vaizdo diagrama_
 
+![functional_view_component_diagram.png](functional_view_component_diagram.png)  
+_UML komponentų diagrama (angl. UML component diagram)<br/>Išeities kodas pateiktas 8 priede_
+
 ### 4.2.1. Rūpesčiai _(angl. Concerns)_
 Šis funkcinis požiūris apibrėžia sistemos funkcines galimybes — **ką sistema privalo daryti ir ko sistema nedaro**, atsižvelgiant į verslo poreikius ir proceso ribas.
 
@@ -362,7 +365,7 @@ Duomenų modelis paremtas **Entity–Relationship (ER)** struktūra. Pagrindinė
 - **Nustatymai** – saugo sistemos konfigūraciją.
 - **Klausimai** – frontend'e užduoti klausimai.
 
-![information_view.png](information_view_classdiagram.png)
+![information_view.png](information_view_classdiagram.png)  
 _UML klasių diagrama_
 
 ![information_view.png](information_view_erdiagram_star.png)  
@@ -598,7 +601,7 @@ Papildomai naudojami **servisų** ir **repzitorijų** sluoksniai, leidžiantys a
 **Kaip sprendžiama ITIS:** Naudojami unit, integraciniai ir E2E testai; PHPUnit, Symfony Panther; CI/CD vykdo testus automatiškai prieš kiekvieną įdiegimą.
 
 #### 5. Instrumentavimas (Logging, monitoring, debugging)
-**Rūpestis:** Kodo elementai turi būti padengti analitine informacija, kad būtų galima sekti sistemą, analizuoti klaidas ir našumą.
+**Rūpestis:** Kodo elementai turi būti padengti analitine informacija, kad būtų galima sekti sistemą, analizuoti klaidas ir našumą.  
 **Kaip sprendžiama ITIS:** Visa sistema privalomai naudoja Monolog; kritinės klaidos siunčiamos į Sentry; DB veikimas stebimas per hostingo serverio įrankį.
 
 ### 4.5.2. Modulių struktūros modelis _(angl. Module Structure Model)_
@@ -639,7 +642,7 @@ _UML Komponentų diagrama<br/>Išeities kodas pateiktas 6 priede_
 Bendro dizaino modelis apibrėžia bendrus programavimo principus ir šablonus, kurių privalo laikytis visi ITIS programinės įrangos kūrėjai.
 
 **Inicializavimas ir uždarymas**
-- Visi HTTP užklausų įėjimo taškai (Controller'iai) naudoja Symfony „kernel“ mechanizmą – papildomų „bootstrap“ scenarijų nenumatyta.
+- Visi HTTP užklausų įėjimo taškai (Controller'iai) naudoja Symfony „kernel“ mechanizmą.
 - Fono užduotys (cron komandos) kuriamos kaip Symfony Console komponento komandos.
 
 **Log'inimas ir monitoringo integracija**
@@ -743,14 +746,6 @@ Naudojamas Git su paprastu „GitFlow“ variantu:
 
 Kiekvienas „`release`“ žymimas Git žyma _(angl. tag)_ X.Y.Z pagal semantinį versijavimą _(angl. semantic versioning)_, kuris susiejamas su konkrečia diegta versija.
 
-**Build, integracija ir testavimas**  
-Kiekvienas „`push`“ į `develop` arba „`merge request`“ paleidžia CI pipeline:
-1. `composer install` (be dev priklausomybių produkcinėms build'ams).
-2. Statinė analizė (`phpstan` / `psalm`) ir programinio kodo stiliaus code tikrinimas (`php-cs-fixer`).
-3. Unit ir integracinių testų paleidimas (`phpunit`).
-4. Jei testai sėkmingi – suformuojamas artefaktas (pvz., Docker image arba archyvas) ir automatiškai diegiamas į **staging** aplinką.
-5. Diegimas į **production** atliekamas pusiau automatiškai – su „manual approval“ žingsniu, kad būtų galima atstatyti _(angl. rollback)_ į paskutinę stabilią versiją.
-
 **Konfigūracijų ir aplinkų valdymas**
 - Konfigūracijos saugomos `.env` failuose ir serverio „environment“ kintamuosiuose.
 - Slapti raktai (Paysera, SMTP) nekeliami į Git – laikomi tik saugiose paslaugose (pvz., CI „secret store“).
@@ -758,11 +753,10 @@ Kiekvienas „`push`“ į `develop` arba „`merge request`“ paleidžia CI pi
 
 ## 4.6. Diegimo vaizdas _(angl. Deployment View)_
 ### 4.6.1. Sprendžiami rūpesčiai _(angl. Concerns)_
-- Kaip sistemiškai virtualizuojami komponentai (konteineriai, pod’ai, node’ai)
+- Kaip sistemiškai virtualizuojami komponentai (konteineriai)
 - Kaip skaliuojami serveriai pagal apkrovą?
 - Kaip užtikrinama aukšta prieinamumo (HA) konfigūracija?
-- Kaip vyksta rollback, self-healing ir autoscaling?
-- Kaip valdomos išorinės priklausomybės (Paysera, SMTP)?
+- Kaip vyksta rollback, self-healing?
 - Kaip įgyvendinamas saugus Secrets valdymas?
 
 ### 4.6.2. Suinteresuotosios šalys _(angl. Stakeholders)_
@@ -770,23 +764,91 @@ Kiekvienas „`push`“ į `develop` arba „`merge request`“ paleidžia CI pi
 | Suinteresuota šalis                | Rūpesčiai diegimo požiūriu                                                                                                                                                                            |
 |------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Sistemos administratoriai**      | Serverių valdymas, resursų paskirstymas, prieinamumas, saugumas, backup'ai, monitoringas, Ugniasienės, SSL, tinklo izoliacijos, OS konfiguracijos, SLA, serverių patikimumas, gedimų atstatymo laikas |
-| **Programuotojai**                 | Deployment procesas, CI/CD suderinamumas, priklausomybių atitiktis, aplinkų atkartojamumas, vartotojų prieigos                                                                                        |
-| **Testuotojai**                    | Testinės aplinkos stabilumas, identiškumas produkcinei aplinkai                                                                                                                                       |
 
 ### 4.6.3. Diegimo aplinkos aprašymas
-ITIS diegiama į **Kubernetes klasterį**, kuriame yra dvi izoliuotos aplinkos:
+ITIS diegiama į įmonės serverio **Kubernetes klasterį**, kuriame yra dvi izoliuotos aplinkos:
 
 | Aplinka        | Paskirtis                               | Pagrindiniai komponentai                                       |
 |----------------|-----------------------------------------|----------------------------------------------------------------|
 | **Staging**    | Testavimui prieš diegimą, demo          | Web serveris, DB serveris, Paysera API (test rėžimas), Mailhog |
 | **Production** | Gyva sistema klientams, tikri mokėjimai | Web serveris, DB serveris, Paysera API, SMTP                   |
 
+Serveris egzistuoja įmonės serveryje ir jo aplinkos hostinamos jose.  
+Jų diegimu, serverio administravimu, resurtų valdymu rūpinasi sistemos administratorius.
+
+**Build, integracija ir testavimas**  
+Kiekvienas „`push`“ į `develop` arba „`merge request`“ paleidžia CI pipeline:
+1. `composer install` (be dev priklausomybių produkcinėms build'ams).
+2. Statinė analizė (`phpstan` / `psalm`) ir programinio kodo stiliaus code tikrinimas (`php-cs-fixer`).
+3. Unit ir integracinių testų paleidimas (`phpunit`).
+4. Jei testai sėkmingi – suformuojamas artefaktas (pvz., Docker image arba archyvas) ir automatiškai diegiamas į **staging** aplinką.
+5. Diegimas į **production** atliekamas automatiškai iš `production` Git šakos kai pakeitimai atsiduria joje.
+
+#### Kubernetes įrašymas
+1. Įrašyti K8s snap  
+`sudo snap install k8s --classic`
+2. Bootstrap'inam klasterį  
+`sudo k8s bootstrap`
+3. Įsitikinam, kad k8n veikia  
+`sudo k8s status`
+4. Kubernetes paleidimas  
+`sudo k8s kubectl get all --all-namespaces`
+5. Kubernetes pod'ų ir node konfiguracija pateikta projekto `configmap/configure-pod.yaml` faile.
+
+#### CI/CD pipelines
+Programinis kodas `staging` aplinkoje atnaujinamas automatiškai iš `staging` Git šakos.  
+`workflows/itis.yaml` konfiguracija:
+```yam
+name: Symfony
+
+on:
+  push:
+    branches: [ "itis" ]
+  pull_request:
+    branches: [ "itis" ]
+
+permissions:
+  contents: read
+
+jobs:
+  symfony-tests:
+    runs-on: ubuntu-latest
+    steps:
+    #  To automatically get bug fixes and new Php versions for shivammathur/setup-php,
+    # change this to (see https://github.com/shivammathur/setup-php#bookmark-versioning):
+    # uses: shivammathur/setup-php@v2
+    - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28
+      with:
+        php-version: '8.2'
+    - uses: actions/checkout@v4
+    - name: Copy .env.test.local
+      run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+    - name: Install Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    - name: Create Database
+      run: |
+        mkdir -p data
+        touch data/database.sqlite
+    - name: Execute tests (Unit and Feature tests) via PHPUnit
+      env:
+        DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
+      run: vendor/bin/phpunit
+```
+
 ### 4.6.4. Naudojama aparatinė įranga ir OS
 **Web aplikacijos serveris**
 - OS: Ubuntu Server 24.04 LTS
-- CPU: >= 4 vCPU
-- RAM: >= 8 GB
-- Diskas: >= 80 GB SSD
+- CPU: 4+ vCPU
+- RAM: 8+ GB
+- Diskas: 80+ GB SSD
 - Paskirtis: PHP aplikacija, cron procesai, Monolog log’ų saugojimas, duomenų bazė.
 
 ### 4.6.5. Konteineriai ir mikrokomponentai
@@ -862,7 +924,7 @@ ITIS diegiama į Kubernetes klasterį per CI/CD (Git CI → Helm):
 **Instaliacijos priklausomybės**
 - Kubernetes klasteris (1.23+)
 - Docker registry
-- MariaDB 10.5+
+- MariaDB 10+
 - Redis
 - Paysera API nuolatinė web prieiga
 - SMTP paslauga
@@ -887,10 +949,6 @@ Konfigūracijų rinkinių tipai:
 - Staging (testavimui)
 - Production (gyvam veikimui)
 
-Konfigūracijų keitimo strategija:
-- Kiekvienas pakeitimas turi praeiti CI/CD testus
-- Draudžiama ranka taisyti podų konfig’ą
-
 ### 4.7.7 Administravimo modelis _(angl. Administration Model)_
 #### Monitoringas
 
@@ -899,16 +957,8 @@ Konfigūracijų keitimo strategija:
 | **Resursai**   | CPU, RAM, Disk I/O, tinklas                               | Hosting platformos monitoring'as, Zabbix |
 | **DB**         | Lėtos užklausos, aktyvios transakcijos, lentelių užraktai | `slow_query_log`, monitoring, DB log'as  |
 | **Mokėjimai**  | Paysera callback klaidos                                  | Sentry, log’ai                           |
-| **Cron**       | Sąskaitų generavimo trukmė, job sėkmė                     | Sentry, log’ai                           |
+| **Cron**       | job'ų sėkmė                                               | Sentry, log’ai                           |
 | **El. paštas** | User notifications fail rate                              | Log'ai                                   |
-
-ITIS naudoja:
-- Sentry (klaidoms)
-- Monolog (log’ai)
-
-Stebima:
-- DB veikimas
-- Cron job’ų veikimas
 
 #### Alerting’as
 Sistema ir Sentry siunčia alert'us, jei:
@@ -961,9 +1011,9 @@ ITIS integracijos:
 | L4              | Visa sistema neveikia | 30 min.  |
 
 #### SLA
-- Availability: 99.99 %
-- MTTR: ≤ 2 h
-- Response time: ≤ 2 min naudotojo veiksmams
+- Prieinamumas _(angl. Availability)_: 99.99 %
+- MTTR: ≤ 1 h.
+- Response time: ≤ 30 sek. naudotojo veiksmams
 
 ### 4.7.11. Santrauka
 Operacinis vaizdas užtikrina, kad ITIS sistema:
@@ -1189,10 +1239,8 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
         <th>Sprendžiami rūpesčiai<br/><small><em>(angl. Concerns)</em></small></th>
         <td>
             - Ar turima pakankamai žmogiškųjų išteklių sistemai kurti ir palaikyti.<br>
-            - Ar yra reikalingi įrankiai (IDE, CI/CD, testavimo aplinkos).<br>
             - Ar atliekami mokymai naujiems komandos nariams.<br>
-            - Ar užtikrinti resursai testavimui, diegimui, monitoringui.<br>
-            - Ar suplanuotas laikas refaktoringui ir techninei skolai.
+            - Ar užtikrinti resursai testavimui, diegimui, monitoringui.
         </td>
     </tr>
     <tr>
@@ -1208,11 +1256,10 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
     <tr>
         <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
         <td>
-            - Naudoti GitFlow arba trunk-based development strategiją.<br>
+            - Naudoti GitFlow programavimo strategiją.<br>
             - Automatizuoti unit ir integracinius testus PHPUnit.<br>
             - Naudoti statinę analizę (phpstan, psalm).<br>
             - Naudoti konteinerizaciją (Docker) vietinei aplinkai.<br>
-            - Planuoti sprintus su „capacity planning“.<br>
             - Prioritizuoti techninę skolą prieš pridedant naują funkcionalumą.
         </td>
     </tr>
@@ -1220,7 +1267,7 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
         <th>Spąstai<br/><small><em>(angl. Pitfalls)</em></small></th>
         <td>
             - Per mažai laiko skiriama testams ir kodo kokybei.<br>
-            - Per didelė priklausomybė nuo vieno programuotojo („bus factor“ problema).<br>
+            - Per didelė priklausomybė nuo vieno programuotojo.<br>
             - Neapibrėžtas resursų poreikis — sunku planuoti darbus.<br>
             - Nepakankamas onboarding naujiems programuotojams.<br>
             - Nėra laiko refaktoringui, todėl kaupiasi techninė skola.
@@ -1776,11 +1823,11 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
             - Naudoti <strong>CSRF token'us</strong> formoms ir POST užklausoms.<br>
             - Naudoti <strong>HTTPS (SSL)</strong> visam duomenų srautui tarp naudotojo ir serverio.<br>
             - Slaptažodžiams naudoti saugius <strong>bcrypt / Argon2</strong> algoritmus.<br>
-            - Diegti <strong>Monolog</strong> log'inimą – fiksuoti prisijungimus, nesėkmingus bandymus.<br>
+            - Diegti <strong>Monolog</strong> klaidų log'inimą – fiksuoti prisijungimus, nesėkmingus bandymus.<br>
             - Naudoti <strong>Sentry</strong> klaidų gaudymo ir incidentų stebėjimo įrankį.<br>
-            - Reguliariai testuoti sistemą naudojant <strong>OWASP ZAP / Burp Suite</strong>.<br>
+            - Reguliariai testuoti sistemą naudojant <strong>OWASP ZAP</strong>.<br>
             - Pasitelkti išorinius saugumo testuotojus.<br>
-            - Stebėti serverių saugumą, OS atnaujinimus, PHP pataisas.
+            - Stebėti serverių saugumą, OS atnaujinimus, PHP atnaujinimus.
         </td>
     </tr>
     <tr>
@@ -1791,7 +1838,7 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
             - <strong>Input validation</strong> – duomenų įvesties validacija prieš apdorojimą.<br>
             - <strong>Error handling & logging</strong> – saugūs klaidų pranešimai be jautrios informacijos.<br>
             - <strong>Session management</strong> – ribotas sesijos galiojimo laikas, automatinis atsijungimas.<br>
-            - <strong>Security by default</strong> – išjungtos nereikalingos paslaugos, saugios konfigūracijos numatytosios reikšmės.
+            - <strong>Security by default</strong> – saugios konfigūracijos numatytosios reikšmės.
         </td>
     </tr>
     <tr>
@@ -2024,22 +2071,18 @@ title Sąskaitos gyvavimo ciklas (Invoice State Diagram)
 [*] --> Sukurta
 
 state Sukurta {
-    [*]            --> LaukiaSiuntimo
+  Sukurta            --> Išsiųsta          : Cron generuoja sąskaitą\nir inicijuoja išsiuntimą
+  Išsiųsta           --> LaukiamaMokėjimo  : Klientas peržiūri sąskaitą
 
-    LaukiaSiuntimo --> Išsiųsta          : siunčiama klientui\n(el. paštas)
+  LaukiamaMokėjimo   --> ApmokėjimasVyksta : „Apmokėti“ Paysera
+  ApmokėjimasVyksta  --> Apmokėta          : Paysera callback\nstatus = paid
+  ApmokėjimasVyksta  --> Nepavyko          : Paysera callback\nstatus = failed
+  ApmokėjimasVyksta  --> Nepavyko          : Paysera callback\nstatus = canceled
+  Nepavyko           --> LaukiamaMokėjimo  : Klientas bando dar kartą
+
+  /' Galutinė būsena '/
+  Apmokėta           --> [*]
 }
-
-Sukurta            --> Išsiųsta          : Cron generuoja sąskaitą\nir inicijuoja išsiuntimą
-Išsiųsta           --> LaukiamaMokėjimo  : Klientas peržiūri sąskaitą
-
-LaukiamaMokėjimo   --> ApmokėjimasVyksta : „Apmokėti“ Paysera
-ApmokėjimasVyksta  --> Apmokėta          : Paysera callback\nstatus = paid
-ApmokėjimasVyksta  --> Nepavyko          : Paysera callback\nstatus = failed
-ApmokėjimasVyksta  --> Nepavyko          : Paysera callback\nstatus = canceled
-Nepavyko           --> LaukiamaMokėjimo  : Klientas bando dar kartą
-
-/' Galutinė būsena '/
-Apmokėta           --> [*]
 @enduml
 ```
 
@@ -2051,13 +2094,10 @@ title Kliento klausimo gyvavimo ciklas
 [*] --> Sukurtas
 
 state Sukurtas {
-    [*] --> Neatsakytas
+  Neatsakytas --> Atsakytas   : Atsako vadybininkas
+  Atsakytas   --> Peržiūrėtas : Peržiūri klientas
+  Peržiūrėtas --> [*]
 }
-
-Neatsakytas --> Atsakytas   : Atsako vadybininkas
-Atsakytas   --> Peržiūrėtas : Peržiūri klientas
-
-Peržiūrėtas --> [*]
 @enduml
 ```
 
@@ -2260,3 +2300,77 @@ Web1 --> SMTP
 @enduml
 ```
 
+## Priedas 8. UML komponentų diagrama _(angl. UML Component Diagram)_
+```plantuml
+@startuml
+title UML Component Diagram
+left to right direction
+
+' ==== External Interfaces ====
+component "Kliento naršyklė" as ClientBrowser
+note right of ClientBrowser
+ type = HTML UI
+ protocol = HTTPS
+ concurrency = 10000
+end note
+
+component "Admin naršyklė" as AdminBrowser
+note right of AdminBrowser
+ type = HTML UI
+ protocol = HTTPS
+ concurrency = 10000
+end note
+
+cloud {
+  component "Paysera sistema" as Paysera
+}
+note right of Paysera
+  type = Redirect Callback
+  protocol = HTTPS
+  concurrent = 10000
+end note
+
+cloud {
+  component "SMTP serveris" as Smtp
+}
+note right of Smtp
+ type = Email transport
+ protocol = SMTP
+ concurrent = 10000
+end note
+
+
+' ==== Main Web Application ====
+node "ITIS Web" {
+  component "Web UI" as WebUI
+  component "Autentifikavimo modulis" as Auth
+  component "Klientų modulis" as Customer
+  component "Sąskaitų modulis" as Billing
+  component "Klausimų modulis" as Support
+  component "Email servisas" as EmailService
+  component "Cron\n(Sąskaitų generavimas)" as Cron
+note right of Cron
+ type = CLI / Symfony Console
+ schedule = daily
+end note
+}
+
+' ==== Component Relationships =====
+
+ClientBrowser --> WebUI : HTTPS užklausos
+AdminBrowser  --> WebUI : HTTPS užklausos
+WebUI --> Auth : formos duomenys
+WebUI --> Customer
+WebUI --> Billing
+WebUI --> Support
+Auth --> Customer : klientas
+Customer --> Billing : kliento duomenys
+Billing --> Customer : skolos
+Support --> Customer
+Billing --> Paysera : mokėjimo užklausa\n(redirect URL)
+Paysera --> Billing : Callback\n(mokėjimo būsen)
+EmailService --> Smtp : email
+Cron --> Billing : sąskaitos
+Cron --> EmailService : email
+@enduml
+```

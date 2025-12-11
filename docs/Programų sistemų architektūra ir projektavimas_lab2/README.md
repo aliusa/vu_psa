@@ -31,6 +31,9 @@ Bonus Points : Document all 7 views 0.25
 Points: 1  
 Bonus Points: Use all 4 perspectives 0.25
 
+#### Į ką atkreipia dėmesį
+- Security perspective. Vulnerability points schema
+
 ---
 <h1 style="text-align:center;">Architektūrinis aprašymas <i>(angl. Architectural description)</i></h1>
 
@@ -238,9 +241,6 @@ Sistema padalinta į funkcinius modulius, atspindinčius verslo procesus:
 - **Nustatymų modulis** – apima sistemos konfigūraciją (PVM, rodymo nustatymai).
 - **Struktūros modulis** – atvaizduoja tekstinius puslapius.
 - **Administratorių modulis** – valdo sistemos administratorius - vadybininkus, rinkodaros specialistus.
-
-![functional_view.png](functional_view.png)  
-_UML funkcinio vaizdo diagrama_
 
 ![functional_view_component_diagram.png](functional_view_component_diagram.png)  
 _UML komponentų diagrama (angl. UML component diagram)<br/>Išeities kodas pateiktas 8 priede_
@@ -468,6 +468,10 @@ Pagal informacijos vaizdo gaires, archyvavimas turi būti natūralus informacijo
 - Klausimai/atsakymai: **neribotai**.
 - Paslaugų pakeitimų auditas: **neribotai** (kol klientas aktyvus)
 - Backup kopijos: **kasdien**, saugomos **30 dienų**.
+
+### 4.3.8. Duomenų srauto diagrama _(angl. Data flow diagram)_
+![information_view_data_flow_diagram.png](information_view_data_flow_diagram.png)
+_Duomenų srauto diagrama (angl. Data Flow Diagram)<br/>Išeities kodas pateiktas 15 priede_
 
 ## 4.4. Lygiagretumo vaizdas _(angl. Concurrency  View)_
 Lygiagretumo vaizdas parodo, **kurios ITIS sistemos dalys gali veikti vienu metu**, kaip jos koordinuojamos, kokie procesai ir gijos atsakingi už vykdymą ir kaip užtikrinama duomenų integracija bei išvengiama konfliktų.
@@ -865,6 +869,9 @@ jobs:
 ![deployment_view_kubernetes_deployment_architecture.png](deployment_view_kubernetes_deployment_architecture.png)  
 _Kubernetes diegimo architektūra (angl. Kubernetes Deployment Architecture)<br/>Išeities kodas pateiktas 7 priede_
 
+![deployment_view_runtime_platform_model.png](deployment_view_runtime_platform_model.png)  
+_Runtime platform model (angl. Runtime Platform Model)<br/>Išeities kodas pateiktas 9 priede_
+
 ## 4.7. Operacinis vaizdas _(angl. Operational View)_
 Operacinis vaizdas apibrėžia, kaip ITIS sistema veikia realioje aplinkoje: kaip ji stebima, prižiūrima, atnaujinama, kokie operaciniai procesai reikalingi stabiliai eksploatacijai ir kokie įrankiai naudojami veikimo problemoms diagnozuoti.
 
@@ -1025,6 +1032,19 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
 - turi aiškią **eksploatacijos ir incidentų valdymo struktūrą**.
 
 # 5. Perspektyvos _(angl. [Perspectives](https://www.viewpoints-and-perspectives.info/home/perspectives/))_
+
+Skyrius susideda iš visų perspektyvų:
+- Prieinamumas neįgaliems _(angl. Accessibility)_
+- Prieinamumas ir atsparumas _(angl. Availability and Resilience)_
+- Plėtros ištekliai _(angl. Development Resource)_
+- Evoliucija _(angl. Evolution)_
+- Internacionalizacija _(angl. Internationalization)_
+- Vieta _(angl. Location)_
+- Našumas ir mastelio keitimas _(angl. Performance and Scalability)_
+- Teisinis reguliavimas _(angl. Regulation)_
+- Saugumas _(angl. Security)_
+- Naudojimo patogumas _(angl. Usability)_
+
 ## 5.1. Prieinamumas neįgaliems _(angl. [Accessibility](https://www.viewpoints-and-perspectives.info/home/perspectives/accessibility/))_
 <table border="1" cellpadding="6" cellspacing="0">
     <tr>
@@ -1222,6 +1242,9 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
     </tr>
 </table>
 
+![perspective_availability_availability_schedule.png](perspective_availability_availability_schedule.png)  
+_Sistemos prieinamumo grafikas (angl. Availability Schedule)<br/>Išeities kodas pateiktas 14 priede_
+
 ## 5.3. Plėtros ištekliai _(angl. [Development Resource](https://www.viewpoints-and-perspectives.info/home/perspectives/development-resource-perspective/))_
 <table border="1" cellpadding="6" cellspacing="0">
     <tr>
@@ -1295,7 +1318,7 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
                 </tr>
                 <tr>
                     <td>Ar testavimo infrastruktūra pakankama?</td>
-                    <td>Taip – PHPUnit, Panther/Cypress</td>
+                    <td>Taip – PHPUnit</td>
                 </tr>
                 <tr>
                     <td>Ar CI/CD turi pakankamai resursų?</td>
@@ -1359,7 +1382,8 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
             - Naudoti <strong>versijų valdymo sistemą (Git)</strong> su aiškiu „branching“ modeliu (pvz., <em>GitFlow</em>).<br>
             - Naudoti <strong>automatinį testavimą (PHPUnit)</strong> prieš kiekvieną atnaujinimą.<br>
             - Naudoti <strong>Continuous Integration (CI)</strong> ir <strong>Continuous Deployment (CD)</strong> procesus.<br>
-            - Numatyti <strong>API sąsajas</strong> išoriniams moduliniams plėtiniams (pvz., papildomiems mokėjimų tiekėjams).
+            - Numatyti <strong>API sąsajas</strong> išoriniams moduliniams plėtiniams (pvz., papildomiems mokėjimų tiekėjams).<br>
+            - Naudoti <strong>Swagger</strong> automatiškam dokumentacijos generavimui pagal kodą, komentarus.<br>
         </td>
     </tr>
     <tr>
@@ -1382,7 +1406,7 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
                 </tr>
                 <tr>
                     <td>Ar architektūra yra modulinė ir nepriklausoma?</td>
-                    <td>Taip, moduliai (klientai, objektai, sąskaitos, mokėjimai, paslaugos) realizuoti atskirose DB lentelėse</td>
+                    <td>Taip, moduliai (klientai, objektai, sąskaitos, mokėjimai, paslaugos ir kiti) realizuoti atskirose DB lentelėse</td>
                 </tr>
                 <tr>
                     <td>Ar pokyčiai versijuojami Git’e su CI/CD?</td>
@@ -1398,12 +1422,52 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
                 </tr>
                 <tr>
                     <td>Ar sistema gali būti lengvai plečiama naujomis funkcijomis?</td>
-                    <td>Taip, dėl aiškios modulinių atsakomybių ribos ir atviro kodo sistemos</td>
+                    <td>Taip, dėl aiškios modulinių atsakomybių ribos ir atviro kodo sistemos Symfony</td>
+                </tr>
+                <tr>
+                    <td>Ar sistema gali būti lengvai papildoma naujomis integracijomis?</td>
+                    <td>Taip, naudojant composer, yarn.</td>
+                </tr>
+                <tr>
+                    <td>Kokie išoriniai veiksniai labiausiai daro įtaką evoliucijai?</td>
+                    <td>Teisiniai reikalavimai, DB ir PHP EOL, saugumo standartai.</td>
+                </tr>
+                <tr>
+                    <td>Ar egzistuoja testavimo ir CI/CD mechanizmai?</td>
+                    <td>Taip – automatiniai build/test/deploy procesai.</td>
                 </tr>
             </table>
         </td>
     </tr>
 </table>
+
+### Architektūros įvertinimas _(angl. Assess the architecture)_
+#### Stipriosios pusės – kas palengvina evoliuciją
+1. Repository pattern su Doctrine ORM.  
+   Naujos lentelės ar ryšiai integruojami gana lengvai.
+2. CI/CD ir Docker/Kubernetes diegimai  
+   Pakeitimai gali būti nedelsiant testuojami, daroma rollback.
+
+#### Silpnosios pusės – kas apsunkina evoliuciją
+1. Sąskaitų generavimas yra daug apkraunantis procesas  
+   Sunku numatyti šalutinį poveikį, jei keičiama daug kainodaros logikos.
+2. TVS (admin) remiasi EasyAdmin, kuris riboja:  
+   UI lankstumą,  
+   specifines formų ir veiksmų modifikacijas,  
+   gali reikėti override'inti generuotą kodą.
+
+### Rizikos įvertinimas _(angl. Risk assessment)_
+
+| Rizika                          | Poveikis                                                | Tikimybė    | Komentaras                                                          
+|---------------------------------|---------------------------------------------------------|-------------|---------------------------------------------------------------------|
+| DB lentelių, stulpelių keitimas | Gali paveikti visas sąskaitų, paslaugų, objektų logikas | Aukšta      | Kiekviena migracija gali sukelti downtime ar duomenų nesuderinamumą |
+| Paysera API pokyčiai            | Neveiks mokėjimai, kritinis poveikis                    | Labai mažai |                                                                     |
+| Kainodaros logikos pakeitimai   | Neteisingos sąskaitos, klaidingos sumos                 | Aukšta      | Verslo logika kompleksiška, vyksta dideli skaičiavimai              |
+| TVS keitimas                    | Administratorių veiklos sutrikimas                      | Vidutinė    |                                                                     |
+| Cron apkrova                    | DB gali tapti lėta visai sistemai                       | Aukšta      | Piko metu rizika dvigubėja                                          |
+| Bibliotekų atnaujinimas         | Sistema gali nebeveikti                                 | Aukšta      |                                                                     |
+| Log'inama ne visi veiksmai      | Galima neatsekti įvykių priežasties                     | Vidutinė    |                                                                     |
+| Neišversti vertimo raktai       | Atvaizduojami vertimo raktai, o ne vertimai             | Vidutinė    |                                                                     |
 
 ## 5.5. Internacionalizacija _(angl. [Internationalization](https://www.viewpoints-and-perspectives.info/home/perspectives/internationalization/))_
 <table border="1" cellpadding="6" cellspacing="0">
@@ -1631,19 +1695,19 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
         <th>Taktikos<br/><small><em>(angl. Tactics)</em></small></th>
         <td>
             - <strong>Sluoksniavimas ir moduliškumas:</strong> aiški atskirtis tarp UI, serviso ir DB sluoksnių leidžia
-              optimizuoti tik kritinius komponentus (pvz., sąskaitų generavimo servisą).<br>
+              optimizuoti tik kritinius komponentus (pvz. sąskaitų generavimo servisą).<br>
             - <strong>Caching ir rezultatų ribojimas:</strong> naudoti puslapiavimą (pagination), limituoti sąrašų dydžius,
-              cache’inti dažnai skaitomus, bet retai kintančius duomenis (nustatymai, paslaugų katalogas, šalys).<br>
+              cache’inti dažnai skaitomus, bet retai kintančius duomenis (nustatymai, paslaugų katalogas, šalys, Twig šablonai).<br>
             - <strong>Asinchroninis apdorojimas:</strong> PDF generavimą, el. laiškų siuntimą, ataskaitas vykdyti per
-              Message Queue worker’ius, kad web užklausa būtų greita.<br>
+              Message Queue worker’ius fone, kad web užklausa būtų greita.<br>
             - <strong>DB optimizavimas:</strong> reikalingi indeksai, JOIN mažinimas, „batch“ įrašymas cron procesuose,
-              kritinėms užklausoms – raw SQL, apeinant ORM overheard’ą.<br>
-            - <strong>HTTP ir statinių resursų optimizacija:</strong> CSS/JS suspaudimas, <code>Cache-Control</code>,
-              minimizuotas HTTP request’ų skaičius UI.<br>
-            - <strong>Mastelio didinimas:</strong> PHP-FPM/Apache worker’iai piko metu, horizontali web sluoksnio plėtra,
+              kritinėms užklausoms – raw SQL, apeinant ORM overhead’ą.<br>
+            - <strong>HTTP ir statinių resursų optimizacija:</strong> CSS/JS suspaudimas (gzip), <code>Cache-Control</code>,
+              minimizuotas HTTP request’ų skaičius UI, nenaudojamo kodo automatinis išėmimas.<br>
+            - <strong>Mastelio didinimas:</strong> PHP/Apache worker’iai piko metu, horizontali web sluoksnio plėtra,
               atskira DB replika „read-only“ ataskaitoms.<br>
             - <strong>Laiko langų naudojimas:</strong> masinį sąskaitų generavimą ir kitus sunkius procesus vykdyti 
-              nakties metu, kad jie nekonkuruotų su dienos apkrova.
+              nakties metu tarp 01:00 ir 06:00, kad jie nekonkuruotų su dienos realių naudotojių apkrova.
         </td>
     </tr>
     <tr>
@@ -1668,7 +1732,7 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
                 </tr>
                 <tr>
                     <td>Ar identifikuoti našumo butelio kakleliai <em>(angl. bottleneck)</em>?</td>
-                    <td>Taip – DB užklausos, PDF generavimas</td>
+                    <td>Taip – DB užklausos, PDF generavimas, el.laiškų siuntimas</td>
                 </tr>
                 <tr>
                     <td>Ar yra galimybė horizontaliai skaidyti serverius?</td>
@@ -1676,7 +1740,7 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
                 </tr>
                 <tr>
                     <td>Ar sistema palaiko cache?</td>
-                    <td>Taip – Symfony HTTP cache komponentas.</td>
+                    <td>Taip – Symfony HTTP cache komponentas, Twig šablonai.</td>
                 </tr>
                 <tr>
                     <td>Ar numatyti streso testai?</td>
@@ -1688,7 +1752,7 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
                 </tr>
                 <tr>
                     <td>Ar naudojama asinchronija?</td>
-                    <td>Taip – Queue el.laiškų siuntimui</td>
+                    <td>Taip – Queue el.laiškų siuntimui, PDF generavimui</td>
                 </tr>
                 <tr>
                     <td>Ar įgalintas scaling workers?</td>
@@ -1702,6 +1766,9 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
         </td>
     </tr>
 </table>
+
+![perspective_performance_performance_model_diagram.png](perspective_performance_performance_model_diagram.png)  
+_Našumo modelio diagrama (angl. Performance Model Diagram)<br/>Išeities kodas pateiktas 13 priede_
 
 ## 5.8. Teisinis reguliavimas _(angl. [Regulation](https://www.viewpoints-and-perspectives.info/home/perspectives/regulation-perspective/))_
 <table border="1" cellpadding="6" cellspacing="0">
@@ -1849,7 +1916,8 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
             - Netinkamai valdomos sesijos (neuždarius senų prisijungimų).<br>
             - Perteklinė klaidų informacija gali atskleisti sistemos struktūrą.<br>
             - Nepakankamas log'ų stebėjimas lemia nepastebėtus saugumo incidentus.<br>
-            - Trūksta periodinių saugumo auditų ir automatizuoto testavimo.
+            - Trūksta periodinių saugumo auditų ir automatizuoto testavimo.<br>
+            - Cron gali sugeneruoti dubliuotas sąskaitas, jei neveikia transakcijų blokavimas.
         </td>
     </tr>
     <tr>
@@ -1896,6 +1964,15 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
         </td>
     </tr>
 </table>
+
+![perspective_security_attach_tree.png](perspective_security_attack_tree.png)  
+_Klientų duomenų pavogimas (angl. Attack tree)<br/>Išeities kodas pateiktas 10 priede_
+
+![perspective_security_graphical_representation_problem.png](perspective_security_graphical_representation_problem.png)  
+_Grafinis problemų atvaizdavimas (angl. Graphical representation problem)<br/>Išeities kodas pateiktas 11 priede_
+
+![perspective_security_vulnerability_points.png](perspective_security_vulnerability_points.png)  
+_Pažeidžiamumo taškų diagrama (angl. Vulnerability Points Diagram)<br/>Išeities kodas pateiktas 12 priede_
 
 ## 5.10. Naudojimo patogumas _(angl. [Usability](https://www.viewpoints-and-perspectives.info/home/perspectives/usability-perspective/))_
 <table border="1" cellpadding="6" cellspacing="0">
@@ -1945,7 +2022,7 @@ Operacinis vaizdas užtikrina, kad ITIS sistema:
             - Per daug informacijos viename puslapyje (ypač TVS).<br>
             - Sudėtingos formos su per daug laukų.<br>
             - Per lėti UI komponentai, priklausomi nuo didelių DB sąrašų.<br>
-            - Nenuoseklus dizainas tarp Frontend ir TVS.<br>
+            - Nevienodas dizainas tarp Frontend ir TVS.<br>
             - Nėra tiek testinių duomenų, tad reikia juos sukurti arba sugeneruoti.
         </td>
     </tr>
@@ -2190,7 +2267,6 @@ WebThread      --> MQ          : "Queue support question notifications"
 @enduml
 ```
 
-
 ## Priedas 6. Komponentų modelis _(angl. UML Component model)_
 ```plantuml
 @startuml
@@ -2372,5 +2448,610 @@ Paysera --> Billing : Callback\n(mokėjimo būsen)
 EmailService --> Smtp : email
 Cron --> Billing : sąskaitos
 Cron --> EmailService : email
+@enduml
+```
+
+## Priedas 9. vykdymo platformos modelis _(angl. Runtime Platform Model)_
+```plantuml
+@startuml
+title ITIS – Runtime Platform Model (Deployment Viewpoint)
+
+skinparam shadowing false
+skinparam rectangleStyle rounded
+skinparam defaultTextAlignment center
+skinparam nodesep 50
+skinparam ranksep 70
+
+' ===================================================================
+' CLIENT DEVICES
+' ===================================================================
+
+node "📱 Client Devices\n(type = Web Browsers)" <<processingNode>> {
+  artifact "ClientFrontEnd\n(HTML/JS)" as ClientApp
+}
+
+node "🖥️ Admin Workstations\n(type = Browsers)" <<processingNode>> {
+  artifact "AdminPanel\n(HTML/JS)" as AdminUI
+}
+
+' ===================================================================
+' KUBERNETES CLUSTER
+' ===================================================================
+
+node "☸️ Kubernetes Cluster\n(model = K8s v1.27)\nos = Linux\nscale = auto" <<processingNode>> as K8s {
+
+  node "Web Namespace" <<executionEnvironment>> {
+
+    node "Web Server Pod\n(cpu: 2 vCPU | mem: 2GB)" <<processingNode>> as WebPod {
+      node "Docker Container\n(php:8.2-fpm)" <<executionEnvironment>> as PhpFpm {
+        artifact "ITIS WebApp\n(Symfony Controllers,\nTwig Views,\nREST Endpoints)" as WebApp
+      }
+    }
+
+    node "Callback Handler Pod\n(cpu: 1 vCPU | mem: 1GB)" <<processingNode>> as CallbackPod {
+      node "Docker Container\n(php:8.2-fpm)" <<executionEnvironment>> as CallbackEnv {
+        artifact "Paysera Callback Handler\n(/callback API)" as CallbackHandler
+      }
+    }
+
+    node "Cron Pod\n(cpu: 1 vCPU | mem: 1GB)" <<processingNode>> as CronPod {
+      node "Docker Container\n(symfony/console)" <<executionEnvironment>> as CronEnv {
+        artifact "InvoiceGenerator.php\n(Scheduled Tasks)" as CronJob
+      }
+    }
+
+    node "Email Worker Pod\n(cpu: 1 vCPU | mem: 1GB)" <<processingNode>> as WorkerPod {
+      node "Docker Container\n(worker:php)" <<executionEnvironment>> as WorkerEnv {
+        artifact "MailQueueWorker.php" as MailWorker
+      }
+    }
+  }
+
+  ' Infrastructure pods
+  node "Infrastructure Namespace" <<executionEnvironment>> {
+
+    node "Redis Pod" <<processingNode>> {
+      node "Redis 7 Cache" <<executionEnvironment>> as RedisEnv
+      artifact "SessionStore\n(Cache Layer)" as RedisCache
+    }
+
+    node "RabbitMQ Pod" <<processingNode>> {
+      node "RabbitMQ 3.12" <<executionEnvironment>> as MQEnv
+      artifact "Message Queues\n(Email Jobs)" as MQ
+    }
+  }
+}
+
+' ===================================================================
+' DATABASE NODE
+' ===================================================================
+
+node "🗄️ Database Server\n(model = VM/Linux | cpu=4 vCPU | mem=8GB)" <<processingNode>> as DBNode {
+  node "MariaDB 10.11\n(execution environment)" <<executionEnvironment>> as MariaDBEnv {
+    artifact "ITIS Schema\n(Tables, Relations, Indexes)" as Schema
+  }
+}
+
+' ===================================================================
+' STORAGE NODE
+' ===================================================================
+
+node "Backup Storage\n(type = object storage | size = 1TB)" <<disk>> as Backup {
+  artifact "Daily DB Dumps\nRetention: 30 days" as Dumps
+}
+
+' ===================================================================
+' EXTERNAL INTEGRATIONS
+' ===================================================================
+
+node "Paysera API\n(type = HTTPS/HMAC)" <<processingNode>> as Paysera {
+  artifact "Payment Gateway" as PayGateway
+}
+
+node "SMTP Email Provider" <<processingNode>> as SMTP {
+  artifact "Email Delivery Service" as MailService
+}
+
+node "Leaflet / OpenStreetMap" <<processingNode>> as Maps {
+  artifact "Map Tiles API" as MapTiles
+}
+
+' ===================================================================
+' COMMUNICATION LINKS
+' ===================================================================
+
+ClientApp --> WebApp : HTTPS\nUser Requests
+AdminUI --> WebApp : HTTPS\nAdmin Management
+
+WebApp --> RedisCache : TCP\nSession Cache
+WebApp --> Schema : SQL/TCP\nRead/Write
+CallbackHandler --> Schema : SQL/TCP\nStatus Updates
+
+WebApp --> MQ : AMQP\nQueue Email Jobs
+MailWorker --> MailService : SMTP\nSend Email
+
+WebApp --> PayGateway : HTTPS\nInit Payment
+PayGateway --> CallbackHandler : HTTPS POST\n(payment_status)
+
+CronJob --> Schema : SQL\nGenerate invoices
+CronJob --> Dumps : Backup\n(DB dump)
+
+WebApp --> MapTiles : HTTPS\nTile Requests
+
+@enduml
+```
+
+## Priedas 10. Atakos medis _(angl. Attack tree)_
+```plantuml
+@startmindmap
+title Attack Tree
+
+<style>
+mindmapDiagram {
+  .rootNode {
+    BackgroundColor lightgreen
+    BorderColor black
+  }
+  .subGoal {
+    BackgroundColor cyan
+    BorderColor black
+  }
+  .attack {
+    BackgroundColor lightpink
+    BorderColor black
+  }
+  .price {
+    BackgroundColor lightgray
+    BorderColor black
+  }
+}
+</style>
+
+* Pavogti klientų ir finansinius duomenis <<rootNode>>
+
+** Įsilaužti į DB <<subGoal>>
+*** Duomenų vagystė <<attack>>
+**** Atakos kaina: 14 000 € <<price>>
+*** Sąskaitų pakeitimas <<attack>>
+**** Atakos kaina: 6 000 € <<price>>
+*** Sąskaitų ištryimas <<attack>>
+**** Atakos kaina: 8 000 € <<price>>
+
+** Gauti atsarginių kopijų duomenis <<subGoal>>
+*** Pavogti backup serverio kopiją <<attack>>
+**** Atakos kaina: 6 000 € <<price>>
+
+** Perimti el. pašto srautą <<subGoal>>
+*** Fišingas prieš klientą ar vadybininką <<attack>>
+**** Atakos kaina: 5 000 € <<price>>
+*** Įsilaužti į vartotojo kompiuterį <<attack>>
+**** Atakos kaina: 1 000 € <<price>>
+
+** Įsilaužti į failų saugyklą <<subGoal>>
+*** Netinkama failų sistemos konfigūracija <<attack>>
+**** Atakos kaina: 3 000 € <<price>>
+*** Ugniasienės apėjimas / lateral movement <<attack>>
+**** Atakos kaina: 7 000 € <<price>>
+
+** Kompromituoti Paysera komunikaciją <<subGoal>>
+*** Suklastotas callback <<attack>>
+**** Atakos kaina: 12 000 € <<price>>
+*** MITM perėmimas tarp Paysera → ITIS <<attack>>
+**** Atakos kaina: 15 000 € <<price>>
+
+** Įsilaužti į TVS <<subGoal>>
+*** Perimti administratoriaus paskyrą <<attack>>
+**** Atakos kaina: 20 000 € <<price>>
+*** Duomenų vagystė <<attack>>
+**** Atakos kaina: 14 000 € <<price>>
+*** Sąskaitų ištryimas <<attack>>
+**** Atakos kaina: 8 000 € <<price>>
+
+@endmindmap
+```
+
+## Priedas 11. Grafinis problemų atvaizdavimas _(angl. Graphical representation problem)_
+```plantuml
+@startuml
+title Graphical representation problem
+
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor Black
+}
+skinparam shadowing false
+skinparam nodesep 20
+skinparam ranksep 40
+<style>
+rectangle {
+  HorizontalAlignment center
+}
+</style>
+
+rectangle "Pavogti klientų\nir sąskaitų duomenis\n<<OR>>" as 1_Root #LightGreen
+  rectangle "Įsilaužti į DB\n<<OR>>" as 2_BreachDB #LightGreen
+  1_Root --> 2_BreachDB
+    rectangle "Duomenų\nvagystė" as 3_Data
+    2_BreachDB --> 3_Data
+    rectangle "Sąskaitų\npakeitimas" as 3_InvoiceChange
+    2_BreachDB --> 3_InvoiceChange
+    rectangle "Sąskaitų\ništrynimas" as 3_InvoiceDelete
+    2_BreachDB --> 3_InvoiceDelete
+  rectangle "Gauti atsarginių\nkopijų duomenis\n<<OR>>" as 2_Backup #LightGreen
+  1_Root --> 2_Backup
+    rectangle "Pavogti backup\nserverio kopiją" as 3_BackupSteal
+    2_Backup --> 3_BackupSteal
+  rectangle "Perimti el. pašto srautą\n<<OR>>" as 2_Email #LightGreen
+  1_Root --> 2_Email
+    rectangle "Fišingas prieš klientą ar vadybininką\n<<OR>>" as 3_Email_Phishing #LightGreen
+    2_Email --> 3_Email_Phishing
+      rectangle "Sukurti netikrą prisijungimo langą" as 4_Email_Phishing_login
+      3_Email_Phishing --> 4_Email_Phishing_login
+      rectangle "Gauti vartotojo slaptažodį" as 4_Email_Phishing_password_user
+      3_Email_Phishing --> 4_Email_Phishing_password_user
+      rectangle "Gauti vadybininko slaptažodį" as 4_Email_Phishing_password_admin
+      3_Email_Phishing --> 4_Email_Phishing_password_admin
+    rectangle "Įsilaužti į vartotojo kompiuterį" as 3_Email_Pc
+    2_Email --> 3_Email_Pc
+  rectangle "Įsilaužti į failų saugyklą\n<<OR>>" as 2_Files #LightGreen
+  1_Root --> 2_Files
+    rectangle "Netinkama failų\nsistemos konfiguracija" as 3_Files_config
+    2_Files --> 3_Files_config
+    rectangle "Ugniasienės apėjimas\n(lateral movement)" as 3_Files_firewall
+    2_Files --> 3_Files_firewall
+  rectangle "Kompromituoti Paysera\nkomunikaciją\n<<OR>>" as 2_CallbackHijack #LightGreen
+  1_Root --> 2_CallbackHijack
+    rectangle "Suklastotas\ncallback" as 2_CallbackHijack_callback
+    2_CallbackHijack --> 2_CallbackHijack_callback
+    rectangle "MITM perėmimas\ntarp Paysera → ITIS" as 2_CallbackHijack_mitm
+    2_CallbackHijack --> 2_CallbackHijack_mitm
+  rectangle "Įsilaužti į TVS\n<<OR>>" as 2_TVS #LightGreen
+  1_Root --> 2_TVS
+    rectangle "Perimti administratoriaus paskyrą\n<<AND>>" as 3_TVS_admin #lightcyan
+    2_TVS --> 3_TVS_admin
+      rectangle "Gauti slaptažodį" as 4_TVS_admin_login
+      3_TVS_admin --> 4_TVS_admin_login
+      rectangle "Žinoti TVS nuorodą" as 4_TVS_admin_url
+      3_TVS_admin --> 4_TVS_admin_url
+      rectangle "Būti su tinkamu IP/VPN" as 4_TVS_admin_ip
+      3_TVS_admin --> 4_TVS_admin_ip
+    rectangle "Duomenų vagystė" as 3_TVS_data
+    2_TVS --> 3_TVS_data
+    rectangle "Sąskaitų pakeitimas\n<<OR>>" as 3_TVS_invoices
+    2_TVS --> 3_TVS_invoices
+      rectangle "Sąskaitų ištrynimas" as 4_TVS_invoices_delete
+      3_TVS_invoices --> 4_TVS_invoices_delete
+
+@enduml
+```
+
+## Priedas 12. Pažeidžiamumo taškai _(angl. Vulnerability Points)_
+```plantuml
+@startuml
+title Pažeidžiamumo taškai (angl. Vulnerability Points)
+
+skinparam rectangleStyle rounded
+skinparam shadowing true
+skinparam HorizontalAlignment center
+
+<style>
+vulnerability {
+  BackgroundColor pink
+}
+</style>
+
+' ==== SYSTEM LAYERS ====
+
+rectangle "Kliento naršyklė\n(Web klientas)" as WebClient
+rectangle "Web serveris" as WebServer
+rectangle "Verslo logika\n(Application Services)" as BusinessLogic
+rectangle "Duomenų prieigos sluoksnis\n(Doctrine ORM)" as DBLayer
+rectangle "MariaDB duomenų bazė" as Database
+rectangle "Failų sistema\n(PDF sąskaitos, laikini failai)" as FileSystem
+rectangle "Operacinė sistema\n(Server OS, Docker containers)" as SystemOS
+rectangle "Cron procesai\n(Sąskaitų generavimas)" as Cron
+rectangle "SMTP serveris\n(Laiškų siuntimas)" as Smtp
+rectangle "Paysera API\n(Mokėjimų callback'ai)" as Paysera
+
+' ==== VULNERABILITIES ====
+
+rectangle "Reverse engineering\n(JS analizė, API endpoint'ų nustatymas)" as Reverse <<vulnerability>>
+rectangle "Parameter tampering\n(Užklausų manipuliavimas)" as ParamTampering <<vulnerability>>
+rectangle "Cross-Site Scripting\n(XSS rizikos vietos)" as XSS <<vulnerability>>
+rectangle "Session hijacking\n(Sesijos vagystė)" as SessionHijacking <<vulnerability>>
+rectangle "SQL Injection\n(ORM apėjimas / raw queries)" as SQLi <<vulnerability>>
+rectangle "Denial of Service\n(Perkrova, flood)" as DoS <<vulnerability>>
+rectangle "Command execution\n(kenksmingų komandų vykdymas)" as CmdExec <<vulnerability>>
+rectangle "File disclosure\n(PDF, konfigų nutekinimas)" as FileDisclosure <<vulnerability>>
+rectangle "Code injection\n(kenksmingi PHP ar template payload'ai)" as CodeInjection <<vulnerability>>
+rectangle "MITM / Callback manipulation\n(Paysera callback perėmimas)" as MITM <<vulnerability>>
+
+' ==== CONNECTIONS (attack paths) ====
+
+Reverse --> WebClient
+ParamTampering --> WebServer
+XSS --> WebServer
+SessionHijacking --> WebServer
+DoS --> WebServer
+
+WebClient --> WebServer
+WebServer --> BusinessLogic
+BusinessLogic --> DBLayer
+DBLayer --> Database
+
+SQLi --> DBLayer
+CmdExec --> SystemOS
+
+FileDisclosure --> FileSystem
+CodeInjection --> FileSystem
+
+Cron --> BusinessLogic
+Cron --> DBLayer
+
+BusinessLogic --> Smtp
+BusinessLogic --> Paysera
+
+MITM --> Paysera
+
+Database --> SystemOS
+Database --> FileSystem
+SystemOS --> FileSystem
+
+' Extra vulnerabilities linked to processes
+CodeInjection --> Cron
+SessionHijacking --> WebClient
+
+@enduml
+```
+
+## Priedas 13. Našumo modelio diagrama _(angl. Performance Model Diagram)_
+```plantuml
+@startuml
+title Našumo modelio diagrama (Performance Model)
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam wrapWidth 200
+skinparam maxMessageSize 200
+
+' ==== KOMPONENTAI ====
+
+component "Naršyklės klientas\n(Klientas / Vadybininkas)" as Client
+component "Web UI\n(Kontroleriai + Twig)" as WebUI
+component "Aplikacijos sluoksnis\n(Servisai)" as AppLayer
+component "Mokėjimo callback\n(Paysera → ITIS)" as Callback
+component "Duomenų bazė" as DB
+component "Fono Cron procesas\n(Sąskaitų generavimas)" as CronInvoices
+component "Fono Cron procesas\n(El.laiškų siuntimas)" as CronEmail
+
+' ==== NAŠUMO PASTABOS ====
+
+' --- Naršyklė → WebUI ---
+note right of Client
+Round-trip vėlinimas ≈ 120–180 ms  
+(užklausa + atsakymas, vidutinis tinklo greitis)
+end note
+
+Client --> WebUI
+
+' --- WebUI → Aplikacijos sluoksnis ---
+note right of WebUI
+Lokalus kvietimas ≈ 1–3 ms  
+(kontroleris → servisas)
+end note
+
+WebUI --> AppLayer
+
+' --- Aplikacijos sluoksnis → DB ---
+note right of AppLayer
+Esant 1000 lygiagrečių vartotojų:  
+SELECT sąskaita: ~45 ms  
+UPDATE sąskaita: ~60–80 ms  
+INSERT mokėjimas: ~65 ms  
+end note
+
+AppLayer --> DB
+
+' --- WebUI → DB (paprasti puslapiai) ---
+note bottom of WebUI
+Round-trip vėlinimas (paprastos užklausos):  
+≈ 25–40 ms
+end note
+
+WebUI --> DB : tik skaitymo užklausos
+
+' --- Paysera Callback ---
+note right of Callback
+Callback apdorojimas ≈ 20–200 ms  
+(duomenų tikrinimas + DB atnaujinimas)  
+Esant 200 lygiagrečių callback'ų:  
+Vėlinimas padidėja ×1.5  
+end note
+
+Callback --> AppLayer
+
+Callback --> DB : mokėjimo būsenos atnaujinimas
+
+' --- CronInvoices → DB ---
+note right of CronInvoices
+Sąskaitų generavimo apkrova:  
+~ 300–600 ms vienai sąskaitai  
+Piko valandą:  
+100 sąskaitų ≈ 30–60 s  
+Gali padidinti DB vėlinimą ×1.7  
+end note
+
+CronInvoices --> DB
+
+' --- CronEmail → DB ---
+note right of CronEmail
+Sąskaitų generavimo apkrova:  
+~ 300–1000 ms vienam el.laiškui  
+Piko valandą:  
+25 el.laiškai ≈ kas 1min
+Gali padidinti DB vėlinimą ×2  
+end note
+
+CronEmail --> DB
+
+
+' ==== NAŠUMO POVEIKIAI (SCENARIO EFFECTS) ====
+
+note bottom of DB
+Duomenų bazė tampa siauroji vieta, kai:  
+• Yra 10000+ lygiagrečių vartotojų  
+• Vykdomas Cron masinis sąskaitų generavimas  
+• Atliekamas masinis sąskaitų perskaičiavimas  
+• Atliekamas masinis el.laiškų siuntimas
+Mažinimo priemonės: indeksavimas, kešavimas,  
+horizontali DB replikacija (tik skaitymui)
+end note
+
+note bottom of AppLayer
+Verslo logikos kaštai labai skiriasi:  
+• Sąskaitos kainos skaičiavimas: ~5–10 ms  
+• Paslaugų paketo generavimas: ~20–30 ms  
+• Klausimo pateikimas: ~15 ms  
+• Administratoriaus veiksmai: iki 50 ms
+end note
+
+note bottom of WebUI
+Twig šablonų renderinimas ≈ 5–20 ms  
+Su cache: ~1–3 ms  
+end note
+
+@enduml
+```
+
+## Priedas 14. Prieinamumo grafikas _(angl. Availability schedule)_
+```plantuml
+@startuml
+title Sistemos prieinamumo grafikas (angl. Availability Schedule)
+
+robust "Naudotojų srautas (apkrova)" as Re1
+rectangle "Frontend dalis" as Re2
+rectangle "TVS dalis" as Re3
+rectangle "Cron sąskaitų generavimo pikas" as Re4
+rectangle "Cron el.laiškų siuntimo pikas" as Re5
+
+@00:00:00
+Re1 is "Beveik jokios"
+Re2 is "Pilna sistemos veikla (angl. Full Online service)"
+Re3 is "Pilna sistemos veikla (angl. Full Online service)"
+
+@02:00:00
+Re4 is "Generuojama"
+
+@04:00:00
+Re4 is {hidden}
+Re4 -> Re5@+14400 : Laukiama ryto
+
+@06:00:00
+Re1 is "Minimali"
+
+@08:00:00
+Re1 is "Vidutiniška"
+Re5 is "Siunčiama"
+
+@10:00:00
+Re1 is "Didelė"
+Re5 is {hidden}
+
+@12:00:00
+
+@14:00:00
+
+@16:00:00
+
+@18:00:00
+Re1 is "Vidutiniška"
+
+@20:00:00
+Re1 is "Minimali"
+
+@22:00:00
+Re1 is "Beveik jokios"
+
+@0:00:00
+
+@enduml
+```
+
+## Priedas 15. Duomenų srauto diagrama _(angl. Data Flow Diagram)_
+```plantuml
+@startuml
+title Duomenų srauto diagrama (angl. Data Flow Diagram)
+
+/' ----- STYLE ----- '/
+skinparam shadowing false
+skinparam defaultTextAlignment center
+skinparam rectangle {
+  RoundCorner 10
+}
+skinparam usecase {
+  BorderColor Black
+  BackgroundColor #F2F2F2
+}
+
+/' ----- ACTORS (usecase = oval) ----- '/
+usecase "Klientas" as Client
+usecase "Vadybininkas" as Manager
+usecase "Paysera" as Paysera
+usecase "SMTP serveris" as SMTP
+
+/' ----- MAIN DATA STORE ----- '/
+database "DB" as DATA
+
+/' ===== CLIENT PROCESSES ===== '/
+rectangle "Peržiūrėti\nsąskaitas" as P_ViewInvoices
+rectangle "Peržiūrėti\npaslaugas" as P_ViewServices
+rectangle "Pateikti\nklausimą" as P_Question
+rectangle "Inicijuoti\nmokėjimą" as P_InitPay
+
+/' ===== MANAGER PROCESSES ===== '/
+rectangle "Administruoti\nklientus" as M_Clients
+rectangle "Administruoti\npaslaugas" as M_Services
+rectangle "Administruoti\nobjektus" as M_Objects
+rectangle "Valdyti\nakcijas" as M_Promotions
+
+/' ===== BACKEND PROCESSES ===== '/
+rectangle "Cron\n(sąskaitų generavimas)" as Cron
+rectangle "Paysera\ncallback apdorojimas" as Callback
+rectangle "El. laiškų\nsiuntimas" as Mailer
+
+
+/' ============================= LINKS ============================== '/
+
+/' ---- CLIENT FLOWS ---- '/
+Client --> P_ViewInvoices
+Client --> P_ViewServices
+Client --> P_Question
+Client --> P_InitPay
+
+P_ViewInvoices --> DATA
+P_ViewServices --> DATA
+P_Question --> DATA
+P_InitPay --> Paysera
+
+/' ---- MANAGER FLOWS ---- '/
+Manager --> M_Clients
+Manager --> M_Services
+Manager --> M_Objects
+Manager --> M_Promotions
+
+M_Clients --> DATA
+M_Services --> DATA
+M_Objects --> DATA
+M_Promotions --> DATA
+
+/' ---- BACKEND FLOWS ---- '/
+Cron --> DATA
+DATA --> Mailer
+SMTP <-- Mailer
+
+Paysera --> Callback
+Callback --> DATA
+Callback --> Mailer
+
 @enduml
 ```

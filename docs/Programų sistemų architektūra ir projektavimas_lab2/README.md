@@ -410,6 +410,22 @@ ISO/IEC 42010:2022 informacinio požiūrio gairės teigia, kad būtina aiškiai 
 | **Struktūra**        | ITIS                    | Vadybininkas                          |                                                        |
 | **Administratoriai** | ITIS                    | Vadybininkas                          |                                                        |
 
+
+| Sistema              | Klientas      | Vadybininkas |
+|----------------------|---------------|--------------|
+| **Klientas**         | Atnaujintojas | Savininkas   |
+| **Objektas**         | Nieko         | Savininkas   |
+| **Paslaugų paketas** | Skaitytojas   | Savininkas   |
+| **Paslaugos**        | Skaitytojas   | Savininkas   |
+| **Sąskaita**         | Skaitytojas   | Savininkas   |
+| **Mokėjimo būsena**  | Nieko         | Savininkas   |
+| **Akcija**           | Nieko         | Savininkas   |
+| **Nustatymai**       | Nieko         | Savininkas   |
+| **Klausimai**        | Kūrėjas       | Savininkas   |
+| **Šalys**            | Nieko         | Savininkas   |
+| **Struktūra**        | Nieko         | Savininkas   |
+| **Administratoriai** | Nieko         | Savininkas   |
+
 **Konfliktų prevencijos taktika**
 - El.mokėjimų sistema turi absoliučią prioritetą dėl mokėjimo būsenos
 - Duomenys tvarkomi viename šaltinyje – **monolitinė DB**, todėl konfliktų rizika minimali

@@ -775,6 +775,20 @@ Kiekvienas „`release`“ žymimas Git žyma _(angl. tag)_ X.Y.Z pagal semantin
 - Slapti raktai (Paysera, SMTP) nekeliami į Git – laikomi tik saugiose paslaugose (pvz., CI „secret store“).
 - DB migracijos vykdomos automatiškai „deploy“ metu, su „rollback“ scenarijais kritinių klaidų atveju.
 
+### Cron komandos
+Cron komandos (sąskaitų generavimo, el. siuntimo vykdomos per cron procesą) paleidžiamą kas 1 minutę.
+#### Sąskaitų generavimas
+Sąskaitos generavimas paleidžiamas 1 kartą per mėnesį pirmą mėnesio dieną už praeitą mėnesį. `crotab` privalo būti įrašyta eilutė:
+```php
+0 1 1 * * php bin/console invoices:generate
+```
+
+#### El. laiškų siuntimas
+El. laiško siuntimo komanda privalo pasileisti kiekvieną minutę, kad gavėjai iškart gautų el.laiškus. `crotab` privalo būti įrašyta eilutė:
+```php
+* * * * * php bin/console emails:send
+```
+
 ## 4.6. Diegimo vaizdas _(angl. Deployment View)_
 ### 4.6.1. Sprendžiami rūpesčiai _(angl. Concerns)_
 - Kaip sistemiškai virtualizuojami komponentai (konteineriai)
@@ -3013,13 +3027,15 @@ title Sistemos prieinamumo grafikas (angl. Availability Schedule)
 robust "Naudotojų srautas (apkrova)" as Re1
 rectangle "Frontend dalis" as Re2
 rectangle "TVS dalis" as Re3
-rectangle "Cron sąskaitų generavimo pikas" as Re4
-rectangle "Cron el.laiškų siuntimo pikas" as Re5
+rectangle "Cron sąskaitų generavimo pikas (pirmą mėn. dieną)" as Re4
+rectangle "Cron el.laiškų siuntimo pikas (pirmą mėn. dieną)" as Re5
+rectangle "Cron el.laiškų siuntimas" as Re6
 
 @00:00:00
 Re1 is "Beveik jokios"
 Re2 is "Pilna sistemos veikla (angl. Full Online service)"
 Re3 is "Pilna sistemos veikla (angl. Full Online service)"
+Re6 is "Visad veikia"
 
 @02:00:00
 Re4 is "Generuojama"

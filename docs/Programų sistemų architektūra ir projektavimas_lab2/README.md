@@ -865,6 +865,52 @@ jobs:
       env:
         DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
       run: vendor/bin/phpunit
+  
+  Deploy-uat:
+    runs-on: itis-prod
+    defaults:
+      run:
+        working-directory: ${{ env.DEPLOY_DIR }}
+    steps:
+      - name: Setup git
+        run: |
+          git config --global credential.helper store
+          git config --global pull.rebase false
+          git config --global --add safe.directory ${{ env.DEPLOY_DIR }}
+          echo "https://${{ secrets.DEPLOYER_GIT_USER }}:${{ secrets.DEPLOYER_GIT_TOKEN }}@itis.lt" >> ~/.git-credentials
+      - name: Update code
+        run: |
+          git checkout .
+          git fetch
+          git checkout ${{ github.ref_name }}
+          git pull
+          git submodule sync
+          git submodule foreach git checkout .
+          git submodule update --init --recursive
+          rm ~/.git-credentials
+      - name: Install deps
+        run: |
+          export COMPOSER_ALLOW_SUPERUSER=1
+          composer validate
+          composer install --prefer-dist --no-progress
+      - name: Install assets
+        run: |
+          php bin/console ckeditor:install --tag=4.22.0
+          php bin/console assets:install
+          npm run build
+      - name: Migrations
+        run: |
+          php bin/console sys:update -f
+      - name: Health check of http://itis.lt
+        uses: jtalk/url-health-check-action@v3
+        with:
+          url: http://itis.lt/general/status
+          max-attempts: 2
+      - name: Health check of http://itis.lt
+        uses: jtalk/url-health-check-action@v3
+        with:
+          url: http://itis.lt/general/emails
+          max-attempts: 2
 ```
 
 ### 4.6.4. Naudojama aparatinė įranga ir OS
@@ -1153,7 +1199,7 @@ Skyrius susideda iš visų perspektyvų:
                 </tr>
                 <tr>
                     <td>Ar visi formų laukai turi aiškias <code>label</code> žymes?</td>
-                    <td>Taip. Visi „input“ turi semantinius <code>&lt;label&gt;</code> elementus ir yra sujungti su <code>ARIA</code> atributais</td>
+                    <td>Taip. Visi HTML „input“ elementai turi semantinius <code>&lt;label&gt;</code> elementus ir yra sujungti su <code>ARIA</code> atributais</td>
                 </tr>
                 <tr>
                     <td>Ar klaidos pranešimai paaiškinti tekstu, o ne tik spalva?</td>
@@ -1262,6 +1308,22 @@ Skyrius susideda iš visų perspektyvų:
     </tr>
 </table>
 
+### Incidentų atkūrimo scenarijai _(angl. Incident recovery scenarios)_
+
+| Incidentas                                     | Poveikis                                                     | Veiksmai atstatymui (Remedial Action)                           | Atstatymo laikas     |
+|------------------------------------------------|--------------------------------------------------------------|-----------------------------------------------------------------|----------------------|
+| **Web serverio / konteinerio gedimas**         | Laikinas nepasiekiamumas; vartotojai negali naudotis sistema | Kubernetes automatiškai paleidžia naują pod                     | **2 val.**           |
+| **Aplikacijos klaida**                         | 4xx, 5xx klaidos                                             | Klaidos analizė                                                 | **10 min - 2 val.**  |
+| **MariaDB išsijungė**                          | Laikinas nepasiekiamumas                                     | Įjungimas                                                       | **2 val.**           |
+| **Disko gedimas konteineryje/VM**              | Galimas duomenų praradimas; sistemos sustojimas              | Duomenų atkūrimas iš backup ar replikos                         | **1 d.**             |
+| **Paysera callback neprieinamas**              | Mokėjimai nepatvirtinami, sąskaitos lieka “neapmokėtos”      | Paysera retry užlausą; administratoriaus rankinis patvirtinimas | **4 val.**           |
+| **SMTP serverio gedimas**                      | Laiškai neišsiunčiami klientams ir vadybininkams             | Klaidos analizė                                                 | **1 d.**             |
+| **Cron (invoice generator) gedimas**           | Nesugeneruojamos sąskaitos                                   | Pakartotinis cron paleidimas; log'ų analizė                     | **12 val.**          |
+| **Failų saugyklos gedimas (log'ai / PDF)**     | Negalima generuoti PDF; logų praradimas                      | Klaidos analizė                                                 | **2 val.**           |
+| **DDoS ataka**                                 | Stiprus sulėtėjimas; sistema gali tapti nepasiekiama         | WAF, Rate limiting, IP blokavimas                               | **30 min. - 2 val.** |
+| **SSL / domeno sertifikato galiojimo pabaiga** | Naudotojai negali jungtis per HTTPS                          | Sertifikato atnaujinimas (Let's Encrypt auto-renew)             | **30 min. - 2 val.** |
+
+### Sistemos prieinamumo grafikas
 ![perspective_availability_availability_schedule.png](perspective_availability_availability_schedule.png)  
 _Sistemos prieinamumo grafikas (angl. Availability Schedule)<br/>Išeities kodas pateiktas 14 priede_
 

@@ -32,7 +32,13 @@ Points: 1
 Bonus Points: Use all 4 perspectives 0.25
 
 #### Į ką atkreipia dėmesį
-- Security perspective. Vulnerability points schema
+- Security perspective:
+  - Vulnerability points diagram
+  - Attack tree
+- Prieinamumas ir atsparumas (angl. Availability and Resilience):
+  - Platform availability
+  - Availability Schedule
+- labai svarbu ką perspektyvose padarei dėl ko reikėjo keisti view'us.
 
 ---
 <h1 style="text-align:center;">Architektūrinis aprašymas <i>(angl. Architectural description)</i></h1>
@@ -135,7 +141,7 @@ Interneto tiekėjo informacinė sistema (ITIS) skirta automatizuoti klientų duo
 |----------|-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
 | **NF1**  | **Našumas _(angl. Performance)_**               | Sistema turi apdoroti bent 10000 užklausų per 1 sekundę esant apkrovai.                                                               |
 | **NF2**  | **Prieinamumas _(angl. Availability)_**         | Sistema turi būti pasiekiama bent 99,99 % laiko per mėnesį.                                                                           |
-| **NF3**  | **Atsparumas _(angl. Resilience)_**             | Gedimo atveju sistema turi būti atstatoma ne vėliau kaip per 2 valandas (MTTR ≤ 2 h).                                                 |
+| **NF3**  | **Atsparumas _(angl. Resilience)_**             | Gedimo atveju sistema turi būti atstatoma ne vėliau kaip per 90 minučių (MTTR ≤ 90 min.).                                             |
 | **NF4**  | **Saugumas _(angl. Security)_**                 | Visi duomenys perduodami HTTPS protokolu; slaptažodžiai saugomi su bcrypt / Argon2; naudojami CSRF token'ai.                          |
 | **NF5**  | **Duomenų apsauga _(angl. Privacy)_**           | Sistema turi atitikti BDAR _(angl. GDPR)_ reikalavimus — klientas turi teisę peržiūrėti, ištaisyti ir prašyti ištrinti savo duomenis. |
 | **NF6**  | **Pritaikomumas _(angl. Usability)_**           | Kliento savitarna turi būti aiški ir pasiekiama per 3 paspaudimus iki pagrindinės informacijos (sąskaitos ar paslaugos).              |
@@ -1098,8 +1104,8 @@ ITIS integracijos:
 | L4              | Visa sistema neveikia | 30 min.  |
 
 #### SLA
-- Prieinamumas _(angl. Availability)_: 99.99 %
-- MTTR: ≤ 1 h.
+- Prieinamumas _(angl. Availability)_: 99.91 %
+- MTTR: ≤ 90 min.
 - Response time: ≤ 30 sek. naudotojo veiksmams
 
 ### 4.7.11. Santrauka
@@ -1326,16 +1332,21 @@ Skyrius susideda iš visų perspektyvų:
 
 | Incidentas                                     | Poveikis                                                     | Veiksmai atstatymui (Remedial Action)                           | Atstatymo laikas     |
 |------------------------------------------------|--------------------------------------------------------------|-----------------------------------------------------------------|----------------------|
-| **Web serverio / konteinerio gedimas**         | Laikinas nepasiekiamumas; vartotojai negali naudotis sistema | Kubernetes automatiškai paleidžia naują pod                     | **2 val.**           |
-| **Aplikacijos klaida**                         | 4xx, 5xx klaidos                                             | Klaidos analizė                                                 | **10 min - 2 val.**  |
-| **MariaDB išsijungė**                          | Laikinas nepasiekiamumas                                     | Įjungimas                                                       | **2 val.**           |
+| **Web serverio / konteinerio gedimas**         | Laikinas nepasiekiamumas; vartotojai negali naudotis sistema | Kubernetes automatiškai paleidžia naują pod                     | **15 min.**          |
+| **Aplikacijos klaida**                         | 4xx, 5xx klaidos                                             | Klaidos analizė                                                 | **10 min - 1 val.**  |
+| **MariaDB išsijungė**                          | Laikinas nepasiekiamumas                                     | Rankinis arba automatinis įjungimas                             | **15 min.**          |
 | **Disko gedimas konteineryje/VM**              | Galimas duomenų praradimas; sistemos sustojimas              | Duomenų atkūrimas iš backup ar replikos                         | **1 d.**             |
-| **Paysera callback neprieinamas**              | Mokėjimai nepatvirtinami, sąskaitos lieka “neapmokėtos”      | Paysera retry užlausą; administratoriaus rankinis patvirtinimas | **4 val.**           |
-| **SMTP serverio gedimas**                      | Laiškai neišsiunčiami klientams ir vadybininkams             | Klaidos analizė                                                 | **1 d.**             |
-| **Cron (invoice generator) gedimas**           | Nesugeneruojamos sąskaitos                                   | Pakartotinis cron paleidimas; log'ų analizė                     | **12 val.**          |
-| **Failų saugyklos gedimas (log'ai / PDF)**     | Negalima generuoti PDF; logų praradimas                      | Klaidos analizė                                                 | **2 val.**           |
+| **Paysera callback neprieinamas**              | Mokėjimai nepatvirtinami, sąskaitos lieka “neapmokėtos”      | Paysera retry užlausą; administratoriaus rankinis patvirtinimas | **2 val.**           |
+| **SMTP serverio gedimas**                      | Laiškai neišsiunčiami klientams ir vadybininkams             | Klaidos analizė                                                 | **3 val.**           |
+| **Cron (invoice generator) gedimas**           | Nesugeneruojamos sąskaitos                                   | Pakartotinis cron paleidimas; log'ų analizė                     | **5 min.**           |
+| **Failų saugyklos gedimas (log'ai / PDF)**     | Negalima generuoti PDF; logų praradimas                      | Klaidos analizė                                                 | **1 val.**           |
 | **DDoS ataka**                                 | Stiprus sulėtėjimas; sistema gali tapti nepasiekiama         | WAF, Rate limiting, IP blokavimas                               | **30 min. - 2 val.** |
 | **SSL / domeno sertifikato galiojimo pabaiga** | Naudotojai negali jungtis per HTTPS                          | Sertifikato atnaujinimas (Let's Encrypt auto-renew)             | **30 min. - 2 val.** |
+
+### Sistemos prieinamumas _(angl. Platform availability)_
+Pagal formulę `MTBF = bendras veikimo laikas / gedimų skaičius` sistema veiks 100% ir gediminų skaičius prognozuojamas 1 per savaitę, tad `MTBF=168 val.`.  
+Pagal formulę `sistemos pasiekiamumas = MTBF / (MTBF + MTTR)` sistemos pasiekiamumas siekia **99.91%**.
+Gedimo atveju sistema turi būti atstatoma ne vėliau kaip per ~1.5 val. (MTTR ≤90 min.).
 
 ### Sistemos prieinamumo grafikas
 ![perspective_availability_availability_schedule.png](perspective_availability_availability_schedule.png)  
@@ -2238,7 +2249,7 @@ UC_301 --> UC_102 : "Kurti sąskaitų įrašus"
 ## Priedas 2. Informacinio vaizdo sąskaitos gyvavimo ciklo diagramos kodas
 ```plantuml
 @startuml
-title Sąskaitos gyvavimo ciklas (Invoice State Diagram)
+title Sąskaitos gyvavimo ciklas (angl. Invoice State Diagram)
 
 /' Pradinė būsena '/
 [*] --> Sukurta
@@ -2277,7 +2288,7 @@ state Sukurtas {
 ## Priedas 4. Sąskaitos apmokėjimo lygiagretumo sekos diagramos _(angl. Invoice Concurrency Sequence diagram)_ - mokėjimo scenarijaus kodas
 ```plantuml
 @startuml
-title Sąskaitos apmokėjimo lygiagretumo sekų diagrama – mokėjimo scenarijus
+title Sąskaitos apmokėjimo lygiagretumo sekų diagrama – mokėjimo scenarijus (angl. Invoice Concurrency Sequence diagram)
 
 actor       Klientas
 actor       Cron
@@ -2326,7 +2337,7 @@ Web      --> Klientas : Rodo "Apmokėta"
 ## Priedas 5. Lygiagretumo modelis _(angl. UML Concurrency Model)_
 ```plantuml
 @startuml
-title ITIS UML Concurrency Model (Processes, Threads, IPC)
+title Lygiagretumo modelis (angl. Concurrency Model (Processes, Threads, IPC))
 
 ' ==== OS PROCESSES ====
 process "Apache / PHP-FPM\n(Web Process)" as WebProc {
@@ -2366,7 +2377,7 @@ WebThread      --> MQ          : "Queue support question notifications"
 ## Priedas 6. Komponentų modelis _(angl. UML Component model)_
 ```plantuml
 @startuml
-title UML Component Diagram (Module Structure Model)
+title UML Komponentų modelis (angl. UML Component model)
 left to right direction
 
 ' ====== Components (tables) ======
@@ -2440,7 +2451,7 @@ users_objects_services_promotions <-- services_promotions
 ## Priedas 7. Kubernetes diegimo architektūra _(angl. Kubernetes Deployment Architecture)_
 ```plantuml
 @startuml
-title Kubernetes Deployment Architecture
+title Kubernetes diegimo architektūra (angl. Kubernetes Deployment Architecture)
 
 node "Client Browser" as Browser
 
@@ -2475,7 +2486,7 @@ Web1 --> SMTP
 ## Priedas 8. UML komponentų diagrama _(angl. UML Component Diagram)_
 ```plantuml
 @startuml
-title UML Component Diagram
+title UML komponentų diagrama (angl. UML Component Diagram)
 left to right direction
 
 ' ==== External Interfaces ====
@@ -2547,10 +2558,10 @@ Cron --> EmailService : email
 @enduml
 ```
 
-## Priedas 9. vykdymo platformos modelis _(angl. Runtime Platform Model)_
+## Priedas 9. Vykdymo platformos modelis _(angl. Runtime Platform Model)_
 ```plantuml
 @startuml
-title ITIS – Runtime Platform Model (Deployment Viewpoint)
+title Vykdymo platformos modelis (angl. Runtime Platform Model)
 
 skinparam shadowing false
 skinparam rectangleStyle rounded
@@ -2680,7 +2691,7 @@ WebApp --> MapTiles : HTTPS\nTile Requests
 ## Priedas 10. Atakos medis _(angl. Attack tree)_
 ```plantuml
 @startmindmap
-title Attack Tree
+title Atakos medis (angl. Attack Tree)
 
 <style>
 mindmapDiagram {
@@ -2749,7 +2760,7 @@ mindmapDiagram {
 ## Priedas 11. Grafinis problemų atvaizdavimas _(angl. Graphical representation problem)_
 ```plantuml
 @startuml
-title Graphical representation problem
+title Grafinis problemų atvaizdavimas (angl. Graphical representation problem)
 
 skinparam rectangle {
   BackgroundColor White

@@ -489,6 +489,10 @@ Pagal informacijos vaizdo gaires, archyvavimas turi būti natūralus informacijo
 ![information_view_data_flow_diagram.png](information_view_data_flow_diagram.png)
 _Duomenų srauto diagrama (angl. Data Flow Diagram)<br/>Išeities kodas pateiktas 15 priede_
 
+### 4.3.9. Sąskaitos įrašo gyvavimo ciklas _(angl. Entity Life History)_
+![information_view_invoice_life_history.png](information_view_invoice_life_history.png)  
+_Sąskaitos įrašo gyvavimo ciklas (angl. Entity Life History)<br/>Išeities kodas pateiktas 16 priede_
+
 ## 4.4. Lygiagretumo vaizdas _(angl. Concurrency  View)_
 Lygiagretumo vaizdas parodo, **kurios ITIS sistemos dalys gali veikti vienu metu**, kaip jos koordinuojamos, kokie procesai ir gijos atsakingi už vykdymą ir kaip užtikrinama duomenų integracija bei išvengiama konfliktų.
 
@@ -3070,4 +3074,18 @@ Callback --> DATA
 Callback --> Mailer
 
 @enduml
+```
+
+## Priedas 16. Sąskaitos įrašo gyvavimo ciklas _(angl. Entity Life History)_
+```plantuml
+@startwbs
+title Sąskaitos įrašo gyvavimo ciklas (angl. Entity Life History)
+
+* -
+** Sukurta
+** Išsiųsta klientui
+*** Peržiūrėta kliento
+** Apmokėta
+
+@endwbs
 ```
